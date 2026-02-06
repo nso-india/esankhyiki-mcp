@@ -42,6 +42,8 @@ This server provides AI-ready access to official Indian government statistics th
 - Full OpenTelemetry integration for observability
 - Production-ready Docker deployment
 
+If you want to connect your AI agent of choice with the MCP server, you can directly connect it with MOSPI's MCP server. Instructions are available at https://www.datainnovation.mospi.gov.in/mospi-mcp. Instructions to connect ChatGPT or Claude to MCP are available here: https://www.datainnovation.mospi.gov.in/mospi-mcp
+
 ---
 
 ## Datasets
@@ -64,29 +66,23 @@ This server provides AI-ready access to official Indian government statistics th
 The server exposes 4 tools that follow a sequential workflow:
 
 ```
-1_know_about_mospi_api  →  2_get_indicators  →  3_get_metadata  →  4_get_data
+know_about_mospi_api  →  get_indicators  →  get_metadata  →  get_data
 ```
 
 | Step | Tool | Description |
 |------|------|-------------|
-| 1 | `1_know_about_mospi_api()` | Overview of all datasets. Start here to find the right dataset. |
-| 2 | `2_get_indicators(dataset)` | List available indicators for the chosen dataset. |
-| 3 | `3_get_metadata(dataset, ...)` | Get valid filter values (states, years, categories) and API parameters. |
-| 4 | `4_get_data(dataset, filters)` | Fetch data using filter key-value pairs from metadata. |
+| 1 | `know_about_mospi_api()` | Overview of all datasets. Start here to find the right dataset. |
+| 2 | `get_indicators(dataset)` | List available indicators for the chosen dataset. |
+| 3 | `get_metadata(dataset, ...)` | Get valid filter values (states, years, categories) and API parameters. |
+| 4 | `get_data(dataset, filters)` | Fetch data using filter key-value pairs from metadata. |
 
-**Important:** Tools must be called in order. Skipping `3_get_metadata` will result in invalid filter codes.
+**Important:** Tools must be called in order. Skipping `get_metadata` will result in invalid filter codes.
 
 ---
 
 ## Quick Start
 
-If you want to connect your AI agent of choice with the MCP server, you can directly connect it with MOSPI's MCP server. Video Guides to connect ChatGPT or Claude to MCP are available here - 
-
-https://github.com/user-attachments/assets/ec23db03-c5ad-4bdd-af3a-9387bd906b3c
-
-https://github.com/user-attachments/assets/4d2adb2a-a350-4563-8408-c0790bb94412
-
-To get more information, visit - https://www.datainnovation.mospi.gov.in/mospi-mcp
+If you want to connect your AI agent of choice with the MCP server, you can directly connect it with MOSPI's MCP server. Instructions are available at https://www.datainnovation.mospi.gov.in/mospi-mcp. Instructions to connect ChatGPT or Claude to MCP are available here: https://www.datainnovation.mospi.gov.in/mospi-mcp
 
 Below instructions are for self-hosting the MCP server. 
 
@@ -129,11 +125,11 @@ from fastmcp import Client
 async def main():
     async with Client("http://localhost:8000/mcp") as client:
         # Step 1: Get dataset overview
-        overview = await client.call_tool("1_know_about_mospi_api", {})
+        overview = await client.call_tool("know_about_mospi_api", {})
         print(overview)
 
         # Step 2: Get indicators for PLFS
-        indicators = await client.call_tool("2_get_indicators", {
+        indicators = await client.call_tool("get_indicators", {
             "dataset": "PLFS",
             "user_query": "unemployment rate"
         })

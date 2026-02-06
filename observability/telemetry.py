@@ -10,6 +10,7 @@ All data is visible in Jaeger for analysis.
 """
 
 import json
+import sys
 from typing import Any
 
 from fastmcp.server.middleware import Middleware, MiddlewareContext

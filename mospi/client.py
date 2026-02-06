@@ -237,7 +237,7 @@ class MoSPI:
                          "'1998' → 1998-99 to 2003-04 | "
                          "'2004' → 2004-05 to 2007-08 | "
                          "'2008' → 2008-09 to 2023-24. "
-                         "Pass classification_year in 3_get_metadata() and 4_get_data().",
+                         "Pass classification_year in get_metadata() and get_data().",
                 "statusCode": True,
             }
             if indicators:

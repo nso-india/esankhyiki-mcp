@@ -3,8 +3,10 @@ Test client for MoSPI MCP Server
 Tests HTTP transport
 """
 import asyncio
+import pytest
 from fastmcp import Client
 
+@pytest.mark.asyncio
 async def test_server():
     """Test the MoSPI MCP server"""
 
@@ -24,17 +26,16 @@ async def test_server():
         result = await client.call_tool("know_about_mospi_api", {})
         print(f"   ✅ Success! Got {len(str(result))} characters of documentation\n")
 
-        # Test 3: Call lookup_mospi_codes
-        print("🔍 Testing lookup_mospi_codes...")
+        # Test 3: Call get_indicators for PLFS
+        print("🔍 Testing get_indicators...")
         result = await client.call_tool(
-            "lookup_mospi_codes",
+            "get_indicators",
             {
                 "dataset": "PLFS",
-                "category": "State",
-                "search_term": "rajasthan"
+                "user_query": "unemployment rate"
             }
         )
-        print(f"   ✅ Success! Result: {result}\n")
+        print(f"   ✅ Success! Result: {str(result)[:100]}...\n")
 
         print("🎉 All tests passed!")
 

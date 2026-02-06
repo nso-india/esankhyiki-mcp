@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public release
 - 7 datasets: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY
-- 4-step MCP tool workflow (`1_know_about_mospi_api`, `2_get_indicators`, `3_get_metadata`, `4_get_data`)
+- 4-step MCP tool workflow (`know_about_mospi_api`, `get_indicators`, `get_metadata`, `get_data`)
 - Swagger-driven parameter validation
 - OpenTelemetry integration for observability
 - Docker and docker-compose deployment
