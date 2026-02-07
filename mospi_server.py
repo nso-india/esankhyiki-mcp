@@ -4,7 +4,15 @@ import yaml
 from typing import Dict, Any, Optional
 from fastmcp import FastMCP
 from mospi.client import mospi
-from observability.telemetry import TelemetryMiddleware
+from observability import AuthMiddleware, RateLimitMiddleware, TelemetryMiddleware
+
+# Load local .env values when available (best effort).
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except Exception as exc:
+    print(f"Warning: unable to load .env file ({exc})", file=sys.stderr)
 
 SWAGGER_DIR = os.path.join(os.path.dirname(__file__), "swagger")
 
@@ -16,7 +24,9 @@ def log(msg: str):
 # Initialize FastMCP server
 mcp = FastMCP("MoSPI Data Server")
 
-# Add telemetry middleware for IP tracking and input/output capture
+# Security middlewares (auth + rate limit) should execute before telemetry.
+mcp.add_middleware(AuthMiddleware())
+mcp.add_middleware(RateLimitMiddleware())
 mcp.add_middleware(TelemetryMiddleware())
 
 
@@ -55,7 +65,7 @@ def get_swagger_param_definitions(dataset: str) -> list:
     swagger_path = os.path.join(SWAGGER_DIR, yaml_file)
     if not os.path.exists(swagger_path):
         return []
-    with open(swagger_path, 'r') as f:
+    with open(swagger_path, "r", encoding="utf-8") as f:
         spec = yaml.safe_load(f)
     return spec.get("paths", {}).get(endpoint_path, {}).get("get", {}).get("parameters", [])
 
@@ -297,8 +307,8 @@ def get_metadata(
         else:
             return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
 
-    except Exception as e:
-        return {"error": str(e)}
+    except Exception:
+        return {"error": "Metadata lookup failed due to an internal server error.", "statusCode": False}
 
 
 @mcp.tool(name="4_get_data")
@@ -488,7 +498,9 @@ if __name__ == "__main__":
 
     log("="*75)
     log("Server will be available at http://localhost:8000/mcp")
-    log("Telemetry: IP tracking + Input/Output capture enabled")
+    log(f"Authentication mode: {os.getenv('MCP_AUTH_MODE', 'required')}")
+    log(f"Rate limit: {os.getenv('MCP_RATE_LIMIT_PER_MINUTE', '120')} req/min per client")
+    log("Telemetry: safe mode enabled (input/output capture defaults to OFF)")
     log("="*75 + "\n")
 
     # Run with HTTP transport for remote access

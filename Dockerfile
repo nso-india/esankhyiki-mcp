@@ -13,6 +13,13 @@ ENV OTEL_SERVICE_NAME=mospi-mcp-server
 ENV OTEL_TRACES_EXPORTER=otlp
 ENV OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 
+# Security defaults (override at runtime)
+ENV MCP_AUTH_MODE=required
+ENV MCP_RATE_LIMIT_PER_MINUTE=120
+ENV TELEMETRY_CAPTURE_TOOL_INPUT=false
+ENV TELEMETRY_CAPTURE_TOOL_OUTPUT=false
+ENV TELEMETRY_LOG_FULL_OUTPUT=false
+
 # Install system dependencies (needed for pandas/numpy/openpyxl)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \

@@ -4,8 +4,14 @@ services:
   mospi-server:
     build: .
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     environment:
+      - MCP_AUTH_MODE=required
+      - MCP_API_KEYS=${MCP_API_KEYS}
+      - MCP_RATE_LIMIT_PER_MINUTE=120
+      - TELEMETRY_CAPTURE_TOOL_INPUT=false
+      - TELEMETRY_CAPTURE_TOOL_OUTPUT=false
+      - TELEMETRY_LOG_FULL_OUTPUT=false
       - OTEL_SERVICE_NAME=mospi-mcp-server
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
       - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
@@ -20,9 +26,9 @@ services:
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
-      - "16686:16686"  # Jaeger UI
-      - "4317:4317"    # OTLP gRPC receiver
-      - "4318:4318"    # OTLP HTTP receiver
+      - "127.0.0.1:16686:16686"  # Jaeger UI
+      - "127.0.0.1:4317:4317"    # OTLP gRPC receiver
+      - "127.0.0.1:4318:4318"    # OTLP HTTP receiver
     environment:
       - COLLECTOR_OTLP_ENABLED=true
     networks:

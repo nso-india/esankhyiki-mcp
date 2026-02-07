@@ -94,8 +94,8 @@ Below instructions are for self-hosting the MCP server.
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/mospi-mcp-api.git
-cd mospi-mcp-api
+git clone https://github.com/nso-india/esankhyiki-mcp.git
+cd esankhyiki-mcp
 
 # Create virtual environment (recommended)
 python -m venv venv
@@ -103,6 +103,11 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Configure security settings
+cp .env.example .env
+# Edit .env and set MCP_API_KEYS to a strong value
+export MCP_API_KEYS="replace-with-strong-random-key"
 ```
 
 ### Running the Server
@@ -119,6 +124,11 @@ fastmcp run mospi_server.py:mcp
 ```
 
 Server runs at `http://localhost:8000/mcp`
+
+Authentication is enabled by default for HTTP mode:
+
+1. `Authorization: Bearer <your-key>`
+2. or `X-API-Key: <your-key>`
 
 ### Connecting from an MCP Client
 
@@ -153,7 +163,12 @@ asyncio.run(main())
 docker build -t mospi-mcp .
 
 # Run the container
-docker run -d -p 8000:8000 --name mospi-server mospi-mcp
+docker run -d \
+  -p 127.0.0.1:8000:8000 \
+  -e MCP_AUTH_MODE=required \
+  -e MCP_API_KEYS="replace-with-strong-random-key" \
+  --name mospi-server \
+  mospi-mcp
 ```
 
 ### Docker Compose
@@ -183,11 +198,12 @@ mospi-mcp-api/
 ├── mospi_server.py          # FastMCP server - tools, validation, routing
 ├── mospi/
 │   └── client.py            # MoSPI API client - HTTP requests to api.mospi.gov.in
+├── observability/
+│   ├── security.py          # Authentication + rate limit middleware
+│   └── telemetry.py         # OpenTelemetry middleware for tracing
 ├── swagger/                 # Swagger YAML specs per dataset (source of truth for params)
 │   └── swagger_user_*.yaml
-├── observability/
-│   └── telemetry.py         # OpenTelemetry middleware for tracing
-├── tests/                   # Per-dataset test files
+├── tests/                   # Unit tests for middleware and server workflow
 ├── Dockerfile               # Production container with OTEL instrumentation
 ├── docker-compose.yml       # Full stack with Jaeger
 └── requirements.txt
@@ -206,14 +222,23 @@ mospi-mcp-api/
 
 ## Configuration
 
-Environment variables for OpenTelemetry:
+Environment variables for security and telemetry:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
+| `MCP_AUTH_MODE` | HTTP auth mode (`required` or `disabled`) | `required` |
+| `MCP_API_KEYS` | Comma-separated API keys | _(required when auth mode is `required`)_ |
+| `MCP_RATE_LIMIT_PER_MINUTE` | Per-client HTTP request limit | `120` |
+| `TRUSTED_PROXY_IPS` | Comma-separated proxy IPs trusted for forwarded headers | _(empty)_ |
+| `TRUSTED_PROXY_CIDRS` | Comma-separated trusted proxy CIDRs | _(empty)_ |
 | `OTEL_SERVICE_NAME` | Service name in traces | `mospi-mcp-server` |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | OTLP collector endpoint | `http://localhost:4317` |
 | `OTEL_EXPORTER_OTLP_PROTOCOL` | Protocol (`grpc` or `http/protobuf`) | `grpc` |
 | `OTEL_TRACES_EXPORTER` | Exporter type (`otlp`, `console`, `none`) | `otlp` |
+| `TELEMETRY_CAPTURE_TOOL_INPUT` | Capture tool inputs in traces | `false` |
+| `TELEMETRY_CAPTURE_TOOL_OUTPUT` | Capture tool outputs in traces | `false` |
+| `TELEMETRY_LOG_FULL_OUTPUT` | Emit full payloads to stderr logs | `false` |
+| `TELEMETRY_MAX_ATTR_BYTES` | Max serialized payload bytes stored in span attributes | `4096` |
 
 See `.env.example` for full configuration options.
 

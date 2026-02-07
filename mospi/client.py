@@ -3,8 +3,20 @@ MoSPI API Client
 Handles all API calls to the MoSPI data portal
 """
 
+import logging
 import requests
 from typing import Optional, Dict, Any
+
+logger = logging.getLogger(__name__)
+
+
+def _upstream_error(operation: str, exc: Exception) -> Dict[str, Any]:
+    """Return a user-safe error while logging internal details server-side."""
+    logger.warning("%s failed: %s", operation, exc)
+    return {
+        "error": f"{operation} failed due to an upstream API error.",
+        "statusCode": False,
+    }
 
 
 class MoSPI:
@@ -50,8 +62,11 @@ class MoSPI:
                 return {"data": response.text, "format": "CSV"}
             else:
                 return response.json()
-        except Exception as e:
-            return {"error": f"An error occurred: {e}"}
+        except requests.RequestException as e:
+            return _upstream_error("get_data", e)
+        except ValueError as e:
+            logger.warning("get_data returned invalid JSON: %s", e)
+            return {"error": "get_data failed due to invalid upstream response.", "statusCode": False}
 
     # =========================================================================
     # PLFS Metadata Methods
@@ -77,7 +92,7 @@ class MoSPI:
                 "statusCode": True,
             }
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_plfs_indicators", e)
 
     def get_plfs_filters(
         self,
@@ -105,7 +120,7 @@ class MoSPI:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_plfs_filters", e)
 
     # =========================================================================
     # CPI Metadata Methods
@@ -136,7 +151,7 @@ class MoSPI:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_cpi_filters", e)
 
     # =========================================================================
     # IIP Metadata Methods
@@ -167,7 +182,7 @@ class MoSPI:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_iip_filters", e)
 
     # =========================================================================
     # ASI Metadata Methods
@@ -183,7 +198,7 @@ class MoSPI:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_asi_classification_years", e)
 
     def get_asi_filters(
         self,
@@ -207,7 +222,7 @@ class MoSPI:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_asi_filters", e)
 
     def get_asi_indicators(self) -> Dict[str, Any]:
         """Fetch ASI indicator list from the filter endpoint (using classification_year=2008).
@@ -246,7 +261,7 @@ class MoSPI:
                 result["filters"] = filter_data
             return result
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_asi_indicators", e)
 
     # =========================================================================
     # NAS Metadata Methods
@@ -262,7 +277,7 @@ class MoSPI:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_nas_indicators", e)
 
     def get_nas_filters(
         self,
@@ -292,7 +307,7 @@ class MoSPI:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_nas_filters", e)
 
     # =========================================================================
     # WPI Metadata Methods
@@ -312,7 +327,7 @@ class MoSPI:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_wpi_filters", e)
 
     # =========================================================================
     # Energy Metadata Methods
@@ -328,7 +343,7 @@ class MoSPI:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_energy_indicators", e)
 
     def get_energy_filters(
         self,
@@ -355,7 +370,7 @@ class MoSPI:
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return _upstream_error("get_energy_filters", e)
 
 
 
