@@ -36,7 +36,7 @@ MCP (Model Context Protocol) server for accessing India's Ministry of Statistics
 This server provides AI-ready access to official Indian government statistics through the Model Context Protocol (MCP). It acts as a bridge between AI assistants (Claude, ChatGPT, Cursor, etc.) and MoSPI's open data APIs, enabling natural language queries for economic, demographic, and social indicators.
 
 **Key Features:**
-- 7 statistical datasets covering employment, inflation, industrial production, GDP, and energy
+- 19 statistical datasets covering employment, inflation, industrial production, GDP, energy, higher education, gender, health, environment, trade, agriculture, consumption, and economic census
 - Sequential 4-tool workflow designed for LLM consumption
 - Swagger-driven parameter validation
 - Full OpenTelemetry integration for observability
@@ -55,6 +55,18 @@ This server provides AI-ready access to official Indian government statistics th
 | **NAS** | National Accounts Statistics | GDP, economic growth, national income |
 | **WPI** | Wholesale Price Index | Wholesale inflation, producer prices |
 | **ENERGY** | Energy Statistics | Energy production, consumption, fuel mix |
+| **AISHE** | All India Survey on Higher Education | Universities, colleges, student enrolment, GER, GPI |
+| **ASUSE** | Annual Survey of Unincorporated Enterprises | Informal sector, small businesses, MSME statistics |
+| **GENDER** | Gender Statistics | Gender indicators, women empowerment, sex ratio, crimes against women |
+| **NFHS** | National Family Health Survey | Fertility, infant mortality, maternal care, nutrition |
+| **ENVSTATS** | Environment Statistics | Climate, biodiversity, pollution, water resources, forests |
+| **RBI** | RBI Statistics | Foreign trade, forex reserves, exchange rates, balance of payments |
+| **NSS77** | NSS 77th Round (Land & Livestock) | Agricultural households, land ownership, farm income, crop insurance |
+| **NSS78** | NSS 78th Round (Living Conditions) | Drinking water, sanitation, digital connectivity, migration |
+| **CPIALRL** | CPI for Agricultural/Rural Labourers | Rural inflation, agricultural labourer cost of living |
+| **HCES** | Household Consumption Expenditure Survey | Consumer spending, poverty analysis, inequality (Gini) |
+| **TUS** | Time Use Survey | Time allocation, unpaid work, gender time gaps |
+| **EC** | Economic Census | Establishments, enterprises, district-wise business count, workers |
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 
 ---
@@ -64,17 +76,17 @@ This server provides AI-ready access to official Indian government statistics th
 The server exposes 4 tools that follow a sequential workflow:
 
 ```
-1_know_about_mospi_api  →  2_get_indicators  →  3_get_metadata  →  4_get_data
+step1_know_about_mospi_api  →  step2_get_indicators  →  step3_get_metadata  →  step4_get_data
 ```
 
 | Step | Tool | Description |
 |------|------|-------------|
-| 1 | `1_know_about_mospi_api()` | Overview of all datasets. Start here to find the right dataset. |
-| 2 | `2_get_indicators(dataset)` | List available indicators for the chosen dataset. |
-| 3 | `3_get_metadata(dataset, ...)` | Get valid filter values (states, years, categories) and API parameters. |
-| 4 | `4_get_data(dataset, filters)` | Fetch data using filter key-value pairs from metadata. |
+| 1 | `step1_know_about_mospi_api()` | Overview of all datasets. Start here to find the right dataset. |
+| 2 | `step2_get_indicators(dataset)` | List available indicators for the chosen dataset. |
+| 3 | `step3_get_metadata(dataset, ...)` | Get valid filter values (states, years, categories) and API parameters. |
+| 4 | `step4_get_data(dataset, filters)` | Fetch data using filter key-value pairs from metadata. |
 
-**Important:** Tools must be called in order. Skipping `3_get_metadata` will result in invalid filter codes.
+**Important:** Tools must be called in order. Skipping `step3_get_metadata` will result in invalid filter codes.
 
 ---
 
@@ -88,14 +100,14 @@ https://github.com/user-attachments/assets/4d2adb2a-a350-4563-8408-c0790bb94412
 
 To get more information, visit - https://www.datainnovation.mospi.gov.in/mospi-mcp
 
-Below instructions are for self-hosting the MCP server. 
+The instructions below are for self-hosting the MCP server.
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/mospi-mcp-api.git
-cd mospi-mcp-api
+git clone https://github.com/nso-india/esankhyiki-mcp.git
+cd esankhyiki-mcp
 
 # Create virtual environment (recommended)
 python -m venv venv
@@ -129,11 +141,11 @@ from fastmcp import Client
 async def main():
     async with Client("http://localhost:8000/mcp") as client:
         # Step 1: Get dataset overview
-        overview = await client.call_tool("1_know_about_mospi_api", {})
+        overview = await client.call_tool("step1_know_about_mospi_api", {})
         print(overview)
 
         # Step 2: Get indicators for PLFS
-        indicators = await client.call_tool("2_get_indicators", {
+        indicators = await client.call_tool("step2_get_indicators", {
             "dataset": "PLFS",
             "user_query": "unemployment rate"
         })
@@ -253,6 +265,6 @@ Know more: https://www.datainnovation.mospi.gov.in/home
 
 ## Acknowledgments
 
-Made in partnership with **[Bharat Digital](https://bharatdigital.io)** in pursuit of modernising and humanising how government's use technology in service of the public. 
+Made in partnership with **[Bharat Digital](https://bharatdigital.io)** in pursuit of modernising and humanising how governments use technology in service of the public. 
 
 <!-- Geek spotted! Respect for reading the raw markdown. You're the kind of person India's open data movement needs. -->

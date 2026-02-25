@@ -2,7 +2,7 @@
 
 ## Adding a New Dataset
 
-The server currently supports 7 datasets. To add a new one:
+The server currently supports 19 datasets. To add a new one:
 
 ### 1. Get the Swagger spec
 
@@ -68,7 +68,6 @@ mospi_server.py       # All MCP tools + validation logic (single file server)
 mospi/client.py       # HTTP client for MoSPI API calls
 swagger/*.yaml        # Swagger specs per dataset (param source of truth)
 observability/        # OpenTelemetry middleware (telemetry.py)
-tests/                # Per-dataset test files
 ```
 
 ## Development Setup
@@ -100,7 +99,7 @@ from fastmcp import Client
 
 async def test():
     async with Client('http://localhost:8000/mcp') as c:
-        r = await c.call_tool('get_indicators', {'dataset': 'PLFS'})
+        r = await c.call_tool('step2_get_indicators', {'dataset': 'PLFS', 'user_query': 'test'})
         print(r)
 
 asyncio.run(test())
