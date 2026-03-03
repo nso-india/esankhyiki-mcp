@@ -249,7 +249,7 @@ mospi-mcp-api/
 │   └── swagger_user_*.yaml
 ├── observability/
 │   └── telemetry.py         # OpenTelemetry middleware for tracing
-├── tests/                   # Per-dataset test files
+├── tests/                   # Pytest suite (62 tests across all 19 datasets)
 ├── Dockerfile               # Production container with OTEL instrumentation
 ├── docker-compose.yml       # Full stack with Jaeger
 └── requirements.txt
@@ -263,6 +263,17 @@ mospi-mcp-api/
 | **Auto-routing** | CPI routes to Group/Item endpoint based on filters; IIP routes to Annual/Monthly |
 | **Validation First** | All filters validated before API calls with clear error messages |
 | **LLM-Optimized** | Tool docstrings contain explicit rules and workflow instructions |
+
+---
+
+## Testing
+
+```bash
+pip install -r tests/requirements-test.txt
+pytest tests/ -v -p no:anyio
+```
+
+Runs in-process against the MCP server (no running server needed). Covers all 19 datasets across all 4 tools. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
 
 ---
 
