@@ -132,24 +132,60 @@ fastmcp run mospi_server.py:mcp
 
 Server runs at `http://localhost:8000/mcp`
 
-### Connecting from an MCP Client
+### Connecting from CLI Tools
 
+**Server URL:** `https://mcp.mospi.gov.in/`
+
+#### Claude Code
+
+```bash
+claude mcp add esankhyiki-mcp --transport http https://mcp.mospi.gov.in/
+```
+
+Verify with `claude mcp list`.
+
+#### Cursor / Windsurf
+
+Add to `.cursor/mcp.json` or `.windsurf/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "esankhyiki-mcp": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://mcp.mospi.gov.in/"]
+    }
+  }
+}
+```
+
+#### Verify Connection
+
+```bash
+curl -s -X POST https://mcp.mospi.gov.in/ \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"test","version":"0.1"}}}'
+```
+
+A successful response returns `serverInfo` with `"name": "MoSPI Data Server"`.
+
+#### Local Server
+
+If running locally:
+```bash
+claude mcp add esankhyiki-mcp --transport http http://localhost:8000/mcp
+```
+
+Or with the FastMCP Python client:
 ```python
 import asyncio
 from fastmcp import Client
 
 async def main():
     async with Client("http://localhost:8000/mcp") as client:
-        # Step 1: Get dataset overview
         overview = await client.call_tool("step1_know_about_mospi_api", {})
         print(overview)
-
-        # Step 2: Get indicators for PLFS
-        indicators = await client.call_tool("step2_get_indicators", {
-            "dataset": "PLFS",
-            "user_query": "unemployment rate"
-        })
-        print(indicators)
 
 asyncio.run(main())
 ```
