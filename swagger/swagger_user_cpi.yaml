@@ -64,18 +64,6 @@ paths:
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
-      - name: state_code
-        in: query
-        description: Enter the State code (for base_year 2024. Comma separated for multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: sector_code
-        in: query
-        description: Enter the Sector code (for base_year 2024. Comma separated for multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
       - name: division_code
         in: query
         description: Enter the Division code (for base_year 2024. Comma separated for multiple values)

@@ -159,6 +159,20 @@ Add to `.cursor/mcp.json` or `.windsurf/mcp.json`:
 }
 ```
 
+#### Antigravity
+
+Add to your Antigravity MCP settings:
+
+```json
+{
+  "mcpServers": {
+    "mospi_api": {
+      "serverUrl": "https://mcp.mospi.gov.in/"
+    }
+  }
+}
+```
+
 #### Verify Connection
 
 ```bash
