@@ -13,7 +13,7 @@ ENV OTEL_SERVICE_NAME=mospi-mcp-server
 ENV OTEL_TRACES_EXPORTER=otlp
 ENV OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 
-# Install system dependencies (needed for pandas/numpy/openpyxl)
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
@@ -36,4 +36,4 @@ EXPOSE 8000
 
 # Run the server with OpenTelemetry instrumentation wrapper
 # FastMCP middleware handles IP tracking and input/output capture
-CMD ["opentelemetry-instrument", "fastmcp", "run", "mospi_server.py:mcp", "--transport", "http", "--port", "8000", "--host", "0.0.0.0"]
+CMD ["opentelemetry-instrument", "fastmcp", "run", "mospi_server.py:mcp", "--transport", "http", "--port", "8000", "--host", "0.0.0.0", "--stateless", "--workers", "4"]

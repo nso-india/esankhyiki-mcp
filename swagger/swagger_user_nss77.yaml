@@ -1,0 +1,477 @@
+openapi: 3.0.1
+info:
+  title: National Sample Survey (NSS)
+  version: 1.0.11
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: National Sample Survey (NSS 77 ROUND).
+  description: Indicator-wise National Sample Survey (NSS 77 ROUND).
+paths:
+  /api/nss-77/getNss77Records:
+    get:
+      tags:
+      - National Sample Survey (NSS 77 ROUND).
+      description:
+      - Indicator-wise National Sample Survey (NSS 77 ROUND).
+      operationId: NSS77IndicatorValues.
+      parameters:
+      - name: indicator_code
+        required: true
+        in: query
+        schema:
+          default: Estimated No. of Hhs for Each Size Class (ha.) of Land Possessed
+          enum:
+          - Estimated No. of Hhs for Each Size Class (ha.) of Land Possessed
+          - Estimated No. of Hhs for Different Social Groups
+          - Distribution of Hhs by Hh Classification for Different Size Classes of
+            Land Possessed
+          - No. Per Hh Operational Holding by Size Class of Hh Operational Holding
+          - No. Per 1000 Crop Producing Agricultural Hhs Disposals of Crop by Agency
+            and Satisfaction Level of Sale Outcomes
+          - Agricultural Hhs Reporting Use of Different Farming Resources
+          - Agricultural Hhs Reporting Use of Purchased Seed by their Quality
+          - Avg. Monthly Income (in Rs.) Per Agricultural Hh (only the Paid Out Expenditure)
+          - Avg. Monthly Income (in Rs.) Per Agricultural Hh (both the Paid Out and
+            Imputed Expenditure)
+          - Avg. Monthly Net Expenditure on Productive Assets
+          - Avg. Expenditure and Receipts on Farm and Non-farm Assets
+          - Avg. Monthly Expenses and Receipts for Crop Production
+          - Avg. Monthly Total Expenses for Crop Production
+          - Average Monthly Total Expenses and Receipts on Animal Farming During a
+            Period of 30 Days
+          - Average Expenses and Receipts From Non-farm Business
+          - Distribution of Amount of Loan Outstanding by Source of Loan Taken
+          - Distribution of Hhs by Size Class of Hh Ownership Holding, Average Area
+            of Homestead Land Owned/land Owned
+          - Distribution of Hhs Reporting Leasing-out of Land and Average Area of
+            such Land for Each Social Group
+          - Distribution of Hhs Reporting Leasing-in of Land and Average Area of such
+            Land for Each Social Group
+          - Percentage Distribution of Leased Out Land by Terms of Lease
+          - No. of Hhs Owning of Livestock of Different Types
+          - Percentage Distribution of Area of Land for the Hhs Belonging of Operational
+            Holding by Kind of Possession
+          - Distribution of Operational Holdings by Type of Possession of Hh Operational
+            Holding
+          - Average Gross Cropped Area / Value of Total Crop Production / Quantity
+            of Crop Production Reporting Crop Production
+          - Distribution of Agricultural Hhs Reporting Sale of Crops and Distribution
+            of Quantity Sold by Agency of Major Disposal
+          - Distribution of Agricultural Hhs Reporting Sale of Selected Crop by Level
+            of Satisfaction
+          - Distribution of Agricultural Hhs Reporting Use of Seed by their Agency
+            of Procurement for Selected Crops
+          - Distribution of Agricultural Hhs Reporting Use of Purchased Seed by their
+            Quality
+          - Per 1000 Distribution of Agricultural Households Reporting Sale of Crops
+            by Awareness About Msp for Selected Crops
+          - Distribution of Agricultural Hhs not Insuring their Crops by Reason for
+            Selected Crops
+          - Distribution of Agricultural Hh by Status of Crop Insurance for Selected
+            Crops
+          - No. Per 1000 of Agricultural Hh Crop Loss Per 1000 Agricultural Hhs and
+            Cause-wise Distribution for Selected Crops
+          - No. Per 1000 Agricultural Hh Which Insured Experienced Crop Loss for Selected
+            Crops
+      - name: state_code
+        in: query
+        description: Enter the State code (from 1 to 39. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: gender_code
+        in: query
+        description: Enter the Gender code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: visit_code
+        in: query
+        description: Enter the Visit code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: visit_name
+        in: query
+        description: Filter by visit name (Visit 1, Visit 2, etc.)
+        schema:
+          type: string
+      - name: land_possessed_hosehold_code
+        in: query
+        description: Enter the Land Possessed Household code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: Land_Possessed(hectares)
+        in: query
+        description: Filter by land possessed in hectares (<0.01, 0.01-0.40, etc.)
+        schema:
+          type: string
+      - name: agricultural_household_code
+        in: query
+        description: Enter the Agricultural Household code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: caste_code
+        in: query
+        description: Enter the Caste code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: household_classification
+        in: query
+        description: Filter by household classification (Agricultural Households,
+          etc.)
+        schema:
+          type: string
+      - name: household_employment_code
+        in: query
+        description: Enter the Household Employment code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: household_employment_sub_code
+        in: query
+        description: Enter the Household Employment Sub code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: major_disposal_code
+        in: query
+        description: Enter the Major Disposal code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: agency_code
+        in: query
+        description: Enter the Agency code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: experienced_crop_code
+        in: query
+        description: Enter the Experienced Crop code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: crop_code
+        in: query
+        description: Enter the Crop code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_experienced_crop_code
+        in: query
+        description: Enter the Sub Experienced Crop code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: operational_holding_code
+        in: query
+        description: Enter the Operational Holding code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: season_code
+        in: query
+        description: Enter the Season code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_satisfactory_code
+        in: query
+        description: Enter the Sub Satisfactory code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: satisfactory_code
+        in: query
+        description: Enter the Satisfactory code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_major_procurement_code
+        in: query
+        description: Enter the Sub Major Procurement code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: major_procurement_code
+        in: query
+        description: Enter the Major Procurement code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: resource_code
+        in: query
+        description: Enter the Resource code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_resource_code
+        in: query
+        description: Enter the Sub Resource code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: agency_procurement_code
+        in: query
+        description: Enter the Agency Procurement code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: seed_procurements_code
+        in: query
+        description: Enter the Seed Procurements code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_seed_procurements_code
+        in: query
+        description: Enter the Sub Seed Procurements code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: expenditure_recipt_code
+        in: query
+        description: Enter the Expenditure Receipt code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: business_type_code
+        in: query
+        description: Enter the Business Type code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: productive_assets_code
+        in: query
+        description: Enter the Productive Assets code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: expenses_recipt_code
+        in: query
+        description: Enter the Expenses Receipt code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: crop_production_code
+        in: query
+        description: Enter the Crop Production code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: farming_animals_code
+        in: query
+        description: Enter the Farming Animals code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: expenses_imputed_code
+        in: query
+        description: Enter the Expenses Imputed code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: receipts_type_code
+        in: query
+        description: Enter the Receipts Type code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: loan_outstanding_code
+        in: query
+        description: Enter the Loan Outstanding code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: ownership_holding_code
+        in: query
+        description: Enter the Ownership Holding code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: ownership_holding_area_code
+        in: query
+        description: Enter the Ownership Holding Area code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: terms_lease_code
+        in: query
+        description: Enter the Terms Lease code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: livestock_owned_code
+        in: query
+        description: Enter the Livestock Owned code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: stock_code
+        in: query
+        description: Enter the Stock code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: possession_code
+        in: query
+        description: Enter the Possession code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: possession_holding_code
+        in: query
+        description: Enter the Possession Holding code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: harvested_code
+        in: query
+        description: Enter the Harvested code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_harvested_code
+        in: query
+        description: Enter the Sub Harvested code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: crop_agency_code
+        in: query
+        description: Enter the Crop Agency code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: crop_satisfaction_code
+        in: query
+        description: Enter the Crop Satisfaction code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: crop_procurement_code
+        in: query
+        description: Enter the Crop Procurement code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: crop_insurance_code
+        in: query
+        description: Enter the Crop Insurance code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: crop_experienced_code
+        in: query
+        description: Enter the Crop Experienced code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: quality_seeds_code
+        in: query
+        description: Enter the Quality Seeds code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: insurance_awareness_code
+        in: query
+        description: Enter the Insurance Awareness code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: crop_loss_code
+        in: query
+        description: Enter the Crop Loss code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: msp_awareness_code
+        in: query
+        description: Enter the MSP Awareness code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_indicator_code
+        in: query
+        description: Enter the Sub Indicator code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: limit
+        in: query
+        description: Number of records per page (default 10)
+        schema:
+          type: integer
+          pattern: ^\d+$
+          default: 10
+      - name: page
+        in: query
+        description: Page number (from 1 to n)
+        schema:
+          type: integer
+          pattern: ^\d+$
+      - name: Format
+        required: true
+        in: query
+        description: Select the Output format
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+      responses:
+        '200':
+          description: A JSON array of user information
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+        '409':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Requested item wasn't found!
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'

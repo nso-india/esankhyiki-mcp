@@ -1,7 +1,6 @@
 openapi: 3.0.1
 info:
   title: Wholesale Price Index (WPI)
-
   version: 1.0.11
 servers:
 - url: https://api.mospi.gov.in/
@@ -9,7 +8,6 @@ tags:
 - name: Wholesale Price Index.
   description: Year-Wise Wholesale Price Index (WPI).
 paths:
-
   /api/wpi/getWpiRecords:
     get:
       tags:
@@ -21,46 +19,61 @@ paths:
         description: Enter the Year (format YYYY. Comma separated for multiple values)
         schema:
           type: string
+          pattern: ^\d{4}(,\d{4})*$
       - name: month_code
         in: query
-        description: Enter the Month code (from 1 to 12. Comma separated for multiple values)
+        description: Enter the Month code (from 1 to 12. Comma separated for multiple
+          values)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: major_group_code
         in: query
-        description: Enter the Major group code (Comma separated for multiple values, Refer MetaData Sheet)
+        description: Enter the Major group code (Comma separated for multiple values,
+          Refer MetaData Sheet)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: group_code
         in: query
-        description: Enter the Group code (Comma separated for multiple values, Refer MetaData Sheet)
+        description: Enter the Group code (Comma separated for multiple values, Refer
+          MetaData Sheet)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: sub_group_code
         in: query
-        description: Enter the Sub group code (Comma separated for multiple values, Refer MetaData Sheet)
+        description: Enter the Sub group code (Comma separated for multiple values,
+          Refer MetaData Sheet)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: sub_sub_group_code
         in: query
-        description: Enter the Sub sub group code (Comma separated for multiple values, Refer MetaData Sheet)
+        description: Enter the Sub sub group code (Comma separated for multiple values,
+          Refer MetaData Sheet)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: item_code
         in: query
-        description: Enter the Item code (Comma separated for multiple values, Refer MetaData Sheet)
+        description: Enter the Item code (Comma separated for multiple values, Refer
+          MetaData Sheet)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: limit
         in: query
         description: Number of records per page (default 10)
         schema:
           type: integer
+          pattern: ^\d+$
       - name: page
         in: query
         description: Enter the page no. (from 1 to n.)
         schema:
           type: string
+          pattern: ^\d+$
       - name: Format
         required: true
         in: query
@@ -72,9 +85,9 @@ paths:
           - JSON
           - CSV
       responses:
-        "200":
+        '200':
           description: A JSON array of user information
-        "400":
+        '400':
           description: Bad Request
           content:
             application/json:
@@ -97,8 +110,7 @@ paths:
                   message:
                     type: string
                     example: Invalid request body
-
-        "409":
+        '409':
           description: Not Found
           content:
             application/json:
@@ -113,7 +125,6 @@ paths:
                     example: Requested item wasn't found!
       security:
       - bearerAuth: []
-
 components:
   securitySchemes:
     bearerAuth:
@@ -121,4 +132,4 @@ components:
       description: Bearer token to access these api endpoints
       name: Authorization
       in: header
-x-original-swagger-version: "2.0"
+x-original-swagger-version: '2.0'

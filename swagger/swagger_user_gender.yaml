@@ -1,0 +1,474 @@
+openapi: 3.0.1
+info:
+  title: Women and Men in India
+  version: 1.0.11
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: Women and Men in India.
+  description: Year-Wise Women and Men in India.
+paths:
+  /api/gender/getGenderRecords:
+    get:
+      tags:
+      - Women and Men in India.
+      operationId: GENDERIndicatorValues.
+      parameters:
+      - name: indicator_code
+        required: true
+        in: query
+        schema:
+          default: Trend in Population
+          enum:
+          - Trend in Population
+          - Sex Ratio
+          - Average Annual Growth Rate of Population
+          - Percentage Distribution of Projected Population
+          - Sex ratio in context of developmental planning
+          - 'State-wise Sex Ratio '
+          - Sex ratio at birth for bigger States based on Sample Registration System
+          - General Fertility Rate
+          - Age-specific Fertility rate
+          - Total Fertility Rate
+          - Percentage distribution of live births
+          - Adolescent Fertility Rates
+          - Age Specific Fertility Rate by level of education of women
+          - Women's Mean Age at Marriage
+          - Year Wise Infant Mortality Rate
+          - State/UT  Wise Infant Mortality Rate
+          - Under-Five Mortality Rates (U5MR)
+          - Year Wise Life Expectancy at birth
+          - State/UT  wise Life Expectancy at birth
+          - Life Expectation at age 60
+          - Maternal Mortality Ratio
+          - Maternity Care Indicators
+          - Percentage of Births Attended by Skilled Health Personnel
+          - Percentage of married women use any modern method of family planning
+          - Unmet Need for Family Planning
+          - Need for Family Planning Satisfied with Modern Methods(Proportion of Women)
+          - Current tobacco use (15years or above)
+          - Proportion of Adults who are Obese (BMI >= 30.0)
+          - Number of new HIV infections per 1,000 uninfected population
+          - Number of PLHIV alive and on ART at the end of January 2025
+          - Cases and Deaths due to Acute Diarrhoeal Diseases
+          - Cases and Deaths due to Cholera Infection
+          - Cases and Deaths due to Enteric Fever (Typhoid) Infection
+          - Cases and Deaths due to Acute Respiratory Infection
+          - Cases and Deaths due to Neonatal Tentanus Infection
+          - Cases and Deaths due to Tetanus Infection
+          - Cases and Deaths due to Diphtheria Infection
+          - Cases and Deaths due to Whooping Cough infection
+          - Cases and Deaths due to Measles Infection
+          - Cases and Deaths due to Viral Hepatitis (All Causes)
+          - Cases and Deaths due to Rabies Infection
+          - Cases and Deaths due to Pneumonia Infection
+          - Cases and Deaths due to Meningococcal Meningitis Infectionv
+          - Cases and Deaths due to Syphilis
+          - Cases and Deaths due to Gonococcal Infection
+          - Cases and Deaths due to Chicken Pox
+          - Cases and Deaths due to Encephalitis Infection
+          - Cases and Deaths due to Viral Meningitis Infection
+          - Cases and Deaths due to Snake Bite
+          - Women undergone a screening test for cervical cancer and breast cancer
+            (%)
+          - Women who have comprehensive knowledge of HIV/AIDS (%)
+          - 'Women whose Body Mass Index is below normal and who are overweight or
+            obese '
+          - Ayush Registered Practitioners (Doctors)
+          - Number of Registered Nurses
+          - Literacy Rates for persons aged 7 years and above
+          - Gender Gap in Literacy Rate for persons of age 7 years and above
+          - State/UT wise Gender Gap in Literacy Rate for persons of age 7 years and
+            above
+          - Literacy Rate of Youth in the Age Group of 15-24 Years
+          - Percentage of persons able to read and write short simple statements
+          - Gross Enrolment Ratio
+          - Adjusted Net Enrolment Rate
+          - Gender Parity Index (GPI)
+          - Gender Parity Index (GPI-As Per NEP Structure)
+          - Gender Parity Indices (GPI) in Higher Education
+          - Enrolment at Under Graduate Level
+          - Enrolment at Ph.D., M.Phil. & Post Graduate Level
+          - Female-Male Ratio in Important Programmes - Regular Mode of Education
+          - Average years completed in formal education (pre-primary or above)
+          - Mean years of schooling in formal education (including pre-primary level
+            of education)
+          - Mean years of schooling in formal education (15 years and above)
+          - Mean years of schooling in formal education (25 years and above)
+          - Population with at least secondary as the highest level of education successfully
+            -completed
+          - 'Examination Result Level-wise Out-turn/Pass out in Higher Education '
+          - Dropout Rate
+          - Average expenditure (Rs.) per student pursuing general course
+          - Average expenditure (Rs.) per student in basic course
+          - Number of Female Teachers per 100 Male Teachers
+          - Proportion of females among tertiary education teachers or professors
+          - Number of Male & Female Teacher
+          - Labour Force Participation Rate (LFPR) (in percent) in usual status (ps+ss)
+          - Labour Force Participation Rate for persons of all ages
+          - Labour Force Participation Rate for persons aged 15 years & above
+          - Worker Population Ratio for persons of all ages
+          - Worker Population Ratio for Persons Aged 15 Years & Above
+          - Worker Population Ratio (WPR) in usual status (ps+ss) for persons of age
+            15 years and above
+          - Age group wise Worker Population Ratio (WPR)
+          - Average Wage Earning (in Rs.) received per day by Casual Labourers in
+            works other than Public Works
+          - Average Wage (in Rs.) Per Hour Earned by Occupation Divisions
+          - Percentage Distribution of Workers According to Broad Employment Status
+          - Percentage distribution of workers in usual status (ps+ss) by broad status
+            in employment
+          - Percentage distribution of workers in usual status (ps+ss) by broad industry
+            division
+          - Proportion (in per cent) of worker in usual status (ps+ss) in informal
+            sector
+          - Year Wise Unemployment rates in the labour force-usual status
+          - Age Wise Unemployment rates in the labour force-usual status
+          - Unemployment Rate for Persons aged 15 years & above
+          - Percentage of persons participating in different activities in a day
+          - Percentage of persons of age 6 years and above participating in different
+            activities in a day
+          - Average time (in minutes) spent in a day per participant in different
+            activities
+          - Average time (in minutes) spent in a day per participant in different
+            activities (TUS 2019)
+          - Percentage of persons in different age groups participating in the activities
+            in a day (TUS 2024)
+          - Percentage of persons participating in learning activities and average
+            time (in minutes) spent in a day per participant in learning activities
+          - Average Time (in Minutes)spent per day per person- Unpaid, Paid & Residual
+            activities
+          - Average Time (in Minutes)spent per day per person- Unpaid, Paid & Residual
+            activities (6 years & above) (TUS 2019)
+          - Average time (in minutes) spent in a day in unpaid and paid activities
+            (TUS 2024)
+          - Percentage of women employed in Scheduled Commercial Banks
+          - Distribution of Employees of Scheduled Commercial Banks
+          - Population Group Wise Deposits of Scheduled Commercial Banks
+          - State/UT Wise Deposits of Scheduled Commercial Banks
+          - Cumulative Enrolments in PMJJBY, PMSBY
+          - Indicators of Pradhan Mantri Vaya Vandana Yojana (PMVVY)
+          - Indicators of Pradhan Mantri Jan Dhan Yojan (PMJDY)
+          - Indicators of  Pradhan Mantri Mudra Yojna (PMMY)
+          - Indicators of Atal Pension Yojana (APY)
+          - Indicators of Stand Up India (SUPI)
+          - Subscribers of Demat accounts with CDSL
+          - Progress under Microfinance - Savings of SHGs with banks
+          - Progress under Microfinance - Bank loans disbursed by banks to SHGs
+          - Distribution of individual investors
+          - Percentage Share of estimated number of Female Workers for top 3 States
+            (all-India)
+          - Share of female headed estimated proprietary establishments of  major
+            states by broad activity category
+          - Per 1000 distribution of number of establishments of major states
+          - Percentage share of female workers to total number of workers
+          - Representation of Women in the Central Council of Ministers
+          - Persons Contesting and Elected in Various Lok Sabha Elections
+          - Women Elected in 18th Lok Sabha, 2024
+          - Women and Men Elected in State Assemblies
+          - Status of representation of women in Panchayati Raj Institutions (PRIs)
+          - Number of Electors and Percentage of Electors Voting in Various General
+            Elections
+          - Women Voters Turnout for General Election - 2024
+          - Women Judges in Supreme Court and High Courts
+          - Persons Engaged at Managerial Positions in Companies
+          - Strength of Female Police Officers in India
+          - Number of Women-led Start-ups
+          - Participation of officers in Indian Army, Navy and Airforce
+          - Women officers in Various All India Central Group B & C Services
+          - Total Women Owned MSMEs Registered & Classified and their Employment,
+            Investment & Turnover Under Udyam
+          - Women IMEs and employment data for the women IMEs
+          - Women Participation in Household Decision-Making
+          - Ownership of Assets
+          - Status of Major Crimes Committed Against Women
+          - Rate (per Lakh Women) of Incidence of Various Crimes Committed against
+            Women
+          - Distribution of Rape Victims
+          - Percentage of Married Women Experienced Violence by their Husband
+          - Disposal of Crimes Committed Against Women Cases by Police
+          - Disposal of Crimes Committed Against Women Cases by Courts
+          - Percentage of women aged 20-24 years married before age 18 years
+          - Percentage of Men aged 25-29 years who were married before age 21 years
+          - Adolescent Fertility Rate for women aged 15-19 years
+          - Incidence of Suicides
+          - Profile of Suicide Victims by various Parameters
+          - Cyber Crimes against Women
+          - Percentage of Disabled (Differently abled persons)
+          - Percentage of persons with broad type of disabilities
+          - Percentage of Disabled persons to Total population
+          - Percentage of females by type of disability
+          - Cases Filed by Women
+      - name: year
+        in: query
+        description: Enter the Year (format YYYY-YY/YYYY. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d{4}-\d{2}(,\d{4}-\d{2})*$
+      - name: quarter_code
+        in: query
+        description: Enter the Quarter Code (from 1 to 4. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_indicator_code
+        in: query
+        description: Enter the Sub Indicator code (from 1 to 152. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: state_ut_code
+        in: query
+        description: Enter the State code (from 1 to 43. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sector_code
+        in: query
+        description: Enter the Sector code (from 1 to 6. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: gender_code
+        in: query
+        description: Enter the Gender code (from 1 to 9. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: age_group_code
+        in: query
+        description: Enter the Age Group code (from 1 to 41. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: birth_order_code
+        in: query
+        description: Enter the Birth Order code (from 1 to 4. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: education_level_code
+        in: query
+        description: Enter the Education Level code (from 1 to 74. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: survey_code
+        in: query
+        description: Enter the Survey code (from 1 to 6. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_indicator
+        in: query
+        description: Filter by sub-indicator
+        schema:
+          type: string
+      - name: family_planning_method_code
+        in: query
+        description: Enter the Family Planning Method code (from 1 to 11. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: ayush_category_code
+        in: query
+        description: Enter the Other Ayush Category code (from 1 to 7. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: discipline_code
+        in: query
+        description: Enter the discipline code (from 1 to 81. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: nco_division_code
+        in: query
+        description: Enter the NCO Division code (from 1 to 10. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: employment_category_code
+        in: query
+        description: Enter the Employment Category code (from 1 to 11. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: industry_code
+        in: query
+        description: Enter the Industry code (from 1 to 25. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: bank_group_code
+        in: query
+        description: Enter the Bank Group code (from 1 to 6. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: activity_code
+        in: query
+        description: Enter the Activity code (from 1 to 30. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: broad_activity_category_code
+        in: query
+        description: Enter the Broad Activity Category code (from 1 to 4. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: type_of_establishment_code
+        in: query
+        description: Enter the Type of Establishment code (from 1 to 3. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: deposit_code
+        in: query
+        description: Enter the Deposit code (from 1 to 2. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: scheme_code
+        in: query
+        description: Enter the Scheme code (from 1 to 2. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: lok_sabha_election_code
+        in: query
+        description: Enter the Lok Sabha Election code (from 1 to 18. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: police_code
+        in: query
+        description: Enter the Police code (from 1 to 17. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: court_code
+        in: query
+        description: Enter the Court code (from 1 to 28. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: service_code
+        in: query
+        description: Enter the Services code (from 1 to 13. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: crime_head_code
+        in: query
+        description: Enter the Crime Head code (from 1 to 32. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: category_code
+        in: query
+        description: Enter the Category code (from 1 to 31. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: limit
+        in: query
+        description: Number of records per page (default 10)
+        schema:
+          type: integer
+          pattern: ^\d+$
+          default: 10
+      - name: page
+        in: query
+        description: Enter the page no. (from 1 to n.)
+        schema:
+          type: string
+          pattern: ^\d+$
+      - name: Format
+        required: true
+        in: query
+        description: Select the Output format
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+      responses:
+        '200':
+          description: A JSON array of user information
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+        '409':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Requested item wasn't found!
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'

@@ -61,3 +61,16 @@ logs/
 *.tmp
 *.bak
 *.cache
+
+# Binary/data files
+*.shp
+*.geojson
+*.xlsx
+*.pdf
+~$*
+
+# Local logs
+mcp_logs/
+
+# Health check dashboard
+health-check/

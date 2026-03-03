@@ -1,0 +1,138 @@
+openapi: 3.0.1
+info:
+  title: All India Survey on Higher Education
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: AISHE.
+  description: Indicator-wise aishe statistics in India.
+paths:
+  /api/aishe/getAisheRecords:
+    get:
+      summary: Get  data for an indicator
+      description: "- **Required:** `indicator_code`  \n- **Filters (optional):**\
+        \ sub_indicator_code,gender_code,state_code,category_code,social_category_code,social_group_code,institution_type_code,faculty_type_code,learning_mode_code,education_level_code,year,\n\
+        \ \n"
+      parameters:
+      - in: query
+        name: indicator_code
+        required: true
+        schema:
+          type: integer
+          pattern: ^\d+$
+        description: Indicator code (primary filter, single value only)
+      - in: query
+        name: year
+        schema:
+          type: string
+          pattern: ^\d{4}-\d{2}$
+        description: Financial year (e.g., 2021-22)
+      - in: query
+        name: state_code
+        schema:
+          type: integer
+        description: State code
+      - in: query
+        name: gender_code
+        schema:
+          type: integer
+        description: Gender code
+      - in: query
+        name: social_category_code
+        schema:
+          type: integer
+        description: Social category code (SC, ST, OBC, etc.)
+      - in: query
+        name: social_group_code
+        schema:
+          type: integer
+        description: Social group code (PWD, Minority, etc.)
+      - in: query
+        name: category_code
+        schema:
+          type: integer
+        description: Category code
+      - in: query
+        name: institution_type_code
+        schema:
+          type: integer
+        description: Institution type code
+      - in: query
+        name: sub_indicator_code
+        schema:
+          type: integer
+        description: Sub-indicator code
+      - in: query
+        name: faculty_type_code
+        schema:
+          type: integer
+        description: Faculty type code
+      - in: query
+        name: learning_mode_code
+        schema:
+          type: integer
+        description: Learning mode code
+      - in: query
+        name: education_level_code
+        schema:
+          type: integer
+        description: Education level code (Ph.D., Post Graduate, Under Graduate, etc.)
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          default: 20
+          pattern: ^\d+$
+      - in: query
+        name: page
+        schema:
+          type: integer
+          minimum: 1
+          pattern: ^\d+$
+      - in: query
+        name: Format
+        required: true
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+        description: Output format (JSON or CSV)
+      responses:
+        '200':
+          description: A JSON array of user information
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'

@@ -1,0 +1,305 @@
+openapi: 3.0.1
+info:
+  title: Annual Survey of Unincorporated Sector Enterprises (ASUSE)
+  version: 1.0.11
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: Annual Survey of Unincorporated Sector Enterprises.
+  description: Year-Wise Annual Survey of Unincorporated Sector Enterprises (ASUSE).
+paths:
+  /api/asuse/getAsuseRecords:
+    get:
+      tags:
+      - Annual Survey of Unincorporated Sector Enterprises.
+      operationId: ASUSEIndicatorValues.
+      parameters:
+      - name: indicator_code
+        required: true
+        in: query
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: year
+        in: query
+        description: "(OPTIONAL) Year filter. For Annual indicators use YYYY-YY format (e.g., 2022-23). For Quarterly indicators use YYYY format (e.g., 2025). Quarterly data available from 2025 onwards. Comma separated for multiple values."
+        schema:
+          type: string
+      - name: quarter_code
+        in: query
+        description: Enter the Quarter code (1=JAN-MAR, 2=APR-JUN, 3=JUL-SEP, 4=OCT-DEC). Only valid for Quarterly data (frequency_code=2). Comma separated for multiple values.
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: state_ut_code
+        in: query
+        description: Enter the State/UT code (from 1 to 37. Comma separated for multiple
+          values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: sub_indicator_code
+        in: query
+        description: Enter the Sub Indicator code (from 1 to 19. Comma separated for
+          multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: activity_category_code
+        in: query
+        description: Enter the Activity Category code (from 1 to 50. Comma separated
+          for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: sector_code
+        in: query
+        description: Enter the Sector code (from 1 to 3. Comma separated for multiple
+          values). MUTUALLY EXCLUSIVE with broad_activity_category_code - use one OR the other, not both.
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: gender_code
+        in: query
+        description: Enter the Gender code (from 1 to 4. Comma separated for multiple
+          values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: ownership_type_code
+        in: query
+        description: Enter the Ownership Type code (from 1 to 8. Comma separated for
+          multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: establishment_type_code
+        in: query
+        description: Enter the Establishment Type code (from 1 to 3. Comma separated
+          for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: general_education_level_code
+        in: query
+        description: Enter the General Education Level code (from 1 to 7. Comma separated
+          for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: social_group_of_owner_major_partner_code
+        in: query
+        description: Enter the Social Group of Owner/Major Partner code (from 1 to
+          6. Comma separated for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: broad_activity_category_code
+        in: query
+        description: Enter the Broad Activity Category code (from 1 to 4. Comma separated
+          for multiple values). MUTUALLY EXCLUSIVE with sector_code - use one OR the other, not both.
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: other_economic_activitycount_code
+        in: query
+        description: Enter the Other Economic Activitycount code (from 1 to 6. Comma
+          separated for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: account_holder_code
+        in: query
+        description: Enter the Account Holder code (from 1 to 3. Comma separated for
+          multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: location_of_establishments_code
+        in: query
+        description: Enter the Location of Establishments code (from 1 to 7. Comma
+          separated for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: nature_of_operation_code
+        in: query
+        description: Enter the Nature of Operation code (from 1 to 4. Comma separated
+          for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: no_of_months_operated_code
+        in: query
+        description: Enter the No. of Months Operated code (from 1 to 6. Comma separated
+          for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: no_of_working_hours_code
+        in: query
+        description: Enter the No. of Working Hours code (from 1 to 5. Comma separated
+          for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: audit_status_code
+        in: query
+        description: Enter the Audit Status code (from 1 to 3. Comma separated for
+          multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: npi_status_code
+        in: query
+        description: Enter the NPI Status code (from 1 to 4. Comma separated for multiple
+          values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: acts_agency_of_registration_code
+        in: query
+        description: Enter the Acts/Agency of Registration code (from 1 to 10. Comma
+          separated for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: services_contract_code
+        in: query
+        description: Enter the Services Contract code (from 1 to 5. Comma separated
+          for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: nature_of_employment_code
+        in: query
+        description: Enter the Nature of Employment code (from 1 to 3. Comma separated
+          for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: type_of_worker_code
+        in: query
+        description: Enter the Type of Worker code (from 1 to 6. Comma separated for
+          multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: hired_worker_code
+        in: query
+        description: Enter the Hired Worker code (from 1 to 3. Comma separated for
+          multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: fixed_assets_code
+        in: query
+        description: Enter the Fixed Assets code (from 1 to 3. Comma separated for
+          multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: usage_of_internet_code
+        in: query
+        description: Enter the Usage of Internet code (from 1 to 13. Comma separated
+          for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: worker_characteristics_code
+        in: query
+        description: Enter the Worker Characteristics code (from 1 to 7. Comma separated
+          for multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: worker_number_code
+        in: query
+        description: Enter the Worker Number code (from 1 to 21. Comma separated for
+          multiple values)
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: working_time
+        in: query
+        description: Filter by working time (Full time, Part time, etc.)
+        schema:
+          type: string
+      - name: frequency_code
+        in: query
+        description: "(NOT REQUIRED for data calls - indicator_code already determines annual vs quarterly. Only used internally for metadata endpoints. Can be omitted.)"
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: limit
+        in: query
+        description: Number of records per page (default 10)
+        schema:
+          type: integer
+          pattern: ^\d+$
+          default: 10
+      - name: page
+        in: query
+        description: Enter the page no. (from 1 to n.)
+        schema:
+          type: integer
+          pattern: ^\d+$
+      - name: Format
+        required: true
+        in: query
+        description: Select the Output format
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+      responses:
+        '200':
+          description: A JSON array of user information
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+        '409':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Requested item wasn't found!
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'

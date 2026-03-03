@@ -1,0 +1,347 @@
+openapi: 3.0.1
+info:
+  title: Time Use Survey
+  version: 1.0.11
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: Time Use Survey.
+  description: Year-Wise Time Use Survey.
+paths:
+  /api/tus/getTusRecords:
+    get:
+      tags:
+      - Time Use Survey.
+      operationId: TUSIndicatorValues.
+      parameters:
+      - name: indicator_code
+        required: true
+        in: query
+        schema:
+          default: Percentage of persons in different activity in a day as major activity
+            (age 6 years and above)
+          enum:
+          - Percentage of persons in different activity in a day as major activity
+            (age 6 years and above)
+          - Minutes spent in different activity in a day as major activity (age 6
+            years and above)
+          - Percentage of persons in different activity in a day irrespective of major
+            activity (age 6 years and above)
+          - Minutes spent on an average per participant in different activity in a
+            day irrespective of major activity
+          - Minutes spent on an average per person in different activity in a day
+            irrespective of major activity
+          - Percentage of persons in unpaid activities, paid activities and other
+            activities as major activity (age 6 years and above)
+          - Minutes spent in a day on an average per participant in unpaid activities,
+            paid activities and other activtities as major activity (age 6 years and
+            above)
+          - Minutes spent in a day on an average per person in unpaid activities,
+            paid activities and other activtities as a major activity (age 6 years
+            and above)
+          - Percentage of persons in unpaid activities, paid activities and other
+            activtities irrespective of major activity (age 6 years and above)
+          - Minutes spent in a day on an average per person in unpaid activities,
+            paid activities and other activtities irrespective of major activity (age
+            6 years and above)
+          - Minutes spent in a day on an average per participant in unpaid activities,
+            paid activities and other activtities irrespective of major activity (age
+            6 years and above)
+          - Percentage of persons in different activity where the activity was a major
+            activity for different usual principal activity status of the person (age
+            6 years and above)
+          - Minutes spent in a day on an average per participant in different activity
+            where the activity was a major activity for each usual principal activity
+            status of the person (age 6 years and above)
+          - Percentage of persons in different activity in a day irrespective of major
+            activity for each usual principal activity status of the person (age 6
+            years and above)
+          - Minutes spent in a day on an average per participant in different activity
+            irrespective of major activity for each usual principal activity status
+            of the person (age 6 years and above)
+          - Percentage of persons in different activity as major activity in a day
+            for each marital status of the person (age 6 years and above)
+          - 'Minutes spent in a day on an average per participant in different activity
+            as major activity for each marital status of the person (age 6 years and
+            above) '
+          - 'Percentage of persons in different activity in a day irrespective of
+            major activity for each marital status of the person (age 6 years and
+            above) '
+          - 'Minutes spent in a day on an average per participant in different activity
+            irrespective of major activity for each marital status of the person (age
+            6 years and above) '
+          - 'Percentage of persons in different activity as major activity in a day
+            for different UMPCE quintile classes (age 6 years and above) '
+          - 'Minutes spent in a day on an average per participant in different activity
+            where the activity was done as a major activity for different UMPCE quintile
+            classes (age 6 years and above) '
+          - 'Percentage of persons in different activity irrespective of major activity
+            in a day for different UMPCE quintile classes '
+          - 'Minutes spent in a day on an average per participant in different activity
+            irrespective of major activity for different UMPCE quintile classes (age
+            6 years and above) '
+          - 'Percentage of persons in different activity where the activity was a
+            major activity for different level of education (age 6 years and above) '
+          - 'Minutes spent in a day on an average per participant in different activity
+            where the activity was performed as a major activity for different level
+            of education (age 6 years and above) '
+          - 'Percentage of persons in different activity irrespective of major activity
+            for different level of education (age 6 years and above) '
+          - 'Minutes spent in a day on an average per participant in different activity
+            irrespective of major activity for different level of education (age 6
+            years and above) '
+          - 'Percentage of persons in different activity as major activity in a day
+            for different household social groups '
+          - 'Minutes spent in a day on an average per participant in different activity
+            where the activity was done as a major activity for different household
+            social groups (age 6 years and above) '
+          - Percentage of persons in different activity irrespective of major activity
+            in a day for different household social groups
+          - Minutes spent in a day on an average per participant in different activity
+            irrespective of major activity for different household social groups (age
+            6 years and above)
+          - 'Percentage of persons and minutes in a day spent on an average per participant
+            in SNA activities, Non-SNA activities and residual other activities where
+            the activity was a major activity for each broad principal activity status
+            (age 6 years and above) '
+          - 'Percentage of persons and minutes spent in a day on an average per participant
+            in SNA activities, Non-SNA activities and residual other activities irrespective
+            of major activity for each broad principal activity status (age 6 years
+            and above) '
+          - Percentage of persons and minutes in a day spent on an average per participant
+            of different age groups in SNA activites,Non-SNA activities and residual
+            Residual other activities where the activity was a major activity by type
+            of the day
+          - Percentage of persons and minutes in a day spent on an average per participant
+            of different age groups in SNA activities, Non-SNA activities and residual
+            Residual other activities irrespective of major activity by type of the
+            day
+          - 'Percentage of persons in different unpaid and paid activities where the
+            activity was a major activity by place of activity (age 6 years and above) '
+          - 'Minutes in a day spent on an average per participant in different unpaid
+            and paid activities where the activity was a major activity by place of
+            activity (age 6 years and above) '
+          - 'Percentage of persons and minutes spent in a day on an average per person
+            /per participant in unpaid activities, paid activities and other activities
+            where the activity was a major activity (age 6 years and above) '
+          - 'Percentage of persons and minutes spent in a day on an average per person/per
+            participant in unpaid activites, paid activites and other activities irrespective
+            of major activity (age 6 years and above) '
+          - 'Percentage of persons and minutes spent in a day on an average per person/per
+            participant for each household social group in unpaid activites, paid
+            activites and other activites where the activity was a major activity
+            all-India(age 6 years and above) '
+          - Percentage of persons and minutes spent in a day on an average per person/per
+            participant for each household social group in unpaid activities, paid
+            activities and other activities irrespective of major activity (age 6
+            years and above)
+          - 'Percentage of time spent in a day per person in Unpaid domestic services
+            for household members and Unpaid caregiving services for household members
+            irrespective of major activity '
+          - Percentage distribution of persons by relationship of the informant with
+            the household member and gender of the informant (age 6 years and above)
+      - name: year
+        in: query
+        description: Enter the Year (format YYYY, e.g. 2019. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d{4}(,\d{4})*$
+      - name: sub_indicator_code
+        in: query
+        description: Enter the Sub Indicator code (from 1 to 27. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: state_code
+        in: query
+        description: Enter the State code (from 1 to 37. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sector_code
+        in: query
+        description: Enter the Sector code (from 1 to 5. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: gender_code
+        in: query
+        description: Enter the Gender code (from 1 to 5. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: day_of_week_code
+        in: query
+        description: Enter the Day of Week code (from 1 to 13. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: household_member_code
+        in: query
+        description: Enter the Household Member code (from 1 to 7. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: age_group_code
+        in: query
+        description: Enter the Age Group code (from 1 to 5. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: icatus_activity_code
+        in: query
+        description: Enter the ICATUS Activity code (from 1 to 235. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: activity_code
+        in: query
+        description: Enter the Activity code (from 1 to 44. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: usual_principal_activity_code
+        in: query
+        description: Enter the Usual Principal Activity_code code (from 1 to 13. Comma
+          separated for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: broad_principal_activity_status_code
+        in: query
+        description: Enter the Broad Principal Activity Status code (from 1 to 4.
+          Comma separated for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: place_of_activity_code
+        in: query
+        description: Enter the Place Of Activity code (from 1 to 4. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sna_activity_code
+        in: query
+        description: Enter the SNA Activity code (from 1 to 4. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: marital_status_code
+        in: query
+        description: Enter the Other Marital Status code (from 1 to 4. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: quintile_class_of_umpce_code
+        in: query
+        description: Enter the Quintile Class of UMPCE code (from 1 to 6. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: level_of_education_code
+        in: query
+        description: Enter the Level of Education code (from 1 to 9. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: employment_status_code
+        in: query
+        description: Enter the Employment Status code (from 1 to 16. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: social_group_code
+        in: query
+        description: Enter the Social  code (from 1 to 5. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: limit
+        in: query
+        description: Number of records per page (default 10)
+        schema:
+          type: integer
+          pattern: ^\d+$
+          default: 10
+      - name: page
+        in: query
+        description: Enter the page no. (from 1 to n.)
+        schema:
+          type: string
+          pattern: ^\d+$
+      - name: Format
+        required: true
+        in: query
+        description: Select the Output format
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+      responses:
+        '200':
+          description: A JSON array of user information
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+        '409':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Requested item wasn't found!
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'
