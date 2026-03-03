@@ -2,9 +2,9 @@ name: MCP Server Tests
 
 on:
   push:
-    branches: [main, v2, esankhyiki-sync]
+    branches: [main]
   pull_request:
-    branches: [main, v2, esankhyiki-sync]
+    branches: [main]
 
 jobs:
   test:
