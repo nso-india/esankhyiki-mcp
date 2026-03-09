@@ -1,0 +1,737 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Trend in Population",
+    "description": "Trend in Population"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Sex Ratio",
+    "description": "Sex Ratio"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Average Annual Growth Rate of Population",
+    "description": "Average Annual Growth Rate of Population"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Percentage Distribution of Projected Population",
+    "description": "Percentage Distribution of Projected Population"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Sex ratio in context of developmental planning",
+    "description": "Sex ratio in context of developmental planning"
+  },
+  {
+    "indicator_code": 6,
+    "name": "State-wise Sex Ratio ",
+    "description": "State-wise Sex Ratio "
+  },
+  {
+    "indicator_code": 7,
+    "name": "Sex ratio at birth for bigger States based on Sample Registration System",
+    "description": "Sex ratio at birth for bigger States based on Sample Registration System"
+  },
+  {
+    "indicator_code": 8,
+    "name": "General Fertility Rate",
+    "description": "General Fertility Rate"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Age-specific Fertility rate",
+    "description": "Age-specific Fertility rate"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Total Fertility Rate ",
+    "description": "Total Fertility Rate "
+  },
+  {
+    "indicator_code": 11,
+    "name": "Percentage distribution of live births",
+    "description": "Percentage distribution of live births"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Adolescent Fertility Rates",
+    "description": "Adolescent Fertility Rates"
+  },
+  {
+    "indicator_code": 13,
+    "name": "Age Specific Fertility Rate by level of education of women",
+    "description": "Age Specific Fertility Rate by level of education of women"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Women's Mean Age at Marriage",
+    "description": "Women's Mean Age at Marriage"
+  },
+  {
+    "indicator_code": 15,
+    "name": "Year Wise Infant Mortality Rate",
+    "description": "Year Wise Infant Mortality Rate"
+  },
+  {
+    "indicator_code": 16,
+    "name": "State/UT  Wise Infant Mortality Rate",
+    "description": "State/UT  Wise Infant Mortality Rate"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Under-Five Mortality Rates (U5MR)",
+    "description": "Under-Five Mortality Rates (U5MR)"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Year Wise Life Expectancy at birth",
+    "description": "Year Wise Life Expectancy at birth"
+  },
+  {
+    "indicator_code": 19,
+    "name": "State/UT  wise Life Expectancy at birth",
+    "description": "State/UT  wise Life Expectancy at birth"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Life Expectation at age 60",
+    "description": "Life Expectation at age 60"
+  },
+  {
+    "indicator_code": 21,
+    "name": "Maternal Mortality Ratio",
+    "description": "Maternal Mortality Ratio"
+  },
+  {
+    "indicator_code": 22,
+    "name": "Maternity Care Indicators",
+    "description": "Maternity Care Indicators"
+  },
+  {
+    "indicator_code": 23,
+    "name": "Percentage of Births Attended by Skilled Health Personnel",
+    "description": "Percentage of Births Attended by Skilled Health Personnel"
+  },
+  {
+    "indicator_code": 24,
+    "name": "Percentage of married women use any modern method of family planning",
+    "description": "Percentage of married women use any modern method of family planning"
+  },
+  {
+    "indicator_code": 25,
+    "name": "Unmet Need for Family Planning ",
+    "description": "Unmet Need for Family Planning "
+  },
+  {
+    "indicator_code": 26,
+    "name": "Need for Family Planning Satisfied with Modern Methods(Proportion of Women)",
+    "description": "Need for Family Planning Satisfied with Modern Methods(Proportion of Women)"
+  },
+  {
+    "indicator_code": 27,
+    "name": "Current tobacco use (15years or above)",
+    "description": "Current tobacco use (15years or above)"
+  },
+  {
+    "indicator_code": 28,
+    "name": "Proportion of Adults who are Obese (BMI >= 30.0)",
+    "description": "Proportion of Adults who are Obese (BMI >= 30.0)"
+  },
+  {
+    "indicator_code": 29,
+    "name": "Number of new HIV infections per 1,000 uninfected population",
+    "description": "Number of new HIV infections per 1,000 uninfected population"
+  },
+  {
+    "indicator_code": 30,
+    "name": "Number of PLHIV alive and on ART at the end of January 2025",
+    "description": "Number of PLHIV alive and on ART at the end of January 2025"
+  },
+  {
+    "indicator_code": 31,
+    "name": "Cases and Deaths due to Acute Diarrhoeal Diseases",
+    "description": "Cases and Deaths due to Acute Diarrhoeal Diseases"
+  },
+  {
+    "indicator_code": 32,
+    "name": "Cases and Deaths due to Cholera Infection",
+    "description": "Cases and Deaths due to Cholera Infection"
+  },
+  {
+    "indicator_code": 33,
+    "name": "Cases and Deaths due to Enteric Fever (Typhoid) Infection",
+    "description": "Cases and Deaths due to Enteric Fever (Typhoid) Infection"
+  },
+  {
+    "indicator_code": 34,
+    "name": "Cases and Deaths due to Acute Respiratory Infection",
+    "description": "Cases and Deaths due to Acute Respiratory Infection"
+  },
+  {
+    "indicator_code": 35,
+    "name": "Cases and Deaths due to Neonatal Tentanus Infection",
+    "description": "Cases and Deaths due to Neonatal Tentanus Infection"
+  },
+  {
+    "indicator_code": 36,
+    "name": "Cases and Deaths due to Tetanus Infection",
+    "description": "Cases and Deaths due to Tetanus Infection"
+  },
+  {
+    "indicator_code": 37,
+    "name": "Cases and Deaths due to Diphtheria Infection",
+    "description": "Cases and Deaths due to Diphtheria Infection"
+  },
+  {
+    "indicator_code": 38,
+    "name": "Cases and Deaths due to Whooping Cough infection",
+    "description": "Cases and Deaths due to Whooping Cough infection"
+  },
+  {
+    "indicator_code": 39,
+    "name": "Cases and Deaths due to Measles Infection",
+    "description": "Cases and Deaths due to Measles Infection"
+  },
+  {
+    "indicator_code": 50,
+    "name": "Women undergone a screening test for cervical cancer and breast cancer (%)",
+    "description": "Women undergone a screening test for cervical cancer and breast cancer (%)"
+  },
+  {
+    "indicator_code": 51,
+    "name": "Women who have comprehensive knowledge of HIV/AIDS (%)",
+    "description": "Women who have comprehensive knowledge of HIV/AIDS (%)"
+  },
+  {
+    "indicator_code": 52,
+    "name": "Women whose Body Mass Index is below normal and who are overweight or obese ",
+    "description": "Women whose Body Mass Index is below normal and who are overweight or obese "
+  },
+  {
+    "indicator_code": 53,
+    "name": "Ayush Registered Practitioners (Doctors) ",
+    "description": "Ayush Registered Practitioners (Doctors) "
+  },
+  {
+    "indicator_code": 54,
+    "name": "Number of Registered Nurses ",
+    "description": "Number of Registered Nurses "
+  },
+  {
+    "indicator_code": 55,
+    "name": "Literacy Rates for persons aged 7 years and above",
+    "description": "Literacy Rates for persons aged 7 years and above"
+  },
+  {
+    "indicator_code": 56,
+    "name": "Gender Gap in Literacy Rate for persons of age 7 years and above",
+    "description": "Gender Gap in Literacy Rate for persons of age 7 years and above"
+  },
+  {
+    "indicator_code": 57,
+    "name": "State/UT wise Gender Gap in Literacy Rate for persons of age 7 years and above",
+    "description": "State/UT wise Gender Gap in Literacy Rate for persons of age 7 years and above"
+  },
+  {
+    "indicator_code": 58,
+    "name": "Literacy Rate of Youth in the Age Group of 15-24 Years",
+    "description": "Literacy Rate of Youth in the Age Group of 15-24 Years"
+  },
+  {
+    "indicator_code": 59,
+    "name": "Percentage of persons able to read and write short simple statements",
+    "description": "Percentage of persons able to read and write short simple statements"
+  },
+  {
+    "indicator_code": 60,
+    "name": "Gross Enrolment Ratio",
+    "description": "Gross Enrolment Ratio"
+  },
+  {
+    "indicator_code": 61,
+    "name": "Adjusted Net Enrolment Rate",
+    "description": "Adjusted Net Enrolment Rate"
+  },
+  {
+    "indicator_code": 62,
+    "name": "Gender Parity Index (GPI) ",
+    "description": "Gender Parity Index (GPI) "
+  },
+  {
+    "indicator_code": 63,
+    "name": "Gender Parity Index (GPI-As Per NEP Structure) ",
+    "description": "Gender Parity Index (GPI-As Per NEP Structure) "
+  },
+  {
+    "indicator_code": 64,
+    "name": "Gender Parity Indices (GPI) in Higher Education",
+    "description": "Gender Parity Indices (GPI) in Higher Education"
+  },
+  {
+    "indicator_code": 65,
+    "name": "Enrolment at Under Graduate Level ",
+    "description": "Enrolment at Under Graduate Level "
+  },
+  {
+    "indicator_code": 66,
+    "name": "Enrolment at Ph.D., M.Phil. & Post Graduate Level ",
+    "description": "Enrolment at Ph.D., M.Phil. & Post Graduate Level "
+  },
+  {
+    "indicator_code": 67,
+    "name": "Female-Male Ratio in Important Programmes - Regular Mode of Education",
+    "description": "Female-Male Ratio in Important Programmes - Regular Mode of Education"
+  },
+  {
+    "indicator_code": 68,
+    "name": "Average years completed in formal education (pre-primary or above)",
+    "description": "Average years completed in formal education (pre-primary or above)"
+  },
+  {
+    "indicator_code": 69,
+    "name": "Mean years of schooling in formal education (including pre-primary level of education)",
+    "description": "Mean years of schooling in formal education (including pre-primary level of education)"
+  },
+  {
+    "indicator_code": 70,
+    "name": "Mean years of schooling in formal education (15 years and above)",
+    "description": "Mean years of schooling in formal education (15 years and above)"
+  },
+  {
+    "indicator_code": 71,
+    "name": "Mean years of schooling in formal education (25 years and above)",
+    "description": "Mean years of schooling in formal education (25 years and above)"
+  },
+  {
+    "indicator_code": 72,
+    "name": "Population with at least secondary as the highest level of education successfully completed",
+    "description": "Population with at least secondary as the highest level of education successfully completed"
+  },
+  {
+    "indicator_code": 73,
+    "name": "Examination Result Level-wise Out-turn/Pass out in Higher Education ",
+    "description": "Examination Result Level-wise Out-turn/Pass out in Higher Education "
+  },
+  {
+    "indicator_code": 74,
+    "name": "Dropout Rate",
+    "description": "Dropout Rate"
+  },
+  {
+    "indicator_code": 75,
+    "name": "Average expenditure (Rs.) per student pursuing general course",
+    "description": "Average expenditure (Rs.) per student pursuing general course"
+  },
+  {
+    "indicator_code": 76,
+    "name": "Average expenditure (Rs.) per student in basic course ",
+    "description": "Average expenditure (Rs.) per student in basic course "
+  },
+  {
+    "indicator_code": 77,
+    "name": "Number of Female Teachers per 100 Male Teachers",
+    "description": "Number of Female Teachers per 100 Male Teachers"
+  },
+  {
+    "indicator_code": 78,
+    "name": "Proportion of females among tertiary education teachers or professors",
+    "description": "Proportion of females among tertiary education teachers or professors"
+  },
+  {
+    "indicator_code": 79,
+    "name": "Number of Male & Female Teacher",
+    "description": "Number of Male & Female Teacher"
+  },
+  {
+    "indicator_code": 80,
+    "name": "Labour Force Participation Rate (LFPR) (in percent) in usual status (ps+ss) ",
+    "description": "Labour Force Participation Rate (LFPR) (in percent) in usual status (ps+ss) "
+  },
+  {
+    "indicator_code": 81,
+    "name": "Labour Force Participation Rate for persons of all ages",
+    "description": "Labour Force Participation Rate for persons of all ages"
+  },
+  {
+    "indicator_code": 82,
+    "name": "Labour Force Participation Rate for persons aged 15 years & above",
+    "description": "Labour Force Participation Rate for persons aged 15 years & above"
+  },
+  {
+    "indicator_code": 83,
+    "name": "Worker Population Ratio for persons of all ages",
+    "description": "Worker Population Ratio for persons of all ages"
+  },
+  {
+    "indicator_code": 84,
+    "name": "Worker Population Ratio for Persons Aged 15 Years & Above",
+    "description": "Worker Population Ratio for Persons Aged 15 Years & Above"
+  },
+  {
+    "indicator_code": 85,
+    "name": "Worker Population Ratio (WPR) in usual status (ps+ss) for persons of age 15 years and above",
+    "description": "Worker Population Ratio (WPR) in usual status (ps+ss) for persons of age 15 years and above"
+  },
+  {
+    "indicator_code": 86,
+    "name": "Age group wise Worker Population Ratio (WPR)",
+    "description": "Age group wise Worker Population Ratio (WPR)"
+  },
+  {
+    "indicator_code": 87,
+    "name": "Average Wage Earning (in Rs.) received per day by Casual Labourers in works other than Public Works",
+    "description": "Average Wage Earning (in Rs.) received per day by Casual Labourers in works other than Public Works"
+  },
+  {
+    "indicator_code": 88,
+    "name": "Average Wage (in Rs.) Per Hour Earned by Occupation Divisions",
+    "description": "Average Wage (in Rs.) Per Hour Earned by Occupation Divisions"
+  },
+  {
+    "indicator_code": 89,
+    "name": "Percentage Distribution of Workers According to Broad Employment Status",
+    "description": "Percentage Distribution of Workers According to Broad Employment Status"
+  },
+  {
+    "indicator_code": 90,
+    "name": "Percentage distribution of workers in usual status (ps+ss) by broad status in employment",
+    "description": "Percentage distribution of workers in usual status (ps+ss) by broad status in employment"
+  },
+  {
+    "indicator_code": 91,
+    "name": "Percentage distribution of workers in usual status (ps+ss) by broad industry division ",
+    "description": "Percentage distribution of workers in usual status (ps+ss) by broad industry division "
+  },
+  {
+    "indicator_code": 92,
+    "name": "Proportion (in per cent) of worker in usual status (ps+ss) in informal sector ",
+    "description": "Proportion (in per cent) of worker in usual status (ps+ss) in informal sector "
+  },
+  {
+    "indicator_code": 93,
+    "name": "Year Wise Unemployment rates in the labour force-usual status",
+    "description": "Year Wise Unemployment rates in the labour force-usual status"
+  },
+  {
+    "indicator_code": 94,
+    "name": "Age Wise Unemployment rates in the labour force-usual status",
+    "description": "Age Wise Unemployment rates in the labour force-usual status"
+  },
+  {
+    "indicator_code": 95,
+    "name": "Unemployment Rate for Persons aged 15 years & above",
+    "description": "Unemployment Rate for Persons aged 15 years & above"
+  },
+  {
+    "indicator_code": 96,
+    "name": "Percentage of persons participating in different activities in a day",
+    "description": "Percentage of persons participating in different activities in a day"
+  },
+  {
+    "indicator_code": 97,
+    "name": "Percentage of persons of age 6 years and above participating in different activities in a day",
+    "description": "Percentage of persons of age 6 years and above participating in different activities in a day"
+  },
+  {
+    "indicator_code": 98,
+    "name": "Average time (in minutes) spent in a day per participant in different activities",
+    "description": "Average time (in minutes) spent in a day per participant in different activities"
+  },
+  {
+    "indicator_code": 99,
+    "name": "Average time (in minutes) spent in a day per participant in different activities (TUS 2019)",
+    "description": "Average time (in minutes) spent in a day per participant in different activities (TUS 2019)"
+  },
+  {
+    "indicator_code": 100,
+    "name": "Percentage of persons in different age groups participating in the activities in a day (TUS 2024)",
+    "description": "Percentage of persons in different age groups participating in the activities in a day (TUS 2024)"
+  },
+  {
+    "indicator_code": 101,
+    "name": "Percentage of persons participating in learning activities and average time (in minutes) spent in a day per participant in learning activities",
+    "description": "Percentage of persons participating in learning activities and average time (in minutes) spent in a day per participant in learning activities"
+  },
+  {
+    "indicator_code": 102,
+    "name": "Average Time (in Minutes)spent per day per person– Unpaid, Paid & Residual activities",
+    "description": "Average Time (in Minutes)spent per day per person– Unpaid, Paid & Residual activities"
+  },
+  {
+    "indicator_code": 103,
+    "name": "Average Time (in Minutes)spent per day per person– Unpaid, Paid & Residual activities (6 years & above) (TUS 2019)",
+    "description": "Average Time (in Minutes)spent per day per person– Unpaid, Paid & Residual activities (6 years & above) (TUS 2019)"
+  },
+  {
+    "indicator_code": 104,
+    "name": "Average time (in minutes) spent in a day in unpaid and paid activities (TUS 2024)",
+    "description": "Average time (in minutes) spent in a day in unpaid and paid activities (TUS 2024)"
+  },
+  {
+    "indicator_code": 105,
+    "name": "Percentage of women employed in Scheduled Commercial Banks",
+    "description": "Percentage of women employed in Scheduled Commercial Banks"
+  },
+  {
+    "indicator_code": 106,
+    "name": "Distribution of Employees of Scheduled Commercial Banks",
+    "description": "Distribution of Employees of Scheduled Commercial Banks"
+  },
+  {
+    "indicator_code": 107,
+    "name": "Population Group Wise Deposits of Scheduled Commercial Banks",
+    "description": "Population Group Wise Deposits of Scheduled Commercial Banks"
+  },
+  {
+    "indicator_code": 108,
+    "name": "State/UT Wise Deposits of Scheduled Commercial Banks",
+    "description": "State/UT Wise Deposits of Scheduled Commercial Banks"
+  },
+  {
+    "indicator_code": 109,
+    "name": "Cumulative Enrolments in PMJJBY, PMSBY",
+    "description": "Cumulative Enrolments in PMJJBY, PMSBY"
+  },
+  {
+    "indicator_code": 110,
+    "name": "Indicators of Pradhan Mantri Vaya Vandana Yojana (PMVVY)",
+    "description": "Indicators of Pradhan Mantri Vaya Vandana Yojana (PMVVY)"
+  },
+  {
+    "indicator_code": 111,
+    "name": "Indicators of Pradhan Mantri Jan Dhan Yojan (PMJDY)",
+    "description": "Indicators of Pradhan Mantri Jan Dhan Yojan (PMJDY)"
+  },
+  {
+    "indicator_code": 112,
+    "name": "Indicators of  Pradhan Mantri Mudra Yojna (PMMY)",
+    "description": "Indicators of  Pradhan Mantri Mudra Yojna (PMMY)"
+  },
+  {
+    "indicator_code": 113,
+    "name": "Indicators of Atal Pension Yojana (APY) ",
+    "description": "Indicators of Atal Pension Yojana (APY) "
+  },
+  {
+    "indicator_code": 114,
+    "name": "Indicators of Stand Up India (SUPI) ",
+    "description": "Indicators of Stand Up India (SUPI) "
+  },
+  {
+    "indicator_code": 115,
+    "name": "Details of Demat accounts with CDSL",
+    "description": "Details of Demat accounts with CDSL"
+  },
+  {
+    "indicator_code": 116,
+    "name": "Progress under Microfinance - Savings of SHGs with banks",
+    "description": "Progress under Microfinance - Savings of SHGs with banks"
+  },
+  {
+    "indicator_code": 117,
+    "name": "Progress under Microfinance - Bank loans disbursed by banks to SHGs  ",
+    "description": "Progress under Microfinance - Bank loans disbursed by banks to SHGs  "
+  },
+  {
+    "indicator_code": 118,
+    "name": "Distribution of individual investors",
+    "description": "Distribution of individual investors"
+  },
+  {
+    "indicator_code": 119,
+    "name": "Percentage Share of estimated number of Female Workers for top 3 States (all-India)",
+    "description": "Percentage Share of estimated number of Female Workers for top 3 States (all-India)"
+  },
+  {
+    "indicator_code": 120,
+    "name": "Share of female headed estimated proprietary establishments of  major states by broad activity category",
+    "description": "Share of female headed estimated proprietary establishments of  major states by broad activity category"
+  },
+  {
+    "indicator_code": 121,
+    "name": "Per 1000 distribution of number of establishments of major states ",
+    "description": "Per 1000 distribution of number of establishments of major states "
+  },
+  {
+    "indicator_code": 122,
+    "name": "Percentage share of female workers to total number of workers ",
+    "description": "Percentage share of female workers to total number of workers "
+  },
+  {
+    "indicator_code": 123,
+    "name": "Representation of Women in the Central Council of Ministers",
+    "description": "Representation of Women in the Central Council of Ministers"
+  },
+  {
+    "indicator_code": 124,
+    "name": "Persons Contesting and Elected in Various Lok Sabha Elections",
+    "description": "Persons Contesting and Elected in Various Lok Sabha Elections"
+  },
+  {
+    "indicator_code": 125,
+    "name": "Women Elected in 18th Lok Sabha, 2024",
+    "description": "Women Elected in 18th Lok Sabha, 2024"
+  },
+  {
+    "indicator_code": 126,
+    "name": "Women and Men Elected in State Assemblies",
+    "description": "Women and Men Elected in State Assemblies"
+  },
+  {
+    "indicator_code": 127,
+    "name": "Status of representation of women in Panchayati Raj Institutions (PRIs)",
+    "description": "Status of representation of women in Panchayati Raj Institutions (PRIs)"
+  },
+  {
+    "indicator_code": 128,
+    "name": "Number of Electors and Percentage of Electors Voting in Various General Elections",
+    "description": "Number of Electors and Percentage of Electors Voting in Various General Elections"
+  },
+  {
+    "indicator_code": 129,
+    "name": "Women Voters Turnout for General Election - 2024",
+    "description": "Women Voters Turnout for General Election - 2024"
+  },
+  {
+    "indicator_code": 130,
+    "name": "Women Judges in Supreme Court and High Courts",
+    "description": "Women Judges in Supreme Court and High Courts"
+  },
+  {
+    "indicator_code": 131,
+    "name": "Persons Engaged at Managerial Positions in Companies",
+    "description": "Persons Engaged at Managerial Positions in Companies"
+  },
+  {
+    "indicator_code": 132,
+    "name": "Strength of Female Police Officers in India",
+    "description": "Strength of Female Police Officers in India"
+  },
+  {
+    "indicator_code": 133,
+    "name": "Number of Women-led Start-ups",
+    "description": "Number of Women-led Start-ups"
+  },
+  {
+    "indicator_code": 134,
+    "name": "Participation of officers in Indian Army, Navy and Airforce",
+    "description": "Participation of officers in Indian Army, Navy and Airforce"
+  },
+  {
+    "indicator_code": 135,
+    "name": "Women officers in Various All India Central Group B & C Services",
+    "description": "Women officers in Various All India Central Group B & C Services"
+  },
+  {
+    "indicator_code": 136,
+    "name": "Total Women Owned MSMEs Registered & Classified and their Employment, Investment & Turnover Under Udyam",
+    "description": "Total Women Owned MSMEs Registered & Classified and their Employment, Investment & Turnover Under Udyam"
+  },
+  {
+    "indicator_code": 137,
+    "name": "Women IMEs and employment data for the women IMEs",
+    "description": "Women IMEs and employment data for the women IMEs"
+  },
+  {
+    "indicator_code": 138,
+    "name": "Women Participation in Household Decision-Making",
+    "description": "Women Participation in Household Decision-Making"
+  },
+  {
+    "indicator_code": 139,
+    "name": "Ownership of Assets",
+    "description": "Ownership of Assets"
+  },
+  {
+    "indicator_code": 140,
+    "name": "Status of Major Crimes Committed Against Women",
+    "description": "Status of Major Crimes Committed Against Women"
+  },
+  {
+    "indicator_code": 141,
+    "name": "Rate (per Lakh Women) of Incidence of Various Crimes Committed against Women",
+    "description": "Rate (per Lakh Women) of Incidence of Various Crimes Committed against Women"
+  },
+  {
+    "indicator_code": 142,
+    "name": "Distribution of Rape Victims",
+    "description": "Distribution of Rape Victims"
+  },
+  {
+    "indicator_code": 143,
+    "name": "Percentage of Married Women Experienced Violence by their Husband",
+    "description": "Percentage of Married Women Experienced Violence by their Husband"
+  },
+  {
+    "indicator_code": 144,
+    "name": "Disposal of Crimes Committed Against Women Cases by Police",
+    "description": "Disposal of Crimes Committed Against Women Cases by Police"
+  },
+  {
+    "indicator_code": 145,
+    "name": "Disposal of Crimes Committed Against Women Cases by Courts",
+    "description": "Disposal of Crimes Committed Against Women Cases by Courts"
+  },
+  {
+    "indicator_code": 146,
+    "name": "Percentage of women aged 20-24 years married before age 18 years",
+    "description": "Percentage of women aged 20-24 years married before age 18 years"
+  },
+  {
+    "indicator_code": 147,
+    "name": "Percentage of Men aged 25-29 years who were married before age 21 years",
+    "description": "Percentage of Men aged 25-29 years who were married before age 21 years"
+  },
+  {
+    "indicator_code": 148,
+    "name": "Adolescent Fertility Rate for women aged 15-19 years",
+    "description": "Adolescent Fertility Rate for women aged 15-19 years"
+  },
+  {
+    "indicator_code": 149,
+    "name": "Incidence of Suicides",
+    "description": "Incidence of Suicides"
+  },
+  {
+    "indicator_code": 150,
+    "name": "Profile of Suicide Victims by various Parameters",
+    "description": "Profile of Suicide Victims by various Parameters"
+  },
+  {
+    "indicator_code": 151,
+    "name": "Cyber Crimes against Women ",
+    "description": "Cyber Crimes against Women "
+  },
+  {
+    "indicator_code": 152,
+    "name": "Percentage of Disabled (Differently abled persons)",
+    "description": "Percentage of Disabled (Differently abled persons)"
+  },
+  {
+    "indicator_code": 153,
+    "name": "Percentage of persons with broad type of disabilities",
+    "description": "Percentage of persons with broad type of disabilities"
+  },
+  {
+    "indicator_code": 154,
+    "name": "Percentage of Disabled persons to Total population",
+    "description": "Percentage of Disabled persons to Total population"
+  },
+  {
+    "indicator_code": 155,
+    "name": "Percentage of females by type of disability",
+    "description": "Percentage of females by type of disability"
+  },
+  {
+    "indicator_code": 156,
+    "name": "Cases Filed by Women",
+    "description": "Cases Filed by Women"
+  },
+  {
+    "indicator_code": 157,
+    "name": "Year wise Cyber Crimes against Women",
+    "description": "Year wise Cyber Crimes against Women"
+  }
+]

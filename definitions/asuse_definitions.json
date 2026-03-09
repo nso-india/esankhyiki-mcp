@@ -1,0 +1,217 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Estimated Number of Establishments Pursuing Mixed Activities",
+    "description": "Estimated Number of Establishments Pursuing Mixed Activities"
+  },
+  {
+    "indicator_code": 2,
+    "name": "State/UT-wise Estimated Number of Establishments Pursuing Mixed Activities",
+    "description": "State/UT-wise Estimated Number of Establishments Pursuing Mixed Activities"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Per 1000 Distribution of Establishments by Type of Ownership",
+    "description": "Per 1000 Distribution of Establishments by Type of Ownership"
+  },
+  {
+    "indicator_code": 4,
+    "name": "State/UT-wise Per 1000 Distribution of Establishments by Type of Ownership",
+    "description": "State/UT-wise Per 1000 Distribution of Establishments by Type of Ownership"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Per 1000 Distribution of Proprietary and Partnership Establishments by Level of General Education of Owner-Major Partner",
+    "description": "Per 1000 Distribution of Proprietary and Partnership Establishments by Level of General Education of Owner-Major Partner"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Per 1000 Distribution of Prop. & Partnership Establishments by Social Group of Owner-Major Partner",
+    "description": "Per 1000 Distribution of Prop. & Partnership Establishments by Social Group of Owner-Major Partner"
+  },
+  {
+    "indicator_code": 7,
+    "name": "State/UT-wise Per 1000 Distribution of Prop. & Partnership Establishments by Social Group of Owner-Major Partner",
+    "description": "State/UT-wise Per 1000 Distribution of Prop. & Partnership Establishments by Social Group of Owner-Major Partner"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Per 1000 Distribution of Prop. & Partnership Estt. by Number of Other Economic Activities",
+    "description": "Per 1000 Distribution of Prop. & Partnership Estt. by Number of Other Economic Activities"
+  },
+  {
+    "indicator_code": 9,
+    "name": "State/UT-wise Number Per 1000 of Establishments Maintaining any Bank Account-Post Office Savings Bank Account",
+    "description": "State/UT-wise Number Per 1000 of Establishments Maintaining any Bank Account-Post Office Savings Bank Account"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Per 1000 Distribution of Establishments by Type of Location ",
+    "description": "Per 1000 Distribution of Establishments by Type of Location "
+  },
+  {
+    "indicator_code": 11,
+    "name": "State/UT-wise Per 1000 Distribution of Establishments by Type of Location",
+    "description": "State/UT-wise Per 1000 Distribution of Establishments by Type of Location"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Per 1000 Distribution of Establishments by Nature of Operation",
+    "description": "Per 1000 Distribution of Establishments by Nature of Operation"
+  },
+  {
+    "indicator_code": 13,
+    "name": "State/UT-wise Per 1000 Distribution of Establishments by Nature of Operation",
+    "description": "State/UT-wise Per 1000 Distribution of Establishments by Nature of Operation"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Per 1000 Distribution of Establishments by Number of Months Operated During Last 365 Days",
+    "description": "Per 1000 Distribution of Establishments by Number of Months Operated During Last 365 Days"
+  },
+  {
+    "indicator_code": 15,
+    "name": "State/UT-wise Per 1000 Distribution of Establishments by Number of Months Operated During Last 365 Days",
+    "description": "State/UT-wise Per 1000 Distribution of Establishments by Number of Months Operated During Last 365 Days"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Per 1000 Distribution of Establishments by Number of Hours Normally Worked in a Day",
+    "description": "Per 1000 Distribution of Establishments by Number of Hours Normally Worked in a Day"
+  },
+  {
+    "indicator_code": 17,
+    "name": "State/UT-wise Per 1000 Distribution of Establishments by Number of Hours Normally Worked in a Day",
+    "description": "State/UT-wise Per 1000 Distribution of Establishments by Number of Hours Normally Worked in a Day"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Number of Per 1000 of Establishments which are NPIs (by type of majot receipts) and non-NPIs",
+    "description": "Number of Per 1000 of Establishments which are NPIs (by type of majot receipts) and non-NPIs"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Number Per 1000 of Establishments Using Computers and Using Internet During Last 365 Days",
+    "description": "Number Per 1000 of Establishments Using Computers and Using Internet During Last 365 Days"
+  },
+  {
+    "indicator_code": 21,
+    "name": "State/UT-wise Number Per 1000 of Establishments Using Computers and Using Internet During Last 365 Days",
+    "description": "State/UT-wise Number Per 1000 of Establishments Using Computers and Using Internet During Last 365 Days"
+  },
+  {
+    "indicator_code": 22,
+    "name": "Number Per 1000 of Establishments Registered Under Different Acts-Authorities",
+    "description": "Number Per 1000 of Establishments Registered Under Different Acts-Authorities"
+  },
+  {
+    "indicator_code": 23,
+    "name": "State/UT-wise Number Per 1000 of Establishments Registered Under Different Acts-Authorities",
+    "description": "State/UT-wise Number Per 1000 of Establishments Registered Under Different Acts-Authorities"
+  },
+  {
+    "indicator_code": 25,
+    "name": "State/UT-wise Estimated Number of Establishments Serving as Franchisee Outlet",
+    "description": "State/UT-wise Estimated Number of Establishments Serving as Franchisee Outlet"
+  },
+  {
+    "indicator_code": 26,
+    "name": "Estimated Number of Workers by Nature of Employment and Gender",
+    "description": "Estimated Number of Workers by Nature of Employment and Gender"
+  },
+  {
+    "indicator_code": 27,
+    "name": "State/UT-wise Estimated Number of Workers by Nature of Employment and Gender",
+    "description": "State/UT-wise Estimated Number of Workers by Nature of Employment and Gender"
+  },
+  {
+    "indicator_code": 28,
+    "name": "Estimated Number of Workers by Type of Workers",
+    "description": "Estimated Number of Workers by Type of Workers"
+  },
+  {
+    "indicator_code": 29,
+    "name": "State/UT-wise Estimated Number of Workers by Type of Workers",
+    "description": "State/UT-wise Estimated Number of Workers by Type of Workers"
+  },
+  {
+    "indicator_code": 30,
+    "name": "Estimated Annual Emoluments (Rs.) Per Hired Worker",
+    "description": "Estimated Annual Emoluments (Rs.) Per Hired Worker"
+  },
+  {
+    "indicator_code": 31,
+    "name": "State/UT-wise Estimated Annual Emoluments (Rs.) Per Hired Worker",
+    "description": "State/UT-wise Estimated Annual Emoluments (Rs.) Per Hired Worker"
+  },
+  {
+    "indicator_code": 32,
+    "name": "Estimated Annual Gross Value Added (GVA) Per Worker (Rs.)",
+    "description": "Estimated Annual Gross Value Added (GVA) Per Worker (Rs.)"
+  },
+  {
+    "indicator_code": 33,
+    "name": "State/UT-wise Estimated Annual Gross Value Added (GVA) Per Worker (Rs.)",
+    "description": "State/UT-wise Estimated Annual Gross Value Added (GVA) Per Worker (Rs.)"
+  },
+  {
+    "indicator_code": 34,
+    "name": "Estimated Annual Gross Value Added (GVA) Per Establishment (Rs.)",
+    "description": "Estimated Annual Gross Value Added (GVA) Per Establishment (Rs.)"
+  },
+  {
+    "indicator_code": 35,
+    "name": "State/UT-wise Estimated Annual Gross Value Added (GVA) Per Establishment (Rs.)",
+    "description": "State/UT-wise Estimated Annual Gross Value Added (GVA) Per Establishment (Rs.)"
+  },
+  {
+    "indicator_code": 38,
+    "name": "Number Per 1000 of Establishments Using Internet by Type of Its Use",
+    "description": "Number Per 1000 of Establishments Using Internet by Type of Its Use"
+  },
+  {
+    "indicator_code": 39,
+    "name": "Estimated Value of Key Characteristics by Number of Workers",
+    "description": "Estimated Value of Key Characteristics by Number of Workers"
+  },
+  {
+    "indicator_code": 40,
+    "name": "Percentage of proprietary and partnership establishments",
+    "description": "Percentage of proprietary and partnership establishments"
+  },
+  {
+    "indicator_code": 41,
+    "name": "Percentage of hired worker establishments",
+    "description": "Percentage of hired worker establishments"
+  },
+  {
+    "indicator_code": 42,
+    "name": "Percentage of market establishments",
+    "description": "Percentage of market establishments"
+  },
+  {
+    "indicator_code": 46,
+    "name": "Percentage Share of Working Owner",
+    "description": "Percentage Share of Working Owner"
+  },
+  {
+    "indicator_code": 47,
+    "name": "No. of establishments (in ’00)",
+    "description": "No. of establishments (in ’00)"
+  },
+  {
+    "indicator_code": 48,
+    "name": "No. of workers (in ’00)",
+    "description": "No. of workers (in ’00)"
+  },
+  {
+    "indicator_code": 49,
+    "name": "Percentage Share of Hired worker",
+    "description": "Percentage Share of Hired worker"
+  },
+  {
+    "indicator_code": 50,
+    "name": "Percentage Share of Other Workers (including unpaid family members)",
+    "description": "Percentage Share of Other Workers (including unpaid family members)"
+  }
+]

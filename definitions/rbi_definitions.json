@@ -1,0 +1,197 @@
+[
+  {
+    "indicator_code": 22,
+    "name": "Balance of Payments ‑ Indicators",
+    "description": "Balance of Payments ‑ Indicators"
+  },
+  {
+    "indicator_code": 24,
+    "name": "Broad Commodity Composition of India's Merchandise Trade ‑ Oil and Non oil Exports and Imports ‑ Rupees",
+    "description": "Broad Commodity Composition of India's Merchandise Trade ‑ Oil and Non oil Exports and Imports ‑ Rupees"
+  },
+  {
+    "indicator_code": 42,
+    "name": "Broad Commodity Composition of India’s Merchandise Trade - Oil and Non-Oil Exports and Imports - US Dollar",
+    "description": "Broad Commodity Composition of India’s Merchandise Trade - Oil and Non-Oil Exports and Imports - US Dollar"
+  },
+  {
+    "indicator_code": 1,
+    "name": "Direction of Foreign Trade ‑ Rupees",
+    "description": "Direction of Foreign Trade ‑ Rupees"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Direction of Foreign Trade ‑ US Dollars",
+    "description": "Direction of Foreign Trade ‑ US Dollars"
+  },
+  {
+    "indicator_code": 32,
+    "name": "Exchange Rate of the Indian Rupee Vis‑a‑Vis the SDR, US Dollar, Pound Sterling, D.M./Euro and Japanese Yen (Calendar Year ‑ Annual Average)",
+    "description": "Exchange Rate of the Indian Rupee Vis‑a‑Vis the SDR, US Dollar, Pound Sterling, D.M./Euro and Japanese Yen (Calendar Year ‑ Annual Average)"
+  },
+  {
+    "indicator_code": 31,
+    "name": "Exchange Rate of the Indian Rupee Vis‑A‑Vis the SDR, US Dollar, Pound Sterling, D.M./Euro and Japanese Yen (Financial Year ‑ Annual Average and End‑Year Rates)",
+    "description": "Exchange Rate of the Indian Rupee Vis‑A‑Vis the SDR, US Dollar, Pound Sterling, D.M./Euro and Japanese Yen (Financial Year ‑ Annual Average and End‑Year Rates)"
+  },
+  {
+    "indicator_code": 35,
+    "name": "Exchange Rate of the Indian Rupee vis-à-vis the SDR, US Dollar, Pound Sterling, Euro and Japanese Yen (High and Low During the Month)",
+    "description": "Exchange Rate of the Indian Rupee vis-à-vis the SDR, US Dollar, Pound Sterling, Euro and Japanese Yen (High and Low During the Month)"
+  },
+  {
+    "indicator_code": 33,
+    "name": "Exchange Rate of the Indian Rupee vis-à-vis the SDR, US Dollar, Pound Sterling, Euro and Japanese Yen (Monthly Average and end-Month Rates)",
+    "description": "Exchange Rate of the Indian Rupee vis-à-vis the SDR, US Dollar, Pound Sterling, Euro and Japanese Yen (Monthly Average and end-Month Rates)"
+  },
+  {
+    "indicator_code": 43,
+    "name": "EXPORTS OF MAJOR COMMODITIES - RUPEES",
+    "description": "EXPORTS OF MAJOR COMMODITIES - RUPEES"
+  },
+  {
+    "indicator_code": 44,
+    "name": "EXPORTS OF MAJOR COMMODITIES - US Dollars",
+    "description": "EXPORTS OF MAJOR COMMODITIES - US Dollars"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Exports of Select Commodities to Principal Countries ‑ Rupees",
+    "description": "Exports of Select Commodities to Principal Countries ‑ Rupees"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Exports of Select Commodities to Principal Countries ‑ US Dollars",
+    "description": "Exports of Select Commodities to Principal Countries ‑ US Dollars"
+  },
+  {
+    "indicator_code": 27,
+    "name": "External Debt of India ‑ Quarterly",
+    "description": "External Debt of India ‑ Quarterly"
+  },
+  {
+    "indicator_code": 48,
+    "name": "Foreign Exchange Reserve Annual",
+    "description": "Foreign Exchange Reserve Annual"
+  },
+  {
+    "indicator_code": 47,
+    "name": " Foreign Exchange Reserve Monthly",
+    "description": " Foreign Exchange Reserve Monthly"
+  },
+  {
+    "indicator_code": 29,
+    "name": "Forex Rates ‑ Month‑High / Month‑Low",
+    "description": "Forex Rates ‑ Month‑High / Month‑Low"
+  },
+  {
+    "indicator_code": 34,
+    "name": "Forward Premia (Inter‑Bank) (Monthly Average)",
+    "description": "Forward Premia (Inter‑Bank) (Monthly Average)"
+  },
+  {
+    "indicator_code": 45,
+    "name": "Imports of Major Commodities - Rupees",
+    "description": "Imports of Major Commodities - Rupees"
+  },
+  {
+    "indicator_code": 46,
+    "name": "Imports of Major Commodities - US Dollars",
+    "description": "Imports of Major Commodities - US Dollars"
+  },
+  {
+    "indicator_code": 26,
+    "name": "India's External Debt ‑ Rupees (End‑March)",
+    "description": "India's External Debt ‑ Rupees (End‑March)"
+  },
+  {
+    "indicator_code": 25,
+    "name": "India's External Debt ‑ US Dollars (End‑March)",
+    "description": "India's External Debt ‑ US Dollars (End‑March)"
+  },
+  {
+    "indicator_code": 13,
+    "name": "India's Foreign Trade – Rupees",
+    "description": "India's Foreign Trade – Rupees"
+  },
+  {
+    "indicator_code": 17,
+    "name": "India's Foreign Trade – Rupees-Annual",
+    "description": "India's Foreign Trade – Rupees-Annual"
+  },
+  {
+    "indicator_code": 12,
+    "name": "India's Foreign Trade ‑ US Dollars",
+    "description": "India's Foreign Trade ‑ US Dollars"
+  },
+  {
+    "indicator_code": 16,
+    "name": "India's Foreign Trade ‑ US Dollars - Annual",
+    "description": "India's Foreign Trade ‑ US Dollars - Annual"
+  },
+  {
+    "indicator_code": 10,
+    "name": "India’s Overall Balance of Payments – Quarterly – Rupees",
+    "description": "India’s Overall Balance of Payments – Quarterly – Rupees"
+  },
+  {
+    "indicator_code": 4,
+    "name": "India's Overall Balance of Payments ‑ Quarterly ‑ US Dollars",
+    "description": "India's Overall Balance of Payments ‑ Quarterly ‑ US Dollars"
+  },
+  {
+    "indicator_code": 6,
+    "name": "India's Overall Balance of Payments – Rupees",
+    "description": "India's Overall Balance of Payments – Rupees"
+  },
+  {
+    "indicator_code": 5,
+    "name": "India's Overall Balance of Payments ‑ US Dollars",
+    "description": "India's Overall Balance of Payments ‑ US Dollars"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Invisibles by Category of Transactions – Rupees",
+    "description": "Invisibles by Category of Transactions – Rupees"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Invisibles by Category of Transactions – US Dollars",
+    "description": "Invisibles by Category of Transactions – US Dollars"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Key Components of India's Balance of Payments – Rupees",
+    "description": "Key Components of India's Balance of Payments – Rupees"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Key Components of India's Balance of Payments ‑ US Dollars",
+    "description": "Key Components of India's Balance of Payments ‑ US Dollars"
+  },
+  {
+    "indicator_code": 37,
+    "name": "Monthly Average Exchange Rate (155 Currencies)",
+    "description": "Monthly Average Exchange Rate (155 Currencies)"
+  },
+  {
+    "indicator_code": 36,
+    "name": "Monthly Average Exchange Rates (EURO, GBP, JPY, USD)",
+    "description": "Monthly Average Exchange Rates (EURO, GBP, JPY, USD)"
+  },
+  {
+    "indicator_code": 40,
+    "name": "NRI Deposits - Outstandings and Inflows(+) / Outflows(-)",
+    "description": "NRI Deposits - Outstandings and Inflows(+) / Outflows(-)"
+  },
+  {
+    "indicator_code": 28,
+    "name": "Sale/ Purchase of U.S. Dollar by the RBI",
+    "description": "Sale/ Purchase of U.S. Dollar by the RBI"
+  },
+  {
+    "indicator_code": 30,
+    "name": "Turnover in Foreign Exchange Market",
+    "description": "Turnover in Foreign Exchange Market"
+  }
+]

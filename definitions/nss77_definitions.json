@@ -1,0 +1,167 @@
+[
+  {
+    "indicator_code": 16,
+    "name": "Estimated No. of Hhs for Each Size Class (ha.) of Land Possessed",
+    "description": "Estimated No. of Hhs for Each Size Class (ha.) of Land Possessed"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Estimated No. of Hhs for Different Social Groups",
+    "description": "Estimated No. of Hhs for Different Social Groups"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Distribution of Hhs by Hh Classification for Different Size Classes of Land Possessed",
+    "description": "Distribution of Hhs by Hh Classification for Different Size Classes of Land Possessed"
+  },
+  {
+    "indicator_code": 19,
+    "name": "No. Per Hh Operational Holding by Size Class of Hh Operational Holding",
+    "description": "No. Per Hh Operational Holding by Size Class of Hh Operational Holding"
+  },
+  {
+    "indicator_code": 21,
+    "name": "No. Per 1000 Crop Producing Agricultural Hhs Disposals of Crop by Agency and Satisfaction Level of Sale Outcomes",
+    "description": "No. Per 1000 Crop Producing Agricultural Hhs Disposals of Crop by Agency and Satisfaction Level of Sale Outcomes"
+  },
+  {
+    "indicator_code": 22,
+    "name": "Agricultural Hhs Reporting Use of Different Farming Resources",
+    "description": "Agricultural Hhs Reporting Use of Different Farming Resources"
+  },
+  {
+    "indicator_code": 23,
+    "name": "Agricultural Hhs Reporting Use of Purchased Seed by their Quality",
+    "description": "Agricultural Hhs Reporting Use of Purchased Seed by their Quality"
+  },
+  {
+    "indicator_code": 24,
+    "name": "Avg. Monthly Income (in Rs.) Per Agricultural Hh (only the Paid Out Expenditure)",
+    "description": "Avg. Monthly Income (in Rs.) Per Agricultural Hh (only the Paid Out Expenditure)"
+  },
+  {
+    "indicator_code": 25,
+    "name": "Avg. Monthly Income (in Rs.) Per Agricultural Hh (both the Paid Out and Imputed Expenditure)",
+    "description": "Avg. Monthly Income (in Rs.) Per Agricultural Hh (both the Paid Out and Imputed Expenditure)"
+  },
+  {
+    "indicator_code": 26,
+    "name": "Avg. Monthly Net Expenditure on Productive Assets",
+    "description": "Avg. Monthly Net Expenditure on Productive Assets"
+  },
+  {
+    "indicator_code": 27,
+    "name": "Avg. Expenditure and Receipts on Farm and Non-farm Assets",
+    "description": "Avg. Expenditure and Receipts on Farm and Non-farm Assets"
+  },
+  {
+    "indicator_code": 28,
+    "name": "Avg. Monthly Expenses and Receipts for Crop Production",
+    "description": "Avg. Monthly Expenses and Receipts for Crop Production"
+  },
+  {
+    "indicator_code": 29,
+    "name": "Avg. Monthly Total Expenses for Crop Production",
+    "description": "Avg. Monthly Total Expenses for Crop Production"
+  },
+  {
+    "indicator_code": 31,
+    "name": "Average Monthly Total Expenses and Receipts on Animal Farming During a Period of 30 Days",
+    "description": "Average Monthly Total Expenses and Receipts on Animal Farming During a Period of 30 Days"
+  },
+  {
+    "indicator_code": 32,
+    "name": "Average Expenses and Receipts From Non-farm Business",
+    "description": "Average Expenses and Receipts From Non-farm Business"
+  },
+  {
+    "indicator_code": 33,
+    "name": "Distribution of Amount of Loan Outstanding by Source of Loan Taken",
+    "description": "Distribution of Amount of Loan Outstanding by Source of Loan Taken"
+  },
+  {
+    "indicator_code": 34,
+    "name": "Distribution of Hhs by Size Class of Hh Ownership Holding, Average Area of Homestead Land Owned/land Owned (excluding Homestead Land)/area Owned and Estimated Area of Hh Ownership Holding",
+    "description": "Distribution of Hhs by Size Class of Hh Ownership Holding, Average Area of Homestead Land Owned/land Owned (excluding Homestead Land)/area Owned and Estimated Area of Hh Ownership Holding"
+  },
+  {
+    "indicator_code": 35,
+    "name": "Distribution of Hhs Reporting Leasing-out of Land and Average Area of such Land for Each Social Group",
+    "description": "Distribution of Hhs Reporting Leasing-out of Land and Average Area of such Land for Each Social Group"
+  },
+  {
+    "indicator_code": 36,
+    "name": "Distribution of Hhs Reporting Leasing-in of Land and Average Area of such Land for Each Social Group",
+    "description": "Distribution of Hhs Reporting Leasing-in of Land and Average Area of such Land for Each Social Group"
+  },
+  {
+    "indicator_code": 37,
+    "name": "Percentage Distribution of Leased Out Land by Terms of Lease",
+    "description": "Percentage Distribution of Leased Out Land by Terms of Lease"
+  },
+  {
+    "indicator_code": 39,
+    "name": "No. of Hhs Owning of Livestock of Different Types",
+    "description": "No. of Hhs Owning of Livestock of Different Types"
+  },
+  {
+    "indicator_code": 40,
+    "name": "Percentage Distribution of Area of Land for the Hhs Belonging of Operational Holding by Kind of Possession",
+    "description": "Percentage Distribution of Area of Land for the Hhs Belonging of Operational Holding by Kind of Possession"
+  },
+  {
+    "indicator_code": 41,
+    "name": "Distribution of Operational Holdings by Type of Possession of Hh Operational Holding",
+    "description": "Distribution of Operational Holdings by Type of Possession of Hh Operational Holding"
+  },
+  {
+    "indicator_code": 42,
+    "name": "Average Gross Cropped Area / Value of Total Crop Production / Quantity of Crop Production Reporting Crop Production",
+    "description": "Average Gross Cropped Area / Value of Total Crop Production / Quantity of Crop Production Reporting Crop Production"
+  },
+  {
+    "indicator_code": 43,
+    "name": "Distribution of Agricultural Hhs Reporting Sale of Crops and Distribution of Quantity Sold by Agency of Major Disposal",
+    "description": "Distribution of Agricultural Hhs Reporting Sale of Crops and Distribution of Quantity Sold by Agency of Major Disposal"
+  },
+  {
+    "indicator_code": 44,
+    "name": "Distribution of Agricultural Hhs Reporting Sale of Selected Crop by Level of Satisfaction",
+    "description": "Distribution of Agricultural Hhs Reporting Sale of Selected Crop by Level of Satisfaction"
+  },
+  {
+    "indicator_code": 45,
+    "name": "Distribution of Agricultural Hhs Reporting Use of Seed by their Agency of Procurement for Selected Crops",
+    "description": "Distribution of Agricultural Hhs Reporting Use of Seed by their Agency of Procurement for Selected Crops"
+  },
+  {
+    "indicator_code": 46,
+    "name": "Distribution of Agricultural Hhs Reporting Use of Purchased Seed by their Quality",
+    "description": "Distribution of Agricultural Hhs Reporting Use of Purchased Seed by their Quality"
+  },
+  {
+    "indicator_code": 47,
+    "name": "Per 1000 Distribution of Agricultural Households Reporting Sale of Crops by Awareness About Msp for Selected Crops",
+    "description": "Per 1000 Distribution of Agricultural Households Reporting Sale of Crops by Awareness About Msp for Selected Crops"
+  },
+  {
+    "indicator_code": 48,
+    "name": "Distribution of Agricultural Hhs not Insuring their Crops by Reason for Selected Crops",
+    "description": "Distribution of Agricultural Hhs not Insuring their Crops by Reason for Selected Crops"
+  },
+  {
+    "indicator_code": 49,
+    "name": "Distribution of Agricultural Hh by Status of Crop Insurance for Selected Crops",
+    "description": "Distribution of Agricultural Hh by Status of Crop Insurance for Selected Crops"
+  },
+  {
+    "indicator_code": 50,
+    "name": "No. Per 1000 of Agricultural Hh Crop Loss Per 1000 Agricultural Hhs and Cause-wise Distribution for Selected Crops",
+    "description": "No. Per 1000 of Agricultural Hh Crop Loss Per 1000 Agricultural Hhs and Cause-wise Distribution for Selected Crops"
+  },
+  {
+    "indicator_code": 51,
+    "name": "No. Per 1000 Agricultural Hh Which Insured Experienced Crop Loss for Selected Crops",
+    "description": "No. Per 1000 Agricultural Hh Which Insured Experienced Crop Loss for Selected Crops"
+  }
+]

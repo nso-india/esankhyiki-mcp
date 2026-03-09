@@ -1,0 +1,207 @@
+[
+  {
+    "indicator_code": 4,
+    "name": "Percentage of persons in different activity in a day as major activity (age 6 years and above)",
+    "description": "Proportion of individuals aged 6 years and above engaged in any of the major activity was the one which was considered most important activity by the informant performed during a time slot. If in a time slot only one activity was performed, that activity was always considered as a major activity."
+  },
+  {
+    "indicator_code": 5,
+    "name": "Minutes spent on an average per participant in different activity in a day as major activity (age 6 years and above)",
+    "description": "Average number of minutes spent per participant aged 6 years and above who are participating in different 3-digit/2-digit/1-digit activity code of TUS activity classification in a day on any of the major activity."
+  },
+  {
+    "indicator_code": 6,
+    "name": "Percentage of persons in different activity in a day irrespective of major activity (age 6 years and above)",
+    "description": "Percentage of persons irrespective of whether they performed the activities or not, aged 6 years and above participating in different daily activities irrespective of major activity."
+  },
+  {
+    "indicator_code": 7,
+    "name": "Minutes spent on an average per participant in different activity in a day irrespective of major activity",
+    "description": "Average time (in minutes) spent per participant who are participating in activity of age 6 years and above in different 3-digit/2-digit/1-digit activity code of TUS activity classification on different daily activities."
+  },
+  {
+    "indicator_code": 8,
+    "name": "Minutes spent on an average per person in different activity in a day irrespective of major activity",
+    "description": "Average time (in minutes) spent per person of age 6 years and above in different 3-digit/2-digit/1-digit activity code of TUS activity classification on different daily activities irrespective of major activity."
+  },
+  {
+    "indicator_code": 9,
+    "name": "Percentage of persons in unpaid activities, paid activities and other activities as major activity (age 6 years and above)",
+    "description": "Proportion of individuals aged 6 years and above engaged in any unpaid, paid and other activities considering as their major daily activity."
+  },
+  {
+    "indicator_code": 10,
+    "name": "Minutes spent in a day on an average per participant in unpaid activities, paid activities and other activities as major activity (age 6 years and above)",
+    "description": "Minutes spent in a day on an average by per participant who are participating in that activity of aged 6 years and above in any of paid, unpaid and other activities as any major activity."
+  },
+  {
+    "indicator_code": 11,
+    "name": "Minutes spent in a day on an average per person in unpaid activities, paid activities and other activities as a major activity (age 6 years and above)",
+    "description": "Minutes spent in a day on an average per person participating in any of paid, unpaid and other activities seeing as a major activity (age 6 years and above)."
+  },
+  {
+    "indicator_code": 12,
+    "name": "Percentage of persons in unpaid activities, paid activities and other activities irrespective of major activity (age 6 years and above)",
+    "description": "Percentage of persons irrespective of participating in any of the unpaid, paid and other activities on any activity irrespective of major activity (age 6 years and above)."
+  },
+  {
+    "indicator_code": 13,
+    "name": "Minutes spent in a day on an average per person in unpaid activities, paid activities and other activities irrespective of major activity (age 6 years and above)",
+    "description": "Average minutes spent in a day per person in unpaid activities, paid activities and other activities irrespective of major activity (age 6 years and above)."
+  },
+  {
+    "indicator_code": 14,
+    "name": "Minutes spent in a day on an average per participant in unpaid activities, paid activities and other activities irrespective of major activity (age 6 years and above)",
+    "description": "Average number of minutes spent per day by participants aged 6 years and above who engage in unpaid activities, paid activities, or other activities, calculated separately for each activity category based on those who reported participation in that activity."
+  },
+  {
+    "indicator_code": 15,
+    "name": "Percentage of persons in different activity where the activity was a major activity for different usual principal activity status of the person (age 6 years and above)",
+    "description": "Proportion of people aged 6 and above whose main daily task was a specific activity, categorized by their usual principal activity status, considering the activities pursued by the persons during the last 365 days."
+  },
+  {
+    "indicator_code": 16,
+    "name": "Minutes spent in a day on an average per participant in different activity where the activity was a major activity for each usual principal activity status of the person (age 6 years and above)",
+    "description": "Average time (in minutes) spent per day by participants on major activities by individuals who are participating in that activity aged 6 and above, broken down by their usual principal activity status, considering as the most significant activity pursued in last year preceding the date of survey."
+  },
+  {
+    "indicator_code": 17,
+    "name": "Percentage of persons in different activity in a day irrespective of major activity for each usual principal activity status of the person (age 6 years and above)",
+    "description": "Share of persons aged 6 years and above engaged in various activities in a day, irrespective of major activity showing as their usual principal activity status pursued in last year preceding the date of survey."
+  },
+  {
+    "indicator_code": 18,
+    "name": "Minutes spent in a day on an average per participant in different activity irrespective of major activity for each usual principal activity status of the person (age 6 years and above)",
+    "description": "Average daily minutes spent per participant who are participating in different activities of aged 6 years or above, regardless of the major activity, considering under the usual principal activity status pursued in last year preceding the date of survey."
+  },
+  {
+    "indicator_code": 19,
+    "name": "Percentage of persons in different activity as major activity in a day for each marital status of the person (age 6 years and above)",
+    "description": "Proportion of persons (aged 6 years and above) engaged in different activities as their major daily activity, categorized by marital status as never married, currently married, divorced, separate, widowed. Includes activities related to employment, unpaid work, learning, leisure, self-care, and social participation."
+  },
+  {
+    "indicator_code": 20,
+    "name": "Minutes spent in a day on an average per participant in different activity as major activity for each marital status of the person (age 6 years and above)",
+    "description": "Average daily minutes spent by participants (aged 6 years and above) on different activities considered as their major activity, categorized by marital status as never married, currently married, divorced, separate, widowed. Covers time spent on employment, unpaid work, learning, leisure, self-care, and social participation."
+  },
+  {
+    "indicator_code": 21,
+    "name": "Percentage of persons in different activity in a day irrespective of major activity for each marital status of the person (age 6 years and above)",
+    "description": "Provides the percentage of people of aged 6 years or above engaged in various daily activities irrespective of major activity categorize by marital status as never married, currently married, divorced, separate, widowed."
+  },
+  {
+    "indicator_code": 22,
+    "name": "Minutes spent in a day on an average per participant in different activity irrespective of major activity for each marital status of the person (age 6 years and above)",
+    "description": "Shows the average number of minutes per day for people with any marital status as never married, currently married, divorced, separate, widowed, of aged 6 or more spend on different activities, regardless of any main activity."
+  },
+  {
+    "indicator_code": 23,
+    "name": "Percentage of persons in different activity as major activity in a day for different UMPCE quintile classes (age 6 years and above)",
+    "description": "Shows the percentage share of persons of age 6 and above engaged in different major activity in a day classified by Usual Monthly Per Capita Expenditure quintile class with each quintile class containing 20 per cent of the population, based on the information collected on Household Usual Monthly Consumer Expenditure."
+  },
+  {
+    "indicator_code": 24,
+    "name": "Minutes spent in a day on an average per participant in different activity where the activity was done as a major activity for different UMPCE quintile classes (age 6 years and above)",
+    "description": "Average daily minutes spent by participants who are participating in major activity aged 6 years and above, categorized under Usual Monthly Per Capita Expenditure quintile class (UMPCE) with each quintile class containing 20 per cent of the population, based on the information collected on Household Usual Monthly Consumer Expenditure."
+  },
+  {
+    "indicator_code": 25,
+    "name": "Percentage of persons in different activity irrespective of major activity in a day for different UMPCE quintile classes",
+    "description": "Proportion of individuals involved in different activities during a day, irrespective of whether it was the main activity, compared across Usual Monthly Per Capita Expenditure quintile class (UMPCE) with each quintile class containing 20 per cent of the population, based on the information collected on Household Usual Monthly Consumer Expenditure."
+  },
+  {
+    "indicator_code": 26,
+    "name": "Minutes spent in a day on an average per participant in different activity irrespective of major activity for different UMPCE quintile classes (age 6 years and above)",
+    "description": "Shows the average minutes every day spent by per participant who are participating in different daily activities aged 6 years and above, categorized in different Usual Monthly Per Capita Expenditure quintile class (UMPCE) with each quintile class containing 20 per cent of the population, based on the information collected on Household Usual Monthly Consumer Expenditure."
+  },
+  {
+    "indicator_code": 27,
+    "name": "Percentage of persons in different activity where the activity was a major activity for different level of education (age 6 years and above)",
+    "description": "Provides the share of persons aged 6 years and above reporting various activities as their main activity, categorized by level of education."
+  },
+  {
+    "indicator_code": 28,
+    "name": "Minutes spent in a day on an average per participant in different activity where the activity was performed as a major activity for different level of education (age 6 years and above)",
+    "description": "Presents the average daily time (in minutes) spent by participants aged 6 years and above on different activities when performed as the main activity, classified by different education levels."
+  },
+  {
+    "indicator_code": 29,
+    "name": "Percentage of persons in different activity irrespective of major activity for different level of education (age 6 years and above)",
+    "description": "Indicates the proportion of persons aged 6 years and above engaged in various activities, irrespective of whether these were major activities, across various levels of education."
+  },
+  {
+    "indicator_code": 30,
+    "name": "Minutes spent in a day on an average per participant in different activity irrespective of major activity for different level of education (age 6 years and above)",
+    "description": "Provide the average minutes spent in a day per participants who are participating in different activities regardless of that major activity aged 6 years and above, across levels of education."
+  },
+  {
+    "indicator_code": 31,
+    "name": "Percentage of persons in different activity as major activity in a day for different household social groups",
+    "description": "Highlights the distribution of persons aged 6 years and above who identified various activities as their daily key activity, for various household social groups viz. scheduled tribe (ST), scheduled caste (SC), other backward class (OBC) and the rest referred to as others."
+  },
+  {
+    "indicator_code": 32,
+    "name": "Minutes spent in a day on an average per participant in different activity where the activity was done as a major activity for different household social groups (age 6 years and above)",
+    "description": "Gives the average daily minutes spent by per participants who are participating in different activities when treated as the main activity aged 6 years and above, differentiated by household social groups viz. scheduled tribe (ST), scheduled caste (SC), other backward class (OBC) and the rest referred to as others."
+  },
+  {
+    "indicator_code": 33,
+    "name": "Percentage of persons in different activity irrespective of major activity in a day for different household social groups",
+    "description": "Depicts the proportion of persons aged 6 years and above participating in different daily activities irrespective of major activity during the day, categorized under different household social groups as scheduled tribe (ST), scheduled caste (SC), other backward class (OBC) and the rest referred to as others."
+  },
+  {
+    "indicator_code": 34,
+    "name": "Minutes spent in a day on an average per participant in different activity irrespective of major activity for different household social groups (age 6 years and above)",
+    "description": "Presents the average time in minutes spent per day by participants who are participating in different activities, regardless of major activity aged 6 years and above, across household social groups as scheduled tribe (ST), scheduled caste (SC), other backward class (OBC) and the rest referred to as others."
+  },
+  {
+    "indicator_code": 35,
+    "name": "Percentage of persons and minutes in a day spent on an average per participant in SNA activities, Non-SNA activities and residual other activities where the activity was a major activity for each broad principal activity status (age 6 years and above)",
+    "description": "Provides both the percentage of persons and the average daily minutes per participant devoted to System of National Accounts (SNA), Non-SNA, and residual activities when considered as the main activity, categorized by broad principal activity status as worker, unemployed or not in labour force for persons aged 6 years and above."
+  },
+  {
+    "indicator_code": 36,
+    "name": "Percentage of persons and minutes spent in a day on an average per participant in SNA activities, Non-SNA activities and residual other activities irrespective of major activity for each broad principal activity status (age 6 years and above)",
+    "description": "Percentage of persons and minutes spent in a day on an average per participant in activities included in the coverage of System of National Accounts (SNA) production boundary are termed as SNA production activities and those which are outside the SNA production boundary but within the SNA general production boundary are termed as non-SNA production and the rest are termed as residual other activities, irrespective of major activity for each broad principal activity status as worker, unemployed or not in labour force (age 6 years and above)."
+  },
+  {
+    "indicator_code": 37,
+    "name": "Percentage of persons and minutes in a day spent on an average per participant of different age groups in SNA activities, Non-SNA activities and residual other activities where the activity was a major activity by type of the day",
+    "description": "Percentage of persons and minutes in a day spent on an average per participant of different age groups in SNA activities, Non-SNA activities and residual other activities where the activity was a major activity and categorized by type of the day."
+  },
+  {
+    "indicator_code": 38,
+    "name": "Percentage of persons and minutes in a day spent on an average per participant of different age groups in SNA activities, Non-SNA activities and residual other activities irrespective of major activity by type of the day",
+    "description": "Highlights the proportion of persons and daily average minutes spent per participant by different age groups in SNA activities, Non-SNA activities, and Residual activities, irrespective of the major activity, classified under different type of day as normal day or other day."
+  },
+  {
+    "indicator_code": 39,
+    "name": "Percentage of persons in different unpaid and paid activities where the activity was a major activity by place of activity (age 6 years and above)",
+    "description": "Shows the percentage of persons aged 6 years and above participating in major paid and major unpaid activities, classified by the place of activity where place could be within premises of the dwelling unit of the household or outside premises of the dwelling unit of the household in fixed location or outside premises of the dwelling unit of the household in non-fixed location."
+  },
+  {
+    "indicator_code": 40,
+    "name": "Minutes in a day spent on an average per participant in different unpaid and paid activities where the activity was a major activity by place of activity (age 6 years and above)",
+    "description": "Presents the average daily minutes spent by participant aged 6 years and above in major paid and major unpaid activities, categorized by the place where the activity occurred, where place could be within premises of the dwelling unit of the household or outside premises of the dwelling unit of the household in fixed location or outside premises of the dwelling unit of the household in non-fixed location."
+  },
+  {
+    "indicator_code": 41,
+    "name": "Percentage of persons and minutes spent in a day on an average per person/per participant in unpaid activities, paid activities and other activities where the activity was a major activity (age 6 years and above)",
+    "description": "Provides the percentage of persons and the average daily time in minutes, both per person and per participant, spent by individuals aged 6 years and above in paid, unpaid, and other activities, considering only major activities. These activities could be self development/self care/self maintenance, etc; unpaid activities: SNA activities; unpaid activities: Non SNA activities; all unpaid activities; paid activities and all unpaid/paid activities."
+  },
+  {
+    "indicator_code": 42,
+    "name": "Percentage of persons and minutes spent in a day on an average per person/per participant in unpaid activities, paid activities and other activities irrespective of major activity (age 6 years and above)",
+    "description": "Percentage of persons and minutes spent in a day on an average per person/per participant in unpaid activities, paid activities and other activities irrespective of major activity (age 6 years and above). These activities could be self development/self care/self maintenance, etc; unpaid activities: SNA activities; unpaid activities: Non SNA activities; all unpaid activities; paid activities and all unpaid/paid activities."
+  },
+  {
+    "indicator_code": 43,
+    "name": "Percentage of persons and minutes spent in a day on an average per person/per participant for each household social group in unpaid activities, paid activities and other activities where the activity was a major activity all-India (age 6 years and above)",
+    "description": "Percentage of persons and minutes spent in a day on an average per person/per participant for each household social group as viz. scheduled tribe (ST), scheduled caste (SC), other backward class (OBC) and the rest referred to as others, in unpaid activities, paid activities and other activities where the activity was a major activity for all-India (age 6 years and above)."
+  },
+  {
+    "indicator_code": 44,
+    "name": "Percentage of persons and minutes spent in a day on an average per person/per participant for each household social group in unpaid activities, paid activities and other activities irrespective of major activity (age 6 years and above)",
+    "description": "Summarizes how persons aged 6 years and above, across different household social groups viz. scheduled tribe (ST), scheduled caste (SC), other backward class (OBC) and the rest referred to as others, allocate their average daily time in minutes and participation in paid, unpaid, and other activities, without restricting to only major activities."
+  }
+]

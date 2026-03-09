@@ -1,0 +1,72 @@
+[
+  {
+    "indicator_code": 2,
+    "name": "Access to Improved Source of Drinking Water",
+    "description": "Access to Improved Source of Drinking Water"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Improved Source of Drinking Water Within Household",
+    "description": "Improved Source of Drinking Water Within Household"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Exclusive Access to Improved Latrine",
+    "description": "Exclusive Access to Improved Latrine"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Improved Latrine and Hand Washing Facilities Within Household",
+    "description": "Improved Latrine and Hand Washing Facilities Within Household"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Usage of Mobile Phone",
+    "description": "Usage of Mobile Phone"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Access to Mass Media and Broadband",
+    "description": "Access to Mass Media and Broadband"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Availability of Basic Transport and Public Facility",
+    "description": "Availability of Basic Transport and Public Facility"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Household Assets",
+    "description": "Household Assets"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Different Sources of Finance",
+    "description": "Different Sources of Finance"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Usual Place of Residence Different From Current Place",
+    "description": "Usual Place of Residence Different From Current Place"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Main Reason for Leaving Last Usual Place of Residence",
+    "description": "Main Reason for Leaving Last Usual Place of Residence"
+  },
+  {
+    "indicator_code": 13,
+    "name": "Income Change Due to Migration",
+    "description": "Income Change Due to Migration"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Main Reason for Migration",
+    "description": "Main Reason for Migration"
+  },
+  {
+    "indicator_code": 15,
+    "name": "Possession of Air Conditioner and Air Cooler",
+    "description": "Possession of Air Conditioner and Air Cooler"
+  }
+]

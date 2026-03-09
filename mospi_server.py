@@ -1,5 +1,6 @@
 import sys
 import os
+import json
 import yaml
 import requests
 from typing import Dict, Any, Optional
@@ -8,6 +9,53 @@ from mospi.client import mospi
 from observability.telemetry import TelemetryMiddleware
 
 SWAGGER_DIR = os.path.join(os.path.dirname(__file__), "swagger")
+DEFINITIONS_DIR = os.path.join(os.path.dirname(__file__), "definitions")
+
+
+def load_definitions(dataset: str) -> Dict[int, Dict[str, str]]:
+    """Load indicator definitions from JSON file, keyed by indicator_code."""
+    filepath = os.path.join(DEFINITIONS_DIR, f"{dataset.lower()}_definitions.json")
+    if not os.path.exists(filepath):
+        return {}
+    with open(filepath, "r") as f:
+        definitions = json.load(f)
+    return {d["indicator_code"]: d for d in definitions}
+
+
+def _apply_definitions(indicators: list, definitions: Dict) -> None:
+    """In-place: add 'definition' field to each indicator dict from definitions map."""
+    for indicator in indicators:
+        code = indicator.get("indicator_code") or indicator.get("code")
+        if code in definitions:
+            indicator["definition"] = definitions[code].get("description", "")
+
+
+def enrich_indicators(result: Dict[str, Any], dataset: str) -> Dict[str, Any]:
+    """Enrich indicator list with definitions from definitions/ folder.
+
+    Handles all response structures:
+    - result["data"] = flat list  (AISHE, GENDER, NFHS, ENVSTATS, RBI, NSS77, HCES, TUS, EC)
+    - result["indicators_by_frequency"] = dict of lists  (PLFS, ASUSE)
+    - result["data"]["indicator"] = list  (NAS, ENERGY, CPIALRL)
+    - result["indicator"] = list  (NSS78)
+    """
+    definitions = load_definitions(dataset)
+    if not definitions:
+        return result
+
+    data = result.get("data")
+
+    if isinstance(data, list):
+        _apply_definitions(data, definitions)
+    elif isinstance(data, dict) and "indicator" in data:
+        _apply_definitions(data["indicator"], definitions)
+    elif "indicators_by_frequency" in result:
+        for items in result["indicators_by_frequency"].values():
+            _apply_definitions(items, definitions)
+    elif "indicator" in result and isinstance(result["indicator"], list):
+        _apply_definitions(result["indicator"], definitions)
+
+    return result
 
 
 def log(msg: str):
@@ -210,6 +258,8 @@ def step2_get_indicators(
         return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS, "_user_query": user_query}
 
     result = indicator_methods[dataset]()
+    result = enrich_indicators(result, dataset)
+
     result["_user_query"] = user_query
     result["_next_step"] = "Call step3_get_metadata() with the matching indicator and required dataset params. MUST NOT skip to step4_get_data."
     result["_retry_hint"] = (

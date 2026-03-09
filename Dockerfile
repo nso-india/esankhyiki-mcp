@@ -30,6 +30,7 @@ COPY mospi_server.py .
 COPY observability/ ./observability/
 COPY mospi/ ./mospi/
 COPY swagger/ ./swagger/
+COPY definitions/ ./definitions/
 
 # Expose the port for HTTP transport
 EXPOSE 8000

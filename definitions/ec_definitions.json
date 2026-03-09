@@ -1,0 +1,17 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Sixth Economic Census (EC6) - 2013-14",
+    "description": "District-wise establishment and worker counts. 36 States/UTs, 24 activity sectors, source of finance, ownership type."
+  },
+  {
+    "indicator_code": 2,
+    "name": "Fifth Economic Census (EC5) - 2005",
+    "description": "District-wise establishment and worker counts. 35 States/UTs, 313 NIC-based activity codes, nature of operation, source of finance, ownership type."
+  },
+  {
+    "indicator_code": 3,
+    "name": "Fourth Economic Census (EC4) - 1998",
+    "description": "District-wise establishment and worker counts. 35 States/UTs, 18 activity sectors, nature of operation, source of finance, ownership type."
+  }
+]
