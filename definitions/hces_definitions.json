@@ -1,0 +1,47 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Average monthly per capita consumption expenditure (MPCE)",
+    "description": "Average monthly per capita consumption expenditure (MPCE)"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Average monthly per capita consumption expenditure (MPCE) Over 12 Fractile Classes",
+    "description": "Average monthly per capita consumption expenditure (MPCE) Over 12 Fractile Classes"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Monthly Per Capita Consumption Expenditure (MPCE) over Broad Categories in 30 Days",
+    "description": "Monthly Per Capita Consumption Expenditure (MPCE) over Broad Categories in 30 Days"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Percentage Share of Monthly Per Capita Consumption Expenditure (MPCE) over Broad Categories in 30 Days",
+    "description": "Percentage Share of Monthly Per Capita Consumption Expenditure (MPCE) over Broad Categories in 30 Days"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Average Per Capita Monthly Quantity Consumption ",
+    "description": "Average Per Capita Monthly Quantity Consumption "
+  },
+  {
+    "indicator_code": 6,
+    "name": "Average Monthly Per Capita Value of Consumption (Rs.)",
+    "description": "Average Monthly Per Capita Value of Consumption (Rs.)"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Average Monthly Per Capita Consumption Expenditure (MPCE) across different Household Type",
+    "description": "Average Monthly Per Capita Consumption Expenditure (MPCE) across different Household Type"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Average Monthly Per Capita Consumption Expenditure (MPCE) across different Social Group",
+    "description": "Average Monthly Per Capita Consumption Expenditure (MPCE) across different Social Group"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Gini Coefficient for Per Capita Consumption Expenditure",
+    "description": "Gini Coefficient for Per Capita Consumption Expenditure"
+  }
+]

@@ -1,0 +1,284 @@
+openapi: 3.0.1
+info:
+  title: Reserve Bank Of India
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: RBI
+  description: '39 indicators on external sector: foreign trade, balance of payments,
+    forex rates, external debt, NRI deposits'
+paths:
+  /api/rbi/getRbiRecords:
+    get:
+      summary: Get RBI data for an indicator
+      description: Fetches RBI statistics. Different indicators use different dimension
+        filters.
+      parameters:
+      - in: query
+        name: sub_indicator_code
+        required: true
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+        description: Indicator code (1-48, required)
+      - in: query
+        name: year
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by year
+      - in: query
+        name: month
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by month
+      - in: query
+        name: quarter
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by quarter
+      - in: query
+        name: period
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by period
+      - in: query
+        name: country_group_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by country group
+      - in: query
+        name: countries_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by countries
+      - in: query
+        name: trade_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by trade
+      - in: query
+        name: trade_type_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by trade type
+      - in: query
+        name: trade_category_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by trade category
+      - in: query
+        name: transaction_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by transaction
+      - in: query
+        name: transaction_type_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by transaction type
+      - in: query
+        name: category_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by category
+      - in: query
+        name: sub_category_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by sub category
+      - in: query
+        name: commodities_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by commodities
+      - in: query
+        name: export_commodities_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by export commodities
+      - in: query
+        name: import_commodities_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by import commodities
+      - in: query
+        name: balance_of_payments_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by balance of payments
+      - in: query
+        name: bop_overall_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by bop overall
+      - in: query
+        name: components_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by components
+      - in: query
+        name: currency_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by currency
+      - in: query
+        name: currency_type_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by currency type
+      - in: query
+        name: ex_rate_fluctuations_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by ex rate fluctuations
+      - in: query
+        name: reference_rate_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by reference rate
+      - in: query
+        name: foreign_exchange_reserve_type_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by foreign exchange reserve type
+      - in: query
+        name: foreign_exchange_reserve_currency_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by foreign exchange reserve currency
+      - in: query
+        name: external_debt_sector_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by external debt sector
+      - in: query
+        name: external_debt_term_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by external debt term
+      - in: query
+        name: external_debt_items_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by external debt items
+      - in: query
+        name: external_debt_agreement_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by external debt agreement
+      - in: query
+        name: external_debt_category_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by external debt category
+      - in: query
+        name: external_debt_institutions_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by external debt institutions
+      - in: query
+        name: market_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by market
+      - in: query
+        name: conversion_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by conversion
+      - in: query
+        name: NRI_deposits_sub_indicator_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by NRI deposits sub indicator
+      - in: query
+        name: NRI_deposits_category_code
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Filter by NRI deposits category
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          default: 20
+          pattern: ^\d+$
+        description: Number of records per page (default 20)
+      - in: query
+        name: page
+        schema:
+          type: integer
+          minimum: 1
+          pattern: ^\d+$
+        description: Page number (from 1 to n)
+      - in: query
+        name: Format
+        required: true
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+        description: Output format (JSON or CSV)
+      responses:
+        '200':
+          description: A JSON array of RBI data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'

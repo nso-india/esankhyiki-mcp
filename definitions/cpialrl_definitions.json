@@ -1,0 +1,12 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "General Index",
+    "description": "General Index"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Group Index",
+    "description": "Group Index"
+  }
+]

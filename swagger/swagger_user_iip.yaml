@@ -1,7 +1,6 @@
 openapi: 3.0.1
 info:
   title: API for Index Of Industrial Production (IIP)
-
   version: 1.0.11
 servers:
 - url: https://api.mospi.gov.in/
@@ -9,9 +8,8 @@ tags:
 - name: IIP Annual Index and GrowthRate.
   description: Index and GrowthRate For Annual Data.
 - name: IIP Monthly Index and GrowthRate
-  description: 'Index and GrowthRate For Monthly Data.'
+  description: Index and GrowthRate For Monthly Data.
 paths:
-
   /api/iip/getIIPAnnual:
     get:
       tags:
@@ -22,36 +20,44 @@ paths:
         required: true
         in: query
         schema:
-          default: "2011-12"
+          default: 2011-12
           enum:
-          - "2011-12"
-          - "2004-05"
-          - "1993-94"
+          - 2011-12
+          - 2004-05
+          - 1993-94
       - name: financial_year
         in: query
-        description: Enter the Financial Year (format YYYY-YY.Comma separated for multiple values)
+        description: Enter the Financial Year (format YYYY-YY.Comma separated for
+          multiple values)
         schema:
           type: string
+          pattern: ^\d{4}-\d{2}(,\d{4}-\d{2})*$
       - name: category_code
         in: query
-        description: Enter the Category code (from 01 to 11.Comma separated for multiple values)
+        description: Enter the Category code (from 01 to 11.Comma separated for multiple
+          values)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: subcategory_code
         in: query
-        description: Enter the Subcategory code (Kindly refer to the Metadata sheet available by clicking the "View Metadata" button)
+        description: Enter the Subcategory code (Kindly refer to the Metadata sheet
+          available by clicking the "View Metadata" button)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: limit
         in: query
         description: Number of records per page (default 10)
         schema:
           type: integer
+          pattern: ^\d+$
       - name: page
         in: query
         description: Enter the page no. (from 1 to n.)
         schema:
           type: string
+          pattern: ^\d+$
       - name: type
         required: true
         in: query
@@ -73,9 +79,9 @@ paths:
           - JSON
           - CSV
       responses:
-        "200":
+        '200':
           description: A JSON array of user information
-        "400":
+        '400':
           description: Bad Request
           content:
             application/json:
@@ -98,8 +104,7 @@ paths:
                   message:
                     type: string
                     example: Invalid request body
-      
-        "409":
+        '409':
           description: Not Found
           content:
             application/json:
@@ -124,41 +129,50 @@ paths:
         required: true
         in: query
         schema:
-          default: "2011-12"
+          default: 2011-12
           enum:
-          - "2011-12"
-          - "2004-05"
-          - "1993-94"
+          - 2011-12
+          - 2004-05
+          - 1993-94
       - name: year
         in: query
-        description:  Enter the Year (format YYYY.Comma separated for multiple values)
+        description: Enter the Year (format YYYY.Comma separated for multiple values)
         schema:
           type: string
+          pattern: ^\d{4}(,\d{4})*$
       - name: month_code
         in: query
-        description: Enter the Month code (from 1-12.Comma separated for multiple values)
+        description: Enter the Month code (from 1-12.Comma separated for multiple
+          values)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: category_code
         in: query
-        description: Enter the Category code (from 01 to 11.Comma separated for multiple values)
+        description: Enter the Category code (from 01 to 11.Comma separated for multiple
+          values)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: subcategory_code
         in: query
-        description: Enter the Subcategory code (Kindly refer to the Metadata sheet available by clicking the "View Metadata" button)
+        description: Enter the Subcategory code (Kindly refer to the Metadata sheet
+          available by clicking the "View Metadata" button)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: limit
         in: query
         description: Number of records per page (default 10)
         schema:
           type: integer
+          pattern: ^\d+$
       - name: page
         in: query
         description: Enter the page no. (from 1 to n.)
         schema:
           type: string
+          pattern: ^\d+$
       - name: type
         required: true
         in: query
@@ -180,10 +194,9 @@ paths:
           - JSON
           - CSV
       responses:
-        "200":
+        '200':
           description: A JSON array of user information
-
-        "400":
+        '400':
           description: Bad Request
           content:
             application/json:
@@ -206,8 +219,7 @@ paths:
                   message:
                     type: string
                     example: Invalid request body
-      
-        "409":
+        '409':
           description: Not Found
           content:
             application/json:
@@ -220,7 +232,6 @@ paths:
                   message:
                     type: string
                     example: Requested item wasn't found!
-     
       security:
       - bearerAuth: []
 components:
@@ -230,4 +241,4 @@ components:
       description: Bearer token to access these api endpoints
       name: Authorization
       in: header
-x-original-swagger-version: "2.0"
+x-original-swagger-version: '2.0'

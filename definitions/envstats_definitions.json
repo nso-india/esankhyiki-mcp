@@ -1,0 +1,622 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Annual and Seasonal Mean Temperature",
+    "description": "Annual and Seasonal Mean Temperature"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Annual and Seasonal Minimum and Maximum Temperature",
+    "description": "Annual and Seasonal Minimum and Maximum Temperature"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Annual and Monthly Rainfall",
+    "description": "Annual and Monthly Rainfall"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Wetland distribution in India",
+    "description": "Wetland distribution in India"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Number and Area of Wetlands",
+    "description": "Number and Area of Wetlands"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Water Sheds in India",
+    "description": "Water Sheds in India"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Catchment Area of major River Basins",
+    "description": "Catchment Area of major River Basins"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Length of Coastline and Coastal Population of India",
+    "description": "Length of Coastline and Coastal Population of India"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Occurrence of Major Soils in India",
+    "description": "Occurrence of Major Soils in India"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Category-wise distribution of land degradation in different States of India",
+    "description": "Category-wise distribution of land degradation in different States of India"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Area under land use and land cover classes in India",
+    "description": "Area under land use and land cover classes in India"
+  },
+  {
+    "indicator_code": 12,
+    "name": "State-wise area by land cover classes",
+    "description": "State-wise area by land cover classes"
+  },
+  {
+    "indicator_code": 13,
+    "name": "List of ramsar sties in india",
+    "description": "List of ramsar sties in india"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Terrestrial Protected Areas",
+    "description": "Terrestrial Protected Areas"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Faunal diversity in India and the world",
+    "description": "Faunal diversity in India and the world"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Category -wise status summary of plants at global level",
+    "description": "Category -wise status summary of plants at global level"
+  },
+  {
+    "indicator_code": 18,
+    "name": "State-wise Forest Area",
+    "description": "State-wise Forest Area"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Forest Cover in India under various forest classes",
+    "description": "Forest Cover in India under various forest classes"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Forest Cover",
+    "description": "Forest Cover"
+  },
+  {
+    "indicator_code": 21,
+    "name": "Number of forest fire detected",
+    "description": "Number of forest fire detected"
+  },
+  {
+    "indicator_code": 22,
+    "name": "Carbon Stock in different forest carbon pools",
+    "description": "Carbon Stock in different forest carbon pools"
+  },
+  {
+    "indicator_code": 23,
+    "name": "Forest type and density wise carbon stock in different carbon pools",
+    "description": "Forest type and density wise carbon stock in different carbon pools"
+  },
+  {
+    "indicator_code": 24,
+    "name": "Tree Cover",
+    "description": "Tree Cover"
+  },
+  {
+    "indicator_code": 25,
+    "name": "Ambient Air Quality in cities of the country under NAMP & CAAQMS (Integrated)",
+    "description": "Ambient Air Quality in cities of the country under NAMP & CAAQMS (Integrated)"
+  },
+  {
+    "indicator_code": 26,
+    "name": "Ambient Air Quality in major cities",
+    "description": "Ambient Air Quality in major cities"
+  },
+  {
+    "indicator_code": 27,
+    "name": "Water Quality in Indian Rivers",
+    "description": "Water Quality in Indian Rivers"
+  },
+  {
+    "indicator_code": 28,
+    "name": "River Water Quality",
+    "description": "River Water Quality"
+  },
+  {
+    "indicator_code": 30,
+    "name": "Status of Critically Polluted industrial clusters",
+    "description": "Status of Critically Polluted industrial clusters"
+  },
+  {
+    "indicator_code": 31,
+    "name": "Status of Ambient Noise Level in Metropolitan Cities",
+    "description": "Status of Ambient Noise Level in Metropolitan Cities"
+  },
+  {
+    "indicator_code": 32,
+    "name": "Mineral Reserves and Resources",
+    "description": "Mineral Reserves and Resources"
+  },
+  {
+    "indicator_code": 33,
+    "name": "Production of Minerals",
+    "description": "Production of Minerals"
+  },
+  {
+    "indicator_code": 34,
+    "name": "Import of Ores and Minerals",
+    "description": "Import of Ores and Minerals"
+  },
+  {
+    "indicator_code": 35,
+    "name": "Export of Ores and Minerals (including re-export)",
+    "description": "Export of Ores and Minerals (including re-export)"
+  },
+  {
+    "indicator_code": 36,
+    "name": "Inventory of geological reserves of coal by type",
+    "description": "Inventory of geological reserves of coal by type"
+  },
+  {
+    "indicator_code": 37,
+    "name": "Inventory of geological reserves of coal",
+    "description": "Inventory of geological reserves of coal"
+  },
+  {
+    "indicator_code": 38,
+    "name": "Inventory of geological reserve of Lignite",
+    "description": "Inventory of geological reserve of Lignite"
+  },
+  {
+    "indicator_code": 39,
+    "name": "Total Primary Supply of Coal & Lignite",
+    "description": "Total Primary Supply of Coal & Lignite"
+  },
+  {
+    "indicator_code": 40,
+    "name": "Power Supply Position",
+    "description": "Power Supply Position"
+  },
+  {
+    "indicator_code": 41,
+    "name": "Annual gross generation of power by source and by sector",
+    "description": "Annual gross generation of power by source and by sector"
+  },
+  {
+    "indicator_code": 42,
+    "name": "Import and Export of Electricity",
+    "description": "Import and Export of Electricity"
+  },
+  {
+    "indicator_code": 43,
+    "name": "Land Use Classification",
+    "description": "Land Use Classification"
+  },
+  {
+    "indicator_code": 44,
+    "name": "Net area irrigated from different sources and gross irrigated area",
+    "description": "Net area irrigated from different sources and gross irrigated area"
+  },
+  {
+    "indicator_code": 45,
+    "name": "State-wise area under organic farming (Registered under accredited certification bodies)",
+    "description": "State-wise area under organic farming (Registered under accredited certification bodies)"
+  },
+  {
+    "indicator_code": 46,
+    "name": "Value of Output - Forestry (At Current Prices)",
+    "description": "Value of Output - Forestry (At Current Prices)"
+  },
+  {
+    "indicator_code": 47,
+    "name": "Value of Output - Industrial Wood (At Current Prices)",
+    "description": "Value of Output - Industrial Wood (At Current Prices)"
+  },
+  {
+    "indicator_code": 48,
+    "name": "Value of Output - Fuelwood(At Current Pric",
+    "description": "Value of Output - Fuelwood(At Current Pric"
+  },
+  {
+    "indicator_code": 49,
+    "name": "Value of Output - Non-Timber Forest Products (At Current Prices)",
+    "description": "Value of Output - Non-Timber Forest Products (At Current Prices)"
+  },
+  {
+    "indicator_code": 50,
+    "name": "Area under major crops",
+    "description": "Area under major crops"
+  },
+  {
+    "indicator_code": 51,
+    "name": "Production of major crops",
+    "description": "Production of major crops"
+  },
+  {
+    "indicator_code": 52,
+    "name": "Production of Biofertilizers",
+    "description": "Production of Biofertilizers"
+  },
+  {
+    "indicator_code": 53,
+    "name": "Capacity and production of insecticides",
+    "description": "Capacity and production of insecticides"
+  },
+  {
+    "indicator_code": 54,
+    "name": "Consumption, Production and Import of Fertilisers",
+    "description": "Consumption, Production and Import of Fertilisers"
+  },
+  {
+    "indicator_code": 55,
+    "name": "Nutrient-wise consumption of Fertilizers",
+    "description": "Nutrient-wise consumption of Fertilizers"
+  },
+  {
+    "indicator_code": 56,
+    "name": "Consumption of Chemical Pesticides in India",
+    "description": "Consumption of Chemical Pesticides in India"
+  },
+  {
+    "indicator_code": 57,
+    "name": "Consumption of Pesticides (Technical Grade Material)",
+    "description": "Consumption of Pesticides (Technical Grade Material)"
+  },
+  {
+    "indicator_code": 58,
+    "name": "Consumption of bio pesticides formulation",
+    "description": "Consumption of bio pesticides formulation"
+  },
+  {
+    "indicator_code": 59,
+    "name": "Import of Agricultural Products",
+    "description": "Import of Agricultural Products"
+  },
+  {
+    "indicator_code": 60,
+    "name": "Export of Agricultural Products",
+    "description": "Export of Agricultural Products"
+  },
+  {
+    "indicator_code": 61,
+    "name": "Livestock population in India",
+    "description": "Livestock population in India"
+  },
+  {
+    "indicator_code": 62,
+    "name": "Number of animals slaughtered and Quantity of Meat Production",
+    "description": "Number of animals slaughtered and Quantity of Meat Production"
+  },
+  {
+    "indicator_code": 63,
+    "name": "Import and Export of Livestock & Marine Products",
+    "description": "Import and Export of Livestock & Marine Products"
+  },
+  {
+    "indicator_code": 64,
+    "name": "Fish Production-India",
+    "description": "Fish Production-India"
+  },
+  {
+    "indicator_code": 65,
+    "name": "Fish Production",
+    "description": "Fish Production"
+  },
+  {
+    "indicator_code": 66,
+    "name": "Water availability in India",
+    "description": "Water availability in India"
+  },
+  {
+    "indicator_code": 67,
+    "name": "Water resources -Basinwise",
+    "description": "Water resources -Basinwise"
+  },
+  {
+    "indicator_code": 68,
+    "name": "Projected Water Demand in India",
+    "description": "Projected Water Demand in India"
+  },
+  {
+    "indicator_code": 69,
+    "name": "Water flow in stream",
+    "description": "Water flow in stream"
+  },
+  {
+    "indicator_code": 70,
+    "name": "Basin- Wise dynamic ground water resources",
+    "description": "Basin- Wise dynamic ground water resources"
+  },
+  {
+    "indicator_code": 71,
+    "name": "Ground water resources",
+    "description": "Ground water resources"
+  },
+  {
+    "indicator_code": 72,
+    "name": "Basin-wise Storage Status of Reservoirs of the Country",
+    "description": "Basin-wise Storage Status of Reservoirs of the Country"
+  },
+  {
+    "indicator_code": 73,
+    "name": "Storage Status of Reservoirs of the Country",
+    "description": "Storage Status of Reservoirs of the Country"
+  },
+  {
+    "indicator_code": 74,
+    "name": "River basin-wise catchment area, average water resources potential and utilisable water resources potential",
+    "description": "River basin-wise catchment area, average water resources potential and utilisable water resources potential"
+  },
+  {
+    "indicator_code": 75,
+    "name": "Greenhouse gas emission by source and removal by sinks from India",
+    "description": "Greenhouse gas emission by source and removal by sinks from India"
+  },
+  {
+    "indicator_code": 76,
+    "name": "Consumption of Ozone Depleting Substances (ODSs) and Hydrofluorocarbons (HFCs) in India",
+    "description": "Consumption of Ozone Depleting Substances (ODSs) and Hydrofluorocarbons (HFCs) in India"
+  },
+  {
+    "indicator_code": 77,
+    "name": "Summary of Sewage Management",
+    "description": "Summary of Sewage Management"
+  },
+  {
+    "indicator_code": 78,
+    "name": "Status of grossly polluting industries discharging their effluents into rivers and lakes",
+    "description": "Status of grossly polluting industries discharging their effluents into rivers and lakes"
+  },
+  {
+    "indicator_code": 80,
+    "name": "Municipal Solid Waste Generation in India",
+    "description": "Municipal Solid Waste Generation in India"
+  },
+  {
+    "indicator_code": 81,
+    "name": "Municipal Solid Waste Generation in Metro Cities / State Capitals",
+    "description": "Municipal Solid Waste Generation in Metro Cities / State Capitals"
+  },
+  {
+    "indicator_code": 82,
+    "name": "Amount of Waste Generated by Waste Category",
+    "description": "Amount of Waste Generated by Waste Category"
+  },
+  {
+    "indicator_code": 83,
+    "name": "Details on Hazardous Waste generation",
+    "description": "Details on Hazardous Waste generation"
+  },
+  {
+    "indicator_code": 84,
+    "name": "Status of Bio-medical Waste Generation and its Management",
+    "description": "Status of Bio-medical Waste Generation and its Management"
+  },
+  {
+    "indicator_code": 85,
+    "name": "Status on Imports & Exports of Hazardous Waste",
+    "description": "Status on Imports & Exports of Hazardous Waste"
+  },
+  {
+    "indicator_code": 86,
+    "name": "Status of Industrial Waste Water Treatment Plants",
+    "description": "Status of Industrial Waste Water Treatment Plants"
+  },
+  {
+    "indicator_code": 87,
+    "name": "Average Number of Heat Wave Days reported during the Summer Season",
+    "description": "Average Number of Heat Wave Days reported during the Summer Season"
+  },
+  {
+    "indicator_code": 88,
+    "name": "Average Number of Cold Wave Days Reported during the Winter Season (December of Previous Year to February of Current Year)",
+    "description": "Average Number of Cold Wave Days Reported during the Winter Season (December of Previous Year to February of Current Year)"
+  },
+  {
+    "indicator_code": 89,
+    "name": "Number of Cyclonic Storms formed over the North Indian Ocean",
+    "description": "Number of Cyclonic Storms formed over the North Indian Ocean"
+  },
+  {
+    "indicator_code": 91,
+    "name": "Major Earthquakes in India",
+    "description": "Major Earthquakes in India"
+  },
+  {
+    "indicator_code": 92,
+    "name": "Damage due to Natural Extreme Events in India",
+    "description": "Damage due to Natural Extreme Events in India"
+  },
+  {
+    "indicator_code": 93,
+    "name": "Damage due to Natural Extreme Events",
+    "description": "Damage due to Natural Extreme Events"
+  },
+  {
+    "indicator_code": 94,
+    "name": "Number of Deaths due to Forces of Nature",
+    "description": "Number of Deaths due to Forces of Nature"
+  },
+  {
+    "indicator_code": 95,
+    "name": "Government Expenditure on account of Natural Calamities",
+    "description": "Government Expenditure on account of Natural Calamities"
+  },
+  {
+    "indicator_code": 96,
+    "name": "Houses, Households and Population in India",
+    "description": "Houses, Households and Population in India"
+  },
+  {
+    "indicator_code": 97,
+    "name": "Coastal Fishing Population in India",
+    "description": "Coastal Fishing Population in India"
+  },
+  {
+    "indicator_code": 98,
+    "name": "Distribution of Households by Major Source of Drinking Water",
+    "description": "Distribution of Households by Major Source of Drinking Water"
+  },
+  {
+    "indicator_code": 99,
+    "name": "Percentage of households getting safe and adequate drinking water within premises through pipe water supply (Rural)",
+    "description": "Percentage of households getting safe and adequate drinking water within premises through pipe water supply (Rural)"
+  },
+  {
+    "indicator_code": 100,
+    "name": "Percentage of households getting safe and adequate drinking water within premises through pipe water supply (Urban)",
+    "description": "Percentage of households getting safe and adequate drinking water within premises through pipe water supply (Urban)"
+  },
+  {
+    "indicator_code": 101,
+    "name": "Distribution of Households with Access to Sanitation",
+    "description": "Distribution of Households with Access to Sanitation"
+  },
+  {
+    "indicator_code": 102,
+    "name": "Percentage distribution of Households by sanitation facilities",
+    "description": "Percentage distribution of Households by sanitation facilities"
+  },
+  {
+    "indicator_code": 103,
+    "name": "Number of Towns/ Cities Reporting Slums and Percentage of Slum Population",
+    "description": "Number of Towns/ Cities Reporting Slums and Percentage of Slum Population"
+  },
+  {
+    "indicator_code": 104,
+    "name": "Percentage of Districsts achieving Open Defecation free (ODF) target",
+    "description": "Percentage of Districsts achieving Open Defecation free (ODF) target"
+  },
+  {
+    "indicator_code": 105,
+    "name": "Proportion of households having access to toilet facility",
+    "description": "Proportion of households having access to toilet facility"
+  },
+  {
+    "indicator_code": 107,
+    "name": "Population connected to wastewater collecting system",
+    "description": "Population connected to wastewater collecting system"
+  },
+  {
+    "indicator_code": 108,
+    "name": "Slum households by source and location of drinking water",
+    "description": "Slum households by source and location of drinking water"
+  },
+  {
+    "indicator_code": 110,
+    "name": "All india weighted average rate of sale of power (WARSP) from conventional power generating stations",
+    "description": "All india weighted average rate of sale of power (WARSP) from conventional power generating stations"
+  },
+  {
+    "indicator_code": 111,
+    "name": "Statistics related to Road Transport",
+    "description": "Statistics related to Road Transport"
+  },
+  {
+    "indicator_code": 112,
+    "name": "Status of registered Motor Vehicles",
+    "description": "Status of registered Motor Vehicles"
+  },
+  {
+    "indicator_code": 113,
+    "name": "Number of passengers carried by state road transport undertakings",
+    "description": "Number of passengers carried by state road transport undertakings"
+  },
+  {
+    "indicator_code": 114,
+    "name": "Cases & Deaths - Cholera",
+    "description": "Cases & Deaths - Cholera"
+  },
+  {
+    "indicator_code": 115,
+    "name": "Cases and deaths - Acute Diarrhoeal Disease",
+    "description": "Cases and deaths - Acute Diarrhoeal Disease"
+  },
+  {
+    "indicator_code": 116,
+    "name": "Cases and deaths - Enteric Fever (Typhoid)",
+    "description": "Cases and deaths - Enteric Fever (Typhoid)"
+  },
+  {
+    "indicator_code": 117,
+    "name": "Cases and Deaths - Viral Hepatitis",
+    "description": "Cases and Deaths - Viral Hepatitis"
+  },
+  {
+    "indicator_code": 118,
+    "name": "Cases and Deaths - Acute Respiratory Infection",
+    "description": "Cases and Deaths - Acute Respiratory Infection"
+  },
+  {
+    "indicator_code": 119,
+    "name": "Cases and deaths - Malaria",
+    "description": "Cases and deaths - Malaria"
+  },
+  {
+    "indicator_code": 120,
+    "name": "Cases and death - Dengue",
+    "description": "Cases and death - Dengue"
+  },
+  {
+    "indicator_code": 121,
+    "name": "Cases - Chikungunya fever",
+    "description": "Cases - Chikungunya fever"
+  },
+  {
+    "indicator_code": 122,
+    "name": "Cases and deaths - Acute Encephalitis Syndrome (AES)",
+    "description": "Cases and deaths - Acute Encephalitis Syndrome (AES)"
+  },
+  {
+    "indicator_code": 123,
+    "name": "Expenditure on Centrally Sponsored Schemes for Protection of Environment",
+    "description": "Expenditure on Centrally Sponsored Schemes for Protection of Environment"
+  },
+  {
+    "indicator_code": 124,
+    "name": "Annual Government Expenditure on Environmental Protection",
+    "description": "Annual Government Expenditure on Environmental Protection"
+  },
+  {
+    "indicator_code": 125,
+    "name": "Annual Corporate Expenditure on Environment Protection- Conservation of Natural Resources Sector",
+    "description": "Annual Corporate Expenditure on Environment Protection- Conservation of Natural Resources Sector"
+  },
+  {
+    "indicator_code": 126,
+    "name": "Annual Corporate Expenditure on Environment Protection- Agro Forestry Sector",
+    "description": "Annual Corporate Expenditure on Environment Protection- Agro Forestry Sector"
+  },
+  {
+    "indicator_code": 127,
+    "name": "Annual Corporate Expenditure on Environment Protection- Environmental Sustainability sector",
+    "description": "Annual Corporate Expenditure on Environment Protection- Environmental Sustainability sector"
+  },
+  {
+    "indicator_code": 128,
+    "name": "Annual Corporate Expenditure on Environment Protection- Across 3 sectors",
+    "description": "Annual Corporate Expenditure on Environment Protection- Across 3 sectors"
+  },
+  {
+    "indicator_code": 129,
+    "name": "Subsidies (including Environment-related Subsidies) under Indian Budget",
+    "description": "Subsidies (including Environment-related Subsidies) under Indian Budget"
+  },
+  {
+    "indicator_code": 130,
+    "name": "Number of Students pursuing environment-related higher education at Ph.D.,M.Phil. & Post Graduate Level",
+    "description": "Number of Students pursuing environment-related higher education at Ph.D.,M.Phil. & Post Graduate Level"
+  }
+]

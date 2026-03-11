@@ -2,7 +2,7 @@
 
 ## Adding a New Dataset
 
-The server currently supports 7 datasets. To add a new one:
+The server currently supports 19 datasets. To add a new one:
 
 ### 1. Get the Swagger spec
 
@@ -50,6 +50,21 @@ In `mospi_server.py`:
 - Add dataset-specific params to `get_metadata` docstring
 - Add dataset to tool argument descriptions
 
+### 6. Add tests
+
+Add a `pytest.param` entry to the `DATASETS` list in `tests/test_mcp_server.py`:
+
+```python
+pytest.param(
+    "YOUR_DATASET",
+    {"indicator_code": 1},                          # step3_kwargs
+    {"indicator_code": "1", "limit": "1"},           # step4_filters
+    id="YOUR_DATASET",
+),
+```
+
+Also update `EXPECTED_DATASETS` to include the new dataset name. Then run `pytest tests/ -v -p no:anyio` to verify all 4 steps pass for the new dataset.
+
 ## Swagger as Source of Truth
 
 Parameter validation is driven by swagger YAML files, not hardcoded lists. When `get_metadata` is called, it returns `api_params` from the swagger spec so LLMs know exactly which params to send to `get_data`.
@@ -68,7 +83,6 @@ mospi_server.py       # All MCP tools + validation logic (single file server)
 mospi/client.py       # HTTP client for MoSPI API calls
 swagger/*.yaml        # Swagger specs per dataset (param source of truth)
 observability/        # OpenTelemetry middleware (telemetry.py)
-tests/                # Per-dataset test files
 ```
 
 ## Development Setup
@@ -87,24 +101,22 @@ python mospi_server.py
 
 ## Testing
 
-Test against the live MoSPI API by running the server and making tool calls:
+The test suite uses FastMCP's in-process Client — no running server needed.
 
 ```bash
-# Run server
-python mospi_server.py
+# Install test dependencies
+pip install -r tests/requirements-test.txt
 
-# Test with FastMCP client
-python -c "
-import asyncio
-from fastmcp import Client
+# Run all tests
+pytest tests/ -v -p no:anyio
+```
 
-async def test():
-    async with Client('http://localhost:8000/mcp') as c:
-        r = await c.call_tool('get_indicators', {'dataset': 'PLFS'})
-        print(r)
+This runs 62 tests covering all 19 datasets across all 4 tools, plus negative/error-path tests. Tests hit the live MoSPI API with a 0.5s throttle between calls to avoid rate-limiting.
 
-asyncio.run(test())
-"
+To test against a deployed server instead of in-process:
+
+```bash
+MCP_SERVER_URL=https://mcp.mospi.gov.in/ pytest tests/ -v -p no:anyio
 ```
 
 ## Code Style

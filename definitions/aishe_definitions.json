@@ -1,0 +1,47 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Number of Universities",
+    "description": "Number of Universities"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Number of Colleges",
+    "description": "Number of Colleges"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Estimated Student Enrolment",
+    "description": "Estimated Student Enrolment"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Social Group-wise Enrolment",
+    "description": "Social Group-wise Enrolment"
+  },
+  {
+    "indicator_code": 5,
+    "name": "PWD & Minority Community-wise Enrolment",
+    "description": "PWD & Minority Community-wise Enrolment"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Social Group wise Gross Enrolment Ratio (GER)",
+    "description": "Social Group wise Gross Enrolment Ratio (GER)"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Social Group wise Gender Parity Index (GPI)",
+    "description": "Social Group wise Gender Parity Index (GPI)"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Mode of Education wise Pupil Teacher Ratio (PTR)",
+    "description": "Mode of Education wise Pupil Teacher Ratio (PTR)"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Number of Teachers",
+    "description": "Number of Teachers"
+  }
+]

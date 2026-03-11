@@ -1,0 +1,183 @@
+openapi: 3.0.1
+info:
+  title: National Sample Survey (NSS)
+  version: 1.0.11
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: National Sample Survey (NSS 78 ROUND).
+  description: Indicator-wise National Sample Survey (NSS 78 ROUND).
+paths:
+  /api/nss-78/getNss78Records:
+    get:
+      tags:
+      - National Sample Survey (NSS 78 ROUND).
+      description:
+      - Indicator-wise National Sample Survey (NSS 78 ROUND).
+      operationId: NSS78IndicatorValues.
+      parameters:
+      - name: Indicator
+        required: true
+        in: query
+        schema:
+          default: Usage of Mobile Phone
+          enum:
+          - Usage of Mobile Phone
+          - Access to Mass Media and Broadband
+          - Main Reason for Leaving Last Usual Place of Residence
+          - Improved Latrine and Hand Washing Facilities Within Household
+          - Exclusive Access to Improved Latrine
+          - Income Change Due to Migration
+          - Household Assets
+          - Improved Source of Drinking Water Within Household
+          - Availability of Basic Transport and Public Facility
+          - Different Sources of Finance
+          - Usual Place of Residence Different From Current Place
+          - Possession of Air Conditioner and Air Cooler
+          - Main Reason for Migration
+          - Access to Improved Source of Drinking Water
+      - name: State_code
+        in: query
+        description: Enter the State code (from 1 to 39. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: Sector_code
+        in: query
+        description: Enter the Sector code (from 1 to 3. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: Gender_code
+        in: query
+        description: Enter the Gender code (from 1 to 3. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: AgeGroup_code
+        in: query
+        description: Enter the AgeGroup code (from 1 to 2. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: InternetAccess_code
+        in: query
+        description: Enter the InternetAccess code (from 1 to 2. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: main_reason_for_migration_code
+        in: query
+        description: Filter by main reason for migration code (1-19)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: reason_leaving_household_code
+        in: query
+        description: Filter by reason for leaving household code (1-19)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: household
+        in: query
+        description: Filter by household type
+        schema:
+          type: string
+      - name: Subindicator_code
+        in: query
+        description: Enter the Subindicator code (from 1 to 34. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: Households_code
+        in: query
+        description: Enter the Households code (from 1 to 3. Comma separated for multiple
+          values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: SourceOfFinance_code
+        in: query
+        description: Enter the SourceOfFinance code (from 1 to 5. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: limit
+        in: query
+        description: Number of records per page (default 10)
+        schema:
+          type: integer
+          pattern: ^\d+$
+          default: 10
+      - name: page
+        in: query
+        description: Page number (from 1 to n)
+        schema:
+          type: integer
+          pattern: ^\d+$
+      - name: Format
+        required: true
+        in: query
+        description: Select the Output format
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+      responses:
+        '200':
+          description: A JSON array of user information
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+        '409':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Requested item wasn't found!
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'
