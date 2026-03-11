@@ -1,0 +1,849 @@
+openapi: 3.0.1
+info:
+  title: Economic Census (EC)
+  version: 1.0.0
+  description: >
+    District-wise economic establishment data from India's Economic Censuses (EC4, EC5, EC6).
+    Returns top/bottom N districts by establishment count for a given state.
+    Each EC version uses DIFFERENT state codes — always use codes from x-enum-names.
+    Activity codes are zero-padded 2-digit strings.
+    EC5 does NOT support activity filtering (activity param not available for EC5).
+servers:
+- url: https://esankhyiki.mospi.gov.in/
+tags:
+- name: EC
+  description: Economic Census district-wise data (EC4, EC5, EC6)
+paths:
+  /EC/filterDistrict6:
+    get:
+      summary: EC6 (Sixth, 2013-14) - top/bottom districts by establishment count
+      description: >
+        EC6 state codes use Census 2011 sequential numbering (e.g. '18'=Assam, '27'=Maharashtra).
+        Activity codes 01-18 are supported.
+        Required: indicator_code=1, state. All others optional.
+      parameters:
+      - in: query
+        name: indicator_code
+        required: true
+        schema:
+          type: integer
+          enum:
+          - 1
+        description: 'EC version: 1=EC6 (Sixth, 2013-14)'
+      - in: query
+        name: state
+        required: true
+        schema:
+          type: string
+          pattern: ^\d{2}$
+          enum:
+          - '01'
+          - '02'
+          - '03'
+          - '04'
+          - '05'
+          - '06'
+          - '07'
+          - '08'
+          - '09'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          - '24'
+          - '25'
+          - '26'
+          - '27'
+          - '29'
+          - '30'
+          - '31'
+          - '32'
+          - '33'
+          - '34'
+          - '35'
+          - '36'
+          - '37'
+        description: State/UT code. EC6 uses Census 2011 sequential codes. e.g. '18'=Assam, '27'=Maharashtra. MUST use codes from x-enum-names.
+        x-enum-names:
+          '01': Jammu And Kashmir
+          '02': Himachal Pradesh
+          '03': Punjab
+          '04': Chandigarh
+          '05': Uttarakhand
+          '06': Haryana
+          '07': Nct Of Delhi
+          '08': Rajasthan
+          '09': Uttar Pradesh
+          '10': Bihar
+          '11': Sikkim
+          '12': Arunachal Pradesh
+          '13': Nagaland
+          '14': Manipur
+          '15': Mizoram
+          '16': Tripura
+          '17': Meghalaya
+          '18': Assam
+          '19': West Bengal
+          '20': Jharkhand
+          '21': Orissa
+          '22': Chhattisgarh
+          '23': Madhya Pradesh
+          '24': Gujarat
+          '25': Daman And Diu
+          '26': Dadra And Nagar Haveli
+          '27': Maharashtra
+          '29': Karnataka
+          '30': Goa
+          '31': Lakshadweep
+          '32': Kerala
+          '33': Tamilnadu
+          '34': Puducherry
+          '35': Andaman And Nicobar Islands
+          '36': Telangana
+          '37': Andhra Pradesh
+      - in: query
+        name: activity
+        required: false
+        schema:
+          type: string
+          pattern: ^\d{2}$
+          enum:
+          - '01'
+          - '02'
+          - '03'
+          - '04'
+          - '05'
+          - '06'
+          - '07'
+          - '08'
+          - '09'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+        description: Activity sector code (zero-padded 2-digit). Leave empty for all activities.
+        x-enum-names:
+          '01': Raising Of Livestock
+          '02': Agricultural Services, Hunting, Trapping And Game, Propagation Forestry & Logging And Fishing
+          '03': All Agricultural Activities
+          '04': Mining And Quarrying
+          '05': Manufacturing
+          '06': Electricity, Gas & Water
+          '07': Construction
+          '08': Wholesale Trade
+          '09': Retail Trade
+          '10': Restaurants & Hotels
+          '11': Transport
+          '12': Storage & Warehousing
+          '13': Communications
+          '14': Financial, Insurance, Real Estate And Business Services
+          '15': Community, Social & Personal Services
+          '16': Other Activities
+          '17': All Non-Agricultural Activities
+          '18': All Agricultural & Non-Agricultural Activities
+      - in: query
+        name: nop
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+        description: Nature of operation. 1=Perennial, 2=Seasonal. Leave empty for all.
+        x-enum-names:
+          '1': Perennial
+          '2': Seasonal
+      - in: query
+        name: sof
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+        description: Source of finance code. Leave empty for all.
+        x-enum-names:
+          '1': Assistance under IRDP
+          '2': Assistance under other poverty alleviation Programmes
+          '3': Borrowing from Institutions
+          '4': Borrowing from Non-Institutions
+          '5': Self-financing
+          '6': Others
+      - in: query
+        name: ownership
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+        description: Type of ownership code. Leave empty for all.
+        x-enum-names:
+          '1': Private Non-Profit Institutions
+          '2': Private Others
+          '3': Co-operatives
+          '4': Government
+      - in: query
+        name: sector
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+        description: Sector type. 1=Rural, 2=Urban. Leave empty for all.
+        x-enum-names:
+          '1': Rural
+          '2': Urban
+      - in: query
+        name: top5opt
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+        description: Which districts to return. Default=2 (Top 10). 1=Top5, 2=Top10, 3=Top15, 4=Bottom5, 5=Bottom10, 6=Bottom15
+        x-enum-names:
+          '1': Top 5 Districts
+          '2': Top 10 Districts
+          '3': Top 15 Districts
+          '4': Bottom 5 Districts
+          '5': Bottom 10 Districts
+          '6': Bottom 15 Districts
+      - in: query
+        name: Format
+        required: true
+        schema:
+          type: string
+          enum:
+          - JSON
+        description: Response format (always JSON)
+      tags:
+      - EC
+
+  /EC/filterDistrict5:
+    get:
+      summary: EC5 (Fifth, 2005) - top/bottom districts by establishment count
+      description: >
+        EC5 state codes use Census 2001 sequential numbering — same scheme as EC6 but with
+        35 states/UTs (Andhra Pradesh undivided, no Telangana split).
+        NOTE: Activity filtering is NOT supported for EC5. Only state-level totals are available.
+        Required: indicator_code=2, state. All others optional.
+      parameters:
+      - in: query
+        name: indicator_code
+        required: true
+        schema:
+          type: integer
+          enum:
+          - 2
+        description: 'EC version: 2=EC5 (Fifth, 2005)'
+      - in: query
+        name: state
+        required: true
+        schema:
+          type: string
+          pattern: ^\d{2}$
+          enum:
+          - '01'
+          - '02'
+          - '03'
+          - '04'
+          - '05'
+          - '06'
+          - '07'
+          - '08'
+          - '09'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          - '24'
+          - '25'
+          - '26'
+          - '27'
+          - '28'
+          - '29'
+          - '30'
+          - '31'
+          - '32'
+          - '33'
+          - '34'
+          - '35'
+        description: State/UT code. EC5 uses Census 2001 sequential codes (same as EC6 except 35 states). e.g. '18'=Assam, '27'=Maharashtra. MUST use codes from x-enum-names.
+        x-enum-names:
+          '01': Jammu & Kashmir
+          '02': Himachal Pradesh
+          '03': Punjab
+          '04': Chandigarh
+          '05': Uttaranchal
+          '06': Haryana
+          '07': Delhi
+          '08': Rajasthan
+          '09': Uttar Pradesh
+          '10': Bihar
+          '11': Sikkim
+          '12': Arunachal Pradesh
+          '13': Nagaland
+          '14': Manipur
+          '15': Mizoram
+          '16': Tripura
+          '17': Meghalaya
+          '18': Assam
+          '19': West Bengal
+          '20': Jharkhand
+          '21': Orissa
+          '22': Chhattisgarh
+          '23': Madhya Pradesh
+          '24': Gujarat
+          '25': Daman & Diu
+          '26': Dadra & Nagar Haveli
+          '27': Maharashtra
+          '28': Andhra Pradesh
+          '29': Karnataka
+          '30': Goa
+          '31': Lakshadweep
+          '32': Kerala
+          '33': Tamil Nadu
+          '34': Pondicherry
+          '35': Andaman & Nicobar Islands
+      - in: query
+        name: nop
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+        description: Nature of operation. 1=Perennial, 2=Seasonal. Leave empty for all.
+        x-enum-names:
+          '1': Perennial
+          '2': Seasonal
+      - in: query
+        name: sof
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+        description: Source of finance code. Leave empty for all.
+        x-enum-names:
+          '1': Assistance under IRDP
+          '2': Assistance under other poverty alleviation Programmes
+          '3': Borrowing from Institutions
+          '4': Borrowing from Non-Institutions
+          '5': Self-financing
+          '6': Others
+      - in: query
+        name: ownership
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+        description: Type of ownership code. Leave empty for all.
+        x-enum-names:
+          '1': Private Non-Profit Institutions
+          '2': Private Others
+          '3': Co-operatives
+          '4': Government
+      - in: query
+        name: sector
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+        description: Sector type. 1=Rural, 2=Urban. Leave empty for all.
+        x-enum-names:
+          '1': Rural
+          '2': Urban
+      - in: query
+        name: top5opt
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+        description: Which districts to return. Default=2 (Top 10). 1=Top5, 2=Top10, 3=Top15, 4=Bottom5, 5=Bottom10, 6=Bottom15
+        x-enum-names:
+          '1': Top 5 Districts
+          '2': Top 10 Districts
+          '3': Top 15 Districts
+          '4': Bottom 5 Districts
+          '5': Bottom 10 Districts
+          '6': Bottom 15 Districts
+      - in: query
+        name: Format
+        required: true
+        schema:
+          type: string
+          enum:
+          - JSON
+        description: Response format (always JSON)
+      tags:
+      - EC
+
+  /EC/filterDistrict4:
+    get:
+      summary: EC4 (Fourth, 1998) - top/bottom districts by establishment count
+      description: >
+        EC4 state codes use OLD MoSPI codes (e.g. '04'=Assam, '14'=Maharashtra) —
+        completely different from EC5/EC6. 35 States/UTs.
+        Activity codes 01-16 are supported (17 and 18 are not applicable for EC4).
+        Required: indicator_code=3, state. All others optional.
+      parameters:
+      - in: query
+        name: indicator_code
+        required: true
+        schema:
+          type: integer
+          enum:
+          - 3
+        description: 'EC version: 3=EC4 (Fourth, 1998)'
+      - in: query
+        name: state
+        required: true
+        schema:
+          type: string
+          pattern: ^\d{2}$
+          enum:
+          - '02'
+          - '03'
+          - '04'
+          - '05'
+          - '06'
+          - '07'
+          - '08'
+          - '09'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          - '24'
+          - '25'
+          - '26'
+          - '27'
+          - '28'
+          - '29'
+          - '30'
+          - '31'
+          - '32'
+          - '33'
+          - '34'
+          - '35'
+          - '36'
+        description: State/UT code. EC4 uses OLD MoSPI codes (different from EC5/EC6). e.g. '04'=Assam, '14'=Maharashtra. MUST use codes from x-enum-names.
+        x-enum-names:
+          '02': Andhra Pradesh
+          '03': Arunachal Pradesh
+          '04': Assam
+          '05': Bihar
+          '06': Goa
+          '07': Gujarat
+          '08': Haryana
+          '09': Himachal Pradesh
+          '10': Jammu & Kashmir
+          '11': Karnataka
+          '12': Kerala
+          '13': Madhya Pradesh
+          '14': Maharashtra
+          '15': Manipur
+          '16': Meghalaya
+          '17': Mizoram
+          '18': Nagaland
+          '19': Orissa
+          '20': Punjab
+          '21': Rajasthan
+          '22': Sikkim
+          '23': Tamil Nadu
+          '24': Tripura
+          '25': Uttar Pradesh
+          '26': West Bengal
+          '27': Andaman & Nicobar Islands
+          '28': Chandigarh
+          '29': Dadra And Nagar Haveli
+          '30': Daman And Diu
+          '31': Delhi
+          '32': Lakshadweep
+          '33': Pondicherry
+          '34': Jharkhand
+          '35': Chhattisgarh
+          '36': Uttaranchal
+      - in: query
+        name: activity
+        required: false
+        schema:
+          type: string
+          pattern: ^\d{2}$
+          enum:
+          - '01'
+          - '02'
+          - '03'
+          - '04'
+          - '05'
+          - '06'
+          - '07'
+          - '08'
+          - '09'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+        description: Activity sector code (zero-padded 2-digit). Leave empty for all. Codes 17-18 not applicable for EC4.
+        x-enum-names:
+          '01': Raising Of Livestock
+          '02': Agricultural Services, Hunting, Trapping And Game, Propagation Forestry & Logging And Fishing
+          '03': All Agricultural Activities
+          '04': Mining And Quarrying
+          '05': Manufacturing
+          '06': Electricity, Gas & Water
+          '07': Construction
+          '08': Wholesale Trade
+          '09': Retail Trade
+          '10': Restaurants & Hotels
+          '11': Transport
+          '12': Storage & Warehousing
+          '13': Communications
+          '14': Financial, Insurance, Real Estate And Business Services
+          '15': Community, Social & Personal Services
+          '16': Other Activities
+      - in: query
+        name: nop
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+        description: Nature of operation. 1=Perennial, 2=Seasonal. Leave empty for all.
+        x-enum-names:
+          '1': Perennial
+          '2': Seasonal
+      - in: query
+        name: sof
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+        description: Source of finance code. Leave empty for all.
+        x-enum-names:
+          '1': Assistance under IRDP
+          '2': Assistance under other poverty alleviation Programmes
+          '3': Borrowing from Institutions
+          '4': Borrowing from Non-Institutions
+          '5': Self-financing
+          '6': Others
+      - in: query
+        name: ownership
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+        description: Type of ownership code. Leave empty for all.
+        x-enum-names:
+          '1': Private Non-Profit Institutions
+          '2': Private Others
+          '3': Co-operatives
+          '4': Government
+      - in: query
+        name: sector
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+        description: Sector type. 1=Rural, 2=Urban. Leave empty for all.
+        x-enum-names:
+          '1': Rural
+          '2': Urban
+      - in: query
+        name: top5opt
+        required: false
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+        description: Which districts to return. Default=2 (Top 10). 1=Top5, 2=Top10, 3=Top15, 4=Bottom5, 5=Bottom10, 6=Bottom15
+        x-enum-names:
+          '1': Top 5 Districts
+          '2': Top 10 Districts
+          '3': Top 15 Districts
+          '4': Bottom 5 Districts
+          '5': Bottom 10 Districts
+          '6': Bottom 15 Districts
+      - in: query
+        name: Format
+        required: true
+        schema:
+          type: string
+          enum:
+          - JSON
+        description: Response format (always JSON)
+      tags:
+      - EC
+
+  /EC/submitForm6:
+    get:
+      summary: EC6 (Sixth, 2013-14) - row-level data with full breakdown (detail mode)
+      description: >
+        Returns 20 rows per page with full breakdown: state, sector, district, household type,
+        activity, nature of operation, source of finance, ownership, social group, NIC description, total workers.
+        Use pageNum to paginate. Same state and activity codes as /EC/filterDistrict6.
+        Required: indicator_code=1, state. pageNum defaults to 1.
+      parameters:
+      - in: query
+        name: indicator_code
+        required: true
+        schema:
+          type: integer
+          enum:
+          - 1
+        description: 'EC version: 1=EC6. Must be 1 for this path.'
+      - in: query
+        name: state
+        required: true
+        schema:
+          type: string
+        description: State/UT code. Same codes as /EC/filterDistrict6 (Census 2011 sequential). e.g. '18'=Assam, '27'=Maharashtra.
+      - in: query
+        name: activity
+        required: false
+        schema:
+          type: string
+        description: Activity sector code (zero-padded 2-digit). Same codes as /EC/filterDistrict6. Leave empty for all.
+      - in: query
+        name: nop
+        required: false
+        schema:
+          type: string
+        description: Nature of operation. 1=Perennial, 2=Seasonal. Leave empty for all.
+      - in: query
+        name: sof
+        required: false
+        schema:
+          type: string
+        description: Source of finance code (1-6). Same codes as /EC/filterDistrict6. Leave empty for all.
+      - in: query
+        name: ownership
+        required: false
+        schema:
+          type: string
+        description: Ownership type (1-4). Same codes as /EC/filterDistrict6. Leave empty for all.
+      - in: query
+        name: sector
+        required: false
+        schema:
+          type: string
+        description: Sector. 1=Rural, 2=Urban. Leave empty for all.
+      - in: query
+        name: pageNum
+        required: false
+        schema:
+          type: integer
+          default: 1
+        description: Page number (default=1). Each page returns 20 rows. Check total_pages in response to know how many pages exist.
+      tags:
+      - EC
+
+  /EC/submitForm5:
+    get:
+      summary: EC5 (Fifth, 2005) - row-level data with full breakdown (detail mode)
+      description: >
+        Returns 20 rows per page with full breakdown: state, sector, district, NIC description,
+        activity, nature of operation, ownership, source of finance, social group, power usage,
+        total workers, registration status.
+        NOTE: Activity filtering is NOT supported for EC5 — omit activity or leave empty.
+        Same state codes as /EC/filterDistrict5.
+        Required: indicator_code=2, state. pageNum defaults to 1.
+      parameters:
+      - in: query
+        name: indicator_code
+        required: true
+        schema:
+          type: integer
+          enum:
+          - 2
+        description: 'EC version: 2=EC5. Must be 2 for this path.'
+      - in: query
+        name: state
+        required: true
+        schema:
+          type: string
+        description: State/UT code. Same codes as /EC/filterDistrict5 (Census 2001 sequential). e.g. '18'=Assam, '27'=Maharashtra.
+      - in: query
+        name: nop
+        required: false
+        schema:
+          type: string
+        description: Nature of operation. 1=Perennial, 2=Seasonal. Leave empty for all.
+      - in: query
+        name: sof
+        required: false
+        schema:
+          type: string
+        description: Source of finance code (1-6). Leave empty for all.
+      - in: query
+        name: ownership
+        required: false
+        schema:
+          type: string
+        description: Ownership type (1-4). Leave empty for all.
+      - in: query
+        name: sector
+        required: false
+        schema:
+          type: string
+        description: Sector. 1=Rural, 2=Urban. Leave empty for all.
+      - in: query
+        name: pageNum
+        required: false
+        schema:
+          type: integer
+          default: 1
+        description: Page number (default=1). Each page returns 20 rows. Check total_pages in response to know how many pages exist.
+      tags:
+      - EC
+
+  /EC/submitForm4:
+    get:
+      summary: EC4 (Fourth, 1998) - row-level data with full breakdown (detail mode)
+      description: >
+        Returns 20 rows per page with full breakdown: state, sector, district, activity,
+        nature of operation, source of finance, ownership, social group, power usage,
+        NIC description, total workers.
+        Same state and activity codes as /EC/filterDistrict4 (OLD MoSPI codes — e.g. '04'=Assam).
+        Required: indicator_code=3, state. pageNum defaults to 1.
+      parameters:
+      - in: query
+        name: indicator_code
+        required: true
+        schema:
+          type: integer
+          enum:
+          - 3
+        description: 'EC version: 3=EC4. Must be 3 for this path.'
+      - in: query
+        name: state
+        required: true
+        schema:
+          type: string
+        description: State/UT code. Same OLD MoSPI codes as /EC/filterDistrict4. e.g. '04'=Assam, '14'=Maharashtra.
+      - in: query
+        name: activity
+        required: false
+        schema:
+          type: string
+        description: Activity sector code (zero-padded 2-digit, 01-16). Same codes as /EC/filterDistrict4. Leave empty for all.
+      - in: query
+        name: nop
+        required: false
+        schema:
+          type: string
+        description: Nature of operation. 1=Perennial, 2=Seasonal. Leave empty for all.
+      - in: query
+        name: sof
+        required: false
+        schema:
+          type: string
+        description: Source of finance code (1-6). Leave empty for all.
+      - in: query
+        name: ownership
+        required: false
+        schema:
+          type: string
+        description: Ownership type (1-4). Leave empty for all.
+      - in: query
+        name: sector
+        required: false
+        schema:
+          type: string
+        description: Sector. 1=Rural, 2=Urban. Leave empty for all.
+      - in: query
+        name: pageNum
+        required: false
+        schema:
+          type: integer
+          default: 1
+        description: Page number (default=1). Each page returns 20 rows. Check total_pages in response to know how many pages exist.
+      tags:
+      - EC

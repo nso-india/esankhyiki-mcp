@@ -1,0 +1,42 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "LFPR (Labour Force Participation Rate, in per cent)",
+    "description": "LFPR (Labour Force Participation Rate, in per cent)"
+  },
+  {
+    "indicator_code": 2,
+    "name": "WPR (Worker Population Ratio, in per cent)",
+    "description": "WPR (Worker Population Ratio, in per cent)"
+  },
+  {
+    "indicator_code": 3,
+    "name": "UR (Unemployment Rate, in per cent)",
+    "description": "UR (Unemployment Rate, in per cent)"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Percentage distribution of workers",
+    "description": "Percentage distribution of workers"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Percentage of regular wage/ salaried employees with employment condition as",
+    "description": "Percentage of regular wage/ salaried employees with employment condition as"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Average wage/salary earnings (Rs. 0.00) during the preceding calendar month from regular wage/salaried employment",
+    "description": "Average wage/salary earnings (Rs. 0.00) during the preceding calendar month from regular wage/salaried employment"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Average wage earnings (Rs. 0.00) per day from casual labour work other than public works",
+    "description": "Average wage earnings (Rs. 0.00) per day from casual labour work other than public works"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Average gross earnings (Rs. 0.00) during last 30 days from self-employment",
+    "description": "Average gross earnings (Rs. 0.00) during last 30 days from self-employment"
+  }
+]

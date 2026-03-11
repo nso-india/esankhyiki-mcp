@@ -1,0 +1,12 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Energy Balance ( in KToE )",
+    "description": "Energy Balance ( in KToE )"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Energy Balance ( in PetaJoules )",
+    "description": "Energy Balance ( in PetaJoules )"
+  }
+]

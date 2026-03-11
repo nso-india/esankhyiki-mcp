@@ -1,97 +1,105 @@
 openapi: 3.0.1
 info:
-  title: National Accounts Statistics (NAS)
+  title: Household Consumption Expenditure Survey
   version: 1.0.11
 servers:
 - url: https://api.mospi.gov.in/
 tags:
-- name: National Accounts Statistics.
-  description: Indicator-wise National Accounts Statistics (NAS).
+- name: Household Consumption Expenditure Survey.
+  description: Year-Wise Household Consumption Expenditure Survey.
 paths:
-  /api/nas/getNASData:
+  /api/hces/getHcesRecords:
     get:
       tags:
-      - National Accounts Statistics.
-      operationId: NASIndicatorValues.
+      - Household Consumption Expenditure Survey.
+      operationId: HCESIndicatorValues.
       parameters:
-      - name: base_year
-        required: true
-        in: query
-        description: Base year for constant price calculations
-        schema:
-          type: string
-          default: "2022-23"
-          enum:
-          - "2022-23"
-          - "2011-12"
-      - name: series
-        required: true
-        in: query
-        schema:
-          default: Current
-          enum:
-          - Current
-          - Back
-      - name: frequency_code
-        required: true
-        in: query
-        schema:
-          default: Annually
-          enum:
-          - Annually
-          - Quarterly
       - name: indicator_code
         required: true
         in: query
-        description: Enter the Indicator code (from 1 to 22, single value only)
         schema:
-          type: string
-          pattern: ^\d+$
-      - name: quarterly_code
-        in: query
-        description: Enter the Quarterly code (from 1 to 4. Comma separated for multiple
-          values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
+          default: Average monthly per capita consumption expenditure (MPCE)
+          enum:
+          - Average monthly per capita consumption expenditure (MPCE)
+          - Average monthly per capita consumption expenditure (MPCE) Over 12 Fractile
+            Classes
+          - Monthly Per Capita Consumption Expenditure (MPCE) over Broad Categories
+            in 30 Days
+          - Percentage Share of Monthly Per Capita Consumption Expenditure (MPCE)
+            over Broad Categories in 30 Days
+          - 'Average Per Capita Monthly Quantity Consumption '
+          - Average Monthly Per Capita Value of Consumption (Rs.)
+          - Average Monthly Per Capita Consumption Expenditure (MPCE) across different
+            Household Type
+          - Average Monthly Per Capita Consumption Expenditure (MPCE) across different
+            Social Group
+          - Gini Coefficient for Per Capita Consumption Expenditure
       - name: year
         in: query
-        description: Enter the Year (format YYYY-YY. Comma separated for multiple
+        description: Enter the Year (format YYYY-YY/YYYY. Comma separated for multiple
           values)
         schema:
           type: string
           pattern: ^\d{4}-\d{2}(,\d{4}-\d{2})*$
-      - name: approach_code
+      - name: sub_indicator_code
         in: query
-        description: Enter the Approach code (from 01 to 03. Comma separated for multiple
+        description: Enter the Sub Indicator code (from 1 to 3. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: state_code
+        in: query
+        description: Enter the State code (from 1 to 37. Comma separated for multiple
           values)
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
-      - name: revision_code
+      - name: sector_code
         in: query
-        description: Enter the Revision code (from 01 to 07. Comma separated for multiple
+        description: Enter the Sector code (from 1 to 3. Comma separated for multiple
           values)
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
-      - name: institutional_code
+      - name: imputation_type_code
         in: query
-        description: Enter the Institutional code (from 01 to 11. Comma separated
+        description: Enter the Imputation Type code (from 1 to 2. Comma separated
           for multiple values)
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
-      - name: industry_code
+      - name: mpce_fractile_classes_code
         in: query
-        description: Enter the Industry code (from 01 to 17. Comma separated for multiple
+        description: Enter the MPCE Fractile Classes code (from 1 to 13. Comma separated
+          for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: item_category_code
+        in: query
+        description: Enter the Item Category code (from 1 to 31. Comma separated for
+          multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: cereal_code
+        in: query
+        description: Enter the Cereal code (from 1 to 5. Comma separated for multiple
           values)
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
-      - name: subindustry_code
+      - name: employment_of_households_code
         in: query
-        description: Enter the Subindustry code (from 01 to 18. Comma separated for
+        description: Enter the Employment of Households code (from 1 to 11. Comma
+          separated for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: social_group_code
+        in: query
+        description: Enter the Social Group code (from 1 to 5. Comma separated for
           multiple values)
         schema:
           type: string
@@ -102,6 +110,7 @@ paths:
         schema:
           type: integer
           pattern: ^\d+$
+          default: 10
       - name: page
         in: query
         description: Enter the page no. (from 1 to n.)

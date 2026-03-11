@@ -8,7 +8,6 @@ tags:
 - name: Energy Statistics.
   description: Year-Wise Energy Statistics.
 paths:
-
   /api/energy/getEnergyRecords:
     get:
       tags:
@@ -19,53 +18,65 @@ paths:
         required: true
         in: query
         schema:
-          default: "Energy Balance ( in KToE )"
+          default: Energy Balance ( in KToE )
           enum:
-          - "Energy Balance ( in KToE )"
-          - "Energy Balance ( in PetaJoules )"
+          - Energy Balance ( in KToE )
+          - Energy Balance ( in PetaJoules )
       - name: use_of_energy_balance_code
         required: true
         in: query
         schema:
-          default: "Supply"
+          default: Supply
           enum:
-          - "Supply"
-          - "Consumption"
+          - Supply
+          - Consumption
       - name: year
         in: query
-        description: Enter the Year (format YYYY-YY/YYYY. Comma separated for multiple values)
+        description: Enter the Year (format YYYY-YY/YYYY. Comma separated for multiple
+          values)
         schema:
           type: string
+          pattern: ^\d{4}-\d{2}(,\d{4}-\d{2})*$
       - name: energy_commodities_code
         in: query
-        description: Enter the Energy Commodities code (from 1 to 10. Comma separated for multiple values)
+        description: Enter the Energy Commodities code (from 1 to 10. Comma separated
+          for multiple values)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: energy_sub_commodities_code
         in: query
-        description: Enter the Energy Sub_commodities code (from 1 to 12. Comma separated for multiple values)
+        description: Enter the Energy Sub_commodities code (from 1 to 12. Comma separated
+          for multiple values)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: end_use_sector_code
         in: query
-        description: Enter the End Use Sector code (from 1 to 10. Comma separated for multiple values)
+        description: Enter the End Use Sector code (from 1 to 10. Comma separated
+          for multiple values)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: end_use_sub_sector_code
         in: query
-        description: Enter the End Use Sub_sector code (from 1 to 22. Comma separated for multiple values)
+        description: Enter the End Use Sub_sector code (from 1 to 22. Comma separated
+          for multiple values)
         schema:
           type: string
+          pattern: ^\d+(,\d+)*$
       - name: limit
         in: query
         description: Number of records per page (default 10)
         schema:
           type: integer
+          pattern: ^\d+$
       - name: page
         in: query
         description: Enter the page no. (from 1 to n.)
         schema:
           type: string
+          pattern: ^\d+$
       - name: Format
         required: true
         in: query
@@ -77,9 +88,9 @@ paths:
           - JSON
           - CSV
       responses:
-        "200":
+        '200':
           description: A JSON array of user information
-        "400":
+        '400':
           description: Bad Request
           content:
             application/json:
@@ -102,8 +113,7 @@ paths:
                   message:
                     type: string
                     example: Invalid request body
-      
-        "409":
+        '409':
           description: Not Found
           content:
             application/json:
@@ -118,7 +128,6 @@ paths:
                     example: Requested item wasn't found!
       security:
       - bearerAuth: []
- 
 components:
   securitySchemes:
     bearerAuth:
@@ -126,4 +135,4 @@ components:
       description: Bearer token to access these api endpoints
       name: Authorization
       in: header
-x-original-swagger-version: "2.0"
+x-original-swagger-version: '2.0'

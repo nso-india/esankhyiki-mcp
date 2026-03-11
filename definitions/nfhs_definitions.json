@@ -1,0 +1,107 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Population and Household Profile",
+    "description": "Population and Household Profile"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Characteristics of Adults (age 15-49 years)",
+    "description": "Characteristics of Adults (age 15-49 years)"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Marriage and Fertility",
+    "description": "Marriage and Fertility"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Infant and Child Mortality Rates (per 1,000 live births)",
+    "description": "Infant and Child Mortality Rates (per 1,000 live births)"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Current Use of Family Planning Methods (currently married women age 15–49 years)",
+    "description": "Current Use of Family Planning Methods (currently married women age 15–49 years)"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Unmet Need for Family Planning (currently married women age 15–49 years)",
+    "description": "Unmet Need for Family Planning (currently married women age 15–49 years)"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Quality of Family Planning Services",
+    "description": "Quality of Family Planning Services"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Maternity Care (for last birth in the 5 years before the survey)",
+    "description": "Maternity Care (for last birth in the 5 years before the survey)"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Delivery Care (for births in the 5 years before the survey)",
+    "description": "Delivery Care (for births in the 5 years before the survey)"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Child Vaccinations and Vitamin A Supplementation",
+    "description": "Child Vaccinations and Vitamin A Supplementation"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Treatment of Childhood Diseases (children under age 5 years)",
+    "description": "Treatment of Childhood Diseases (children under age 5 years)"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Child Feeding Practices and Nutritional Status of Children",
+    "description": "Child Feeding Practices and Nutritional Status of Children"
+  },
+  {
+    "indicator_code": 13,
+    "name": "Nutritional Status of Adults (age 15-49 years)",
+    "description": "Nutritional Status of Adults (age 15-49 years)"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Anaemia among Children and Adults",
+    "description": "Anaemia among Children and Adults"
+  },
+  {
+    "indicator_code": 15,
+    "name": "Blood Sugar Level among Adults (age 15 years and above)",
+    "description": "Blood Sugar Level among Adults (age 15 years and above)"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Hypertension among Adults (age 15 years and above)",
+    "description": "Hypertension among Adults (age 15 years and above)"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Screening for Cancer among Adults (age 30-49 years)",
+    "description": "Screening for Cancer among Adults (age 30-49 years)"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Knowledge of HIV/AIDS among Adults (age 15-49 years)",
+    "description": "Knowledge of HIV/AIDS among Adults (age 15-49 years)"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Women's Empowerment (women age 15-49 years)",
+    "description": "Women's Empowerment (women age 15-49 years)"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Gender Based Violence (age 18-49 years)",
+    "description": "Gender Based Violence (age 18-49 years)"
+  },
+  {
+    "indicator_code": 21,
+    "name": "Tobacco Use and Alcohol Consumption among Adults (age 15 years and above)",
+    "description": "Tobacco Use and Alcohol Consumption among Adults (age 15 years and above)"
+  }
+]

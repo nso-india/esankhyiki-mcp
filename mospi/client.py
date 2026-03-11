@@ -4,6 +4,9 @@ Handles all API calls to the MoSPI data portal
 """
 
 import requests
+import yaml, os
+import math, random
+from bs4 import BeautifulSoup
 from typing import Optional, Dict, Any
 
 
@@ -14,6 +17,8 @@ class MoSPI:
 
     def __init__(self, base_url: str = "https://api.mospi.gov.in"):
         self.base_url = base_url
+        self.session = requests.Session()
+        self.session.headers.update({"User-Agent": "Mozilla/5.0"})
         self.api_endpoints = {
             "PLFS": "/api/plfs/getData",
             "CPI_Group": "/api/cpi/getCPIIndex",
@@ -24,6 +29,17 @@ class MoSPI:
             "NAS": "/api/nas/getNASData",
             "WPI": "/api/wpi/getWpiRecords",
             "Energy": "/api/energy/getEnergyRecords",
+            "AISHE": "/api/aishe/getAisheRecords",
+            "ASUSE": "/api/asuse/getAsuseRecords",
+            "GENDER": "/api/gender/getGenderRecords",
+            "NFHS": "/api/nfhs/getNfhsRecords",
+            "ENVSTATS": "/api/env/getEnvStatsRecords",
+            "RBI": "/api/rbi/getRbiRecords",
+            "NSS77": "/api/nss-77/getNss77Records",
+            "NSS78": "/api/nss-78/getNss78Records",
+            "CPIALRL": "/api/cpialrl/getCpialrlRecords",
+            "HCES": "/api/hces/getHcesRecords",
+            "TUS": "/api/tus/getTusRecords",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -44,7 +60,7 @@ class MoSPI:
             full_url = f"{self.base_url}{endpoint_path}"
 
         try:
-            response = requests.get(full_url, params=params, timeout=30)
+            response = self.session.get(full_url, params=params, timeout=30)
             response.raise_for_status()
 
             # Check if CSV format was requested
@@ -66,7 +82,7 @@ class MoSPI:
         result = {}
         try:
             for fc, label in [(1, "Annual"), (2, "Quarterly"), (3, "Monthly")]:
-                response = requests.get(url, params={"frequency_code": fc}, timeout=30)
+                response = self.session.get(url, params={"frequency_code": fc}, timeout=30)
                 response.raise_for_status()
                 data = response.json()
                 result[f"frequency_code_{fc}_{label}"] = data.get("data", [])
@@ -100,7 +116,7 @@ class MoSPI:
             params["month_code"] = month_code
 
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/plfs/getFilterByIndicatorId",
                 params=params,
                 timeout=30
@@ -134,7 +150,7 @@ class MoSPI:
         }
 
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/cpi/getCpiFilterByLevelAndBaseYear",
                 params=params,
                 timeout=30
@@ -151,7 +167,7 @@ class MoSPI:
             Dictionary with available base_year and level options
         """
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/cpi/getCpiBaseYear",
                 timeout=30
             )
@@ -191,7 +207,7 @@ class MoSPI:
         }
 
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/iip/getIipFilter",
                 params=params,
                 timeout=30
@@ -208,7 +224,7 @@ class MoSPI:
     def get_asi_classification_years(self) -> Dict[str, Any]:
         """Fetch list of available NIC classification years from MoSPI API."""
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/asi/getNicClassificationYear",
                 timeout=30
             )
@@ -231,7 +247,7 @@ class MoSPI:
         }
 
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/asi/getAsiFilter",
                 params=params,
                 timeout=30
@@ -248,7 +264,7 @@ class MoSPI:
         it must pass classification_year in get_metadata/get_data.
         """
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/asi/getAsiFilter",
                 params={"classification_year": "2008"},
                 timeout=30
@@ -269,7 +285,7 @@ class MoSPI:
                          "'1998' → 1998-99 to 2003-04 | "
                          "'2004' → 2004-05 to 2007-08 | "
                          "'2008' → 2008-09 to 2023-24. "
-                         "Pass classification_year in 3_get_metadata() and 4_get_data().",
+                         "Pass classification_year in step3_get_metadata() and step4_get_data().",
                 "statusCode": True,
             }
             if indicators:
@@ -287,7 +303,7 @@ class MoSPI:
     def get_nas_indicators(self) -> Dict[str, Any]:
         """Fetch list of all NAS indicators from MoSPI API."""
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/nas/getNasIndicatorList",
                 timeout=30
             )
@@ -301,7 +317,7 @@ class MoSPI:
                     {"base_year": "2011-12"},
                 ]
             result["_note"] = (
-                "NAS requires base_year in 3_get_metadata and 4_get_data. "
+                "NAS requires base_year in step3_get_metadata and step4_get_data. "
                 "Available base years: '2022-23' (latest) and '2011-12'. "
                 "DEFAULT to '2022-23' for recent data unless user specifies otherwise. "
                 "Pass base_year along with series, frequency_code, and indicator_code."
@@ -333,7 +349,7 @@ class MoSPI:
         }
 
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/nas/getNasFilterByIndicatorId",
                 params=params,
                 timeout=30
@@ -354,7 +370,7 @@ class MoSPI:
             Available filters: year, month, major_group, group, sub_group, sub_sub_group, item
         """
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/wpi/getWpiData",
                 timeout=30
             )
@@ -370,7 +386,7 @@ class MoSPI:
     def get_energy_indicators(self) -> Dict[str, Any]:
         """Fetch list of Energy indicators from MoSPI API."""
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/energy/getEnergyIndicatorList",
                 timeout=30
             )
@@ -396,7 +412,7 @@ class MoSPI:
         }
 
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.base_url}/api/energy/getEnergyFilterByIndicatorId",
                 params=params,
                 timeout=30
@@ -406,6 +422,753 @@ class MoSPI:
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 
+    # =========================================================================
+    # AISHE (All India Survey on Higher Education) Methods
+    # =========================================================================
+
+    def get_aishe_indicators(self) -> Dict[str, Any]:
+        """Fetch list of AISHE indicators from MoSPI API.
+
+        Returns 9 indicators covering:
+        - Number of Universities
+        - Number of Colleges
+        - Student Enrolment
+        - Social Group-wise Enrolment
+        - PWD & Minority Enrolment
+        - Gross Enrolment Ratio (GER)
+        - Gender Parity Index (GPI)
+        - Pupil Teacher Ratio
+        - Number of Teachers
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/aishe/getAisheIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_aishe_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available AISHE filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-9)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/aishe/getAisheFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # ASUSE (Annual Survey of Unincorporated Sector Enterprises) Methods
+    # =========================================================================
+
+    def get_asuse_frequencies(self) -> Dict[str, Any]:
+        """Fetch list of ASUSE frequencies from MoSPI API."""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/asuse/getAsuseFrequencyList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_asuse_indicators(self, frequency_code: int = 1) -> Dict[str, Any]:
+        """Fetch list of ASUSE indicators grouped by frequency_code.
+
+        Args:
+            frequency_code: 1=Annually, 2=Quarterly (ignored - fetches both)
+        """
+        url = f"{self.base_url}/api/asuse/getAsuseIndicatorListByFrequency"
+        result = {}
+        try:
+            for fc, label in [(1, "Annual"), (2, "Quarterly")]:
+                response = self.session.get(url, params={"frequency_code": fc}, timeout=30)
+                response.raise_for_status()
+                data = response.json()
+                result[f"frequency_code_{fc}_{label}"] = data.get("data", [])
+            return {
+                "indicators_by_frequency": result,
+                "_note": "frequency_code=1 (Annual) has 35 indicators on establishment details, ownership, workers, GVA. "
+                         "frequency_code=2 (Quarterly) has 15 indicators including market establishments, worker counts. "
+                         "For RECENT data or quarterly breakdowns (Jan-Mar, Apr-Jun, etc.), use frequency_code=2. "
+                         "Pass the correct frequency_code in step3_get_metadata() and step4_get_data().",
+                "statusCode": True,
+            }
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_asuse_filters(self, indicator_code: int, frequency_code: int = 1) -> Dict[str, Any]:
+        """Fetch available ASUSE filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code
+            frequency_code: 1=Annually, 2=Quarterly
+        """
+        params = {
+            "indicator_code": indicator_code,
+            "frequency_code": frequency_code
+        }
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/asuse/getAsuseFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # Gender Statistics Methods
+    # =========================================================================
+
+    def get_gender_indicators(self) -> Dict[str, Any]:
+        """Fetch list of Gender indicators from MoSPI API.
+
+        Returns 157 indicators covering demographics, health, education,
+        labour, time use, financial inclusion, political participation,
+        crimes against women, and more.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/gender/getGenderIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_gender_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available Gender filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-157)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/gender/getGenderFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # NFHS (National Family Health Survey) Metadata Methods
+    # =========================================================================
+
+    def get_nfhs_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NFHS indicators from MoSPI API."""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nfhs/getNfhsIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nfhs_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available NFHS filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nfhs/getNfhsFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # Environment Statistics Methods
+    # =========================================================================
+
+    def get_envstats_indicators(self) -> Dict[str, Any]:
+        """Fetch list of Environment Statistics indicators from MoSPI API.
+
+        Returns 124 indicators covering climate, biodiversity, pollution,
+        resources, disasters, health, and environmental expenditure.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/env/getEnvStatsIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_envstats_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available Environment Statistics filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-130)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/env/getEnvStatsFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # RBI (Reserve Bank of India) Statistics Methods
+    # =========================================================================
+
+    def get_rbi_indicators(self) -> Dict[str, Any]:
+        """Fetch list of RBI indicators from MoSPI API.
+
+        Returns 39 indicators covering foreign trade, balance of payments,
+        forex rates, external debt, and NRI deposits.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/rbi/getRbiIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_rbi_filters(self, sub_indicator_code: int) -> Dict[str, Any]:
+        """Fetch available RBI filters for given indicator.
+
+        Args:
+            sub_indicator_code: Indicator code (1-48)
+        """
+        params = {"sub_indicator_code": sub_indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/rbi/getRbiMetaData",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss77_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS77 indicators from MoSPI API.
+
+        Returns indicators from NSS 77th Round (Situation Assessment Survey of Agricultural Households).
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-77/getIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss77_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available NSS77 filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (16-51)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-77/getFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss78_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS78 indicators from MoSPI API.
+
+        Returns indicators from NSS 78th Round (Living Conditions - drinking water,
+        sanitation, digital connectivity, migration, household assets).
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-78/getIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss78_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available NSS78 filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (2-15)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-78/getFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # CPIALRL (CPI for Agricultural Labourers and Rural Labourers) Methods
+    # =========================================================================
+
+    def get_cpialrl_indicators(self) -> Dict[str, Any]:
+        """Fetch list of CPIALRL indicators from MoSPI API.
+
+        Returns 2 indicators: General Index and Group Index.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/cpialrl/getCpialrlIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_cpialrl_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available CPIALRL filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-2)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/cpialrl/getCpialrlFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # HCES (Household Consumption Expenditure Survey) Methods
+    # =========================================================================
+
+    def get_hces_indicators(self) -> Dict[str, Any]:
+        """Fetch list of HCES indicators from MoSPI API.
+
+        Returns 9 indicators covering MPCE, consumption patterns,
+        Gini coefficient, and expenditure by household type/social group.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/hces/getHcesIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_hces_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available HCES filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-9)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/hces/getHcesFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # TUS (Time Use Survey) Methods
+    # =========================================================================
+
+    def get_tus_indicators(self) -> Dict[str, Any]:
+        """Fetch list of TUS indicators from MoSPI API.
+
+        Returns 41 indicators covering time spent on paid/unpaid activities,
+        SNA/non-SNA activities, by gender, age, education, marital status, etc.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/tus/getTusIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_tus_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available TUS filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (4-44)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/tus/getTusFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # EC (Economic Census) Methods
+    # =========================================================================
+
+    _EC_URLS = {
+        1: "https://esankhyiki.mospi.gov.in/EC/filterDistrict6",
+        2: "https://esankhyiki.mospi.gov.in/EC/filterDistrict5",
+        3: "https://esankhyiki.mospi.gov.in/EC/filterDistrict4",
+    }
+    _EC_SUBMIT_URLS = {
+        1: "https://esankhyiki.mospi.gov.in/dashboard/EC/submitForm6",
+        2: "https://esankhyiki.mospi.gov.in/dashboard/EC/submitForm5",
+        3: "https://esankhyiki.mospi.gov.in/dashboard/EC/submitForm4",
+    }
+    _EC_VERSION_MAP = {1: "6", 2: "5", 3: "4"}
+    _EC_SWAGGER_PATHS = {
+        1: "/EC/filterDistrict6",
+        2: "/EC/filterDistrict5",
+        3: "/EC/filterDistrict4",
+    }
+    _EC_SUBMIT_SWAGGER_PATHS = {
+        1: "/EC/submitForm6",
+        2: "/EC/submitForm5",
+        3: "/EC/submitForm4",
+    }
+
+    def get_ec_indicators(self) -> Dict[str, Any]:
+        """Return available Economic Census indicators (EC4, EC5, EC6)."""
+        return {
+            "data": [
+                {"indicator_code": 1, "indicator_name": "Sixth Economic Census (EC6) - 2013-14",
+                 "description": "District-wise establishment and worker counts. 36 States/UTs, 24 activity sectors, source of finance, ownership type."},
+                {"indicator_code": 2, "indicator_name": "Fifth Economic Census (EC5) - 2005",
+                 "description": "District-wise establishment and worker counts. 35 States/UTs, 313 NIC-based activity codes, nature of operation, source of finance, ownership type."},
+                {"indicator_code": 3, "indicator_name": "Fourth Economic Census (EC4) - 1998",
+                 "description": "District-wise establishment and worker counts. 35 States/UTs, 18 activity sectors, nature of operation, source of finance, ownership type."},
+            ],
+            "statusCode": True,
+        }
+
+    def get_ec_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Read EC filter values from swagger YAML for given EC version.
+
+        Args:
+            indicator_code: 1=EC6, 2=EC5, 3=EC4
+        """
+        
+        swagger_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "swagger", "swagger_user_ec.yaml"
+        )
+        ranking_path = self._EC_SWAGGER_PATHS.get(indicator_code)
+        detail_path = self._EC_SUBMIT_SWAGGER_PATHS.get(indicator_code)
+        if not ranking_path:
+            return {"error": f"Invalid indicator_code {indicator_code}. Use 1 (EC6), 2 (EC5), or 3 (EC4).", "statusCode": False}
+
+        try:
+            with open(swagger_path, 'r') as f:
+                spec = yaml.safe_load(f)
+
+            # Read filter enum values from filterDistrict path
+            ranking_params = spec["paths"][ranking_path]["get"]["parameters"]
+            data = {}
+            for p in ranking_params:
+                name = p["name"]
+                enum_names = p.get("x-enum-names", {})
+                if enum_names:
+                    data[name] = [{"id": code, "name": desc} for code, desc in sorted(enum_names.items())]
+
+            # Read detail-mode param names from submitForm path
+            detail_params = spec["paths"][detail_path]["get"]["parameters"]
+            detail_param_names = [p["name"] for p in detail_params]
+
+            return {
+                "data": data,
+                "ranking_mode_params": [p["name"] for p in ranking_params],
+                "detail_mode_params": detail_param_names,
+                "statusCode": True,
+                "_note": (
+                    "state is required. All other filters are optional. "
+                    "In step4, pass mode='ranking' for top/bottom N districts (uses top5opt). "
+                    "Pass mode='detail' for row-level data with social group, NIC description, workers (uses pageNum, 20 rows/page)."
+                ),
+            }
+        except Exception as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_ec_data(self, indicator_code: int, filters: Dict[str, str]) -> Dict[str, Any]:
+        """Fetch Economic Census data via POST to esankhyiki.mospi.gov.in.
+
+        Args:
+            indicator_code: 1=EC6, 2=EC5, 3=EC4
+            filters: Dict with keys: state (required), activity, nop, sof, ownership (optional)
+        """
+        if filters.get("mode") == "detail":
+            return self.get_ec_detail_data(indicator_code=indicator_code, filters=filters)
+
+        url = self._EC_URLS.get(indicator_code)
+        ec_num = self._EC_VERSION_MAP.get(indicator_code)
+        if not url:
+            return {"error": f"Invalid indicator_code {indicator_code}. Use 1 (EC6), 2 (EC5), or 3 (EC4).", "statusCode": False}
+
+        state = filters.get("state", "")
+        if not state:
+            return {"error": "state is required for EC queries.", "statusCode": False}
+
+        form_data = {
+            "ec": ec_num,
+            "state": state,
+            "param1": "val1",
+            "top5opt": filters.get("top5opt", "2"),
+            "nop": filters.get("nop", ""),
+            "sof": filters.get("sof", ""),
+            "activity": filters.get("activity", ""),
+            "ownership": filters.get("ownership", ""),
+            "sector": filters.get("sector", ""),
+        }
+
+        try:
+            response = self.session.post(
+                url, data=form_data,
+                headers={
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+                timeout=30,
+            )
+            response.raise_for_status()
+            raw = response.json()
+
+            # Parse HTML table from "code" field
+            districts = []
+            html = raw.get("code", "")
+            if html:
+                soup = BeautifulSoup(f"<table>{html}</table>", "html.parser")
+                for row in soup.find_all("tr"):
+                    cols = row.find_all("td")
+                    if len(cols) == 3:
+                        districts.append({
+                            "rank": cols[0].get_text(strip=True),
+                            "district": cols[1].get_text(strip=True),
+                            "establishments": cols[2].get_text(strip=True),
+                        })
+
+            return {
+                "data": districts,
+                "summary": {
+                    "total_establishments": raw.get("counter"),
+                    "total_workers": raw.get("wcounter"),
+                    "max_establishments": raw.get("max_ent"),
+                    "min_establishments": raw.get("min_ent"),
+                    "max_workers": raw.get("max_workers"),
+                    "min_workers": raw.get("min_workers"),
+                },
+                "description": raw.get("msgText", ""),
+                "statusCode": True,
+            }
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_ec_detail_data(self, indicator_code: int, filters: Dict[str, str]) -> Dict[str, Any]:
+        """Fetch row-level EC data via POST to dashboard/EC/submitForm{4,5,6}.
+
+        Returns 20 rows per page with full breakdown: sector, district, household type,
+        activity, NOP, SOF, ownership, social group, NIC description, workers.
+
+        Args:
+            indicator_code: 1=EC6, 2=EC5, 3=EC4
+            filters: state (required), activity, nop, sof, ownership, sector, pageNum (optional)
+        """
+
+        url = self._EC_SUBMIT_URLS.get(indicator_code)
+        ec_num = self._EC_VERSION_MAP.get(indicator_code)
+        if not url:
+            return {"error": f"Invalid indicator_code {indicator_code}.", "statusCode": False}
+
+        page_num = filters.get("pageNum", "1")
+        form_data = {
+            "ec": ec_num,
+            "state": filters.get("state", ""),
+            "nop": filters.get("nop", ""),
+            "sof": filters.get("sof", ""),
+            "activity": filters.get("activity", ""),
+            "randomnum": str(random.random()),
+            "pageNum": str(page_num),
+            "ownership": filters.get("ownership", ""),
+            "sector": filters.get("sector", ""),
+        }
+
+        try:
+            response = self.session.post(
+                url, data=form_data,
+                headers={
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+                timeout=30,
+            )
+            response.raise_for_status()
+            raw = response.json()
+
+            # Column positions differ per EC version
+            # EC6 column names sourced directly from portal headers
+            col_maps = {
+                1: {  # EC6: 20 cols
+                    "sl_no": 0,
+                    "state": 1,
+                    "sector": 2,
+                    "district": 3,
+                    "household_type": 4,
+                    "activity": 5,
+                    "nature_of_operation": 6,
+                    "source_of_finance": 7,
+                    "ownership": 8,
+                    "social_group": 9,
+                    "establishments_in_household": 10,
+                    "nic_description": 11,
+                    "handloom_activity": 12,
+                    "gender_code": 13,
+                    "religion_code": 14,
+                    "hired_male_workers": 15,
+                    "hired_female_workers": 16,
+                    "unpaid_male_workers": 17,
+                    "unpaid_female_workers": 18,
+                    "total_workers": 19,
+                },
+                2: {  # EC5: 22 cols - sourced from EC5 portal headers
+                    "sl_no": 0,
+                    "state": 1,
+                    "sector": 2,
+                    "district": 3,
+                    "activity": 4,                       # NIC description
+                    "enterprise_classification": 5,       # Agriculture / Non-Agriculture
+                    "nature_of_operation": 6,
+                    "ownership": 7,
+                    "source_of_finance": 8,
+                    "social_group": 9,
+                    "power_fuel_usage": 10,
+                    "hired_male_workers": 11,
+                    "hired_female_workers": 12,
+                    "male_child_workers": 13,
+                    "female_child_workers": 14,
+                    "unpaid_male_child_workers": 15,
+                    "unpaid_female_child_workers": 16,
+                    "unpaid_male_workers": 17,
+                    "unpaid_female_workers": 18,
+                    "total_workers": 19,
+                    "registration_code1": 20,
+                    "registration_code2": 21,
+                },
+                3: {  # EC4: 18 cols - sourced from EC4 portal headers + API cross-check
+                    "sl_no": 0,
+                    "state": 1,
+                    "sector": 2,
+                    "district": 3,
+                    "activity": 4,
+                    "enterprise_classification": 5,       # Agriculture / Non-Agriculture
+                    "nature_of_operation": 6,
+                    "ownership": 7,
+                    "source_of_finance": 8,
+                    "social_group": 9,
+                    "power_fuel_usage": 10,
+                    "nic_description": 11,
+                    "male_workers": 12,
+                    "female_workers": 13,
+                    "male_child_workers": 14,
+                    "female_child_workers": 15,
+                    "total_workers": 16,
+                    "enterprise_type": 17,               # OAE / NDE / DE
+                },
+            }
+            col_map = col_maps.get(indicator_code, col_maps[1])
+
+            rows = []
+            html = raw.get("code", "")
+            if html and "No Record" not in html:
+                soup = BeautifulSoup(f"<table>{html}</table>", "html.parser")
+                for row in soup.find_all("tr"):
+                    cols = row.find_all("td")
+                    if len(cols) >= 10:
+                        row_data = {}
+                        for field, idx in col_map.items():
+                            row_data[field] = cols[idx].get_text(strip=True) if idx < len(cols) else ""
+                        rows.append(row_data)
+
+            total_records = int(str(raw.get("counter", 0) or 0).replace(",", ""))
+            total_pages = math.ceil(total_records / 20) if total_records else 0
+
+            return {
+                "data": rows,
+                "page": int(page_num),
+                "total_pages": total_pages,
+                "total_records": total_records,
+                "statusCode": True,
+                "_note": f"Showing page {page_num} of {total_pages} ({total_records} total records). Pass pageNum to fetch next page." if total_pages > 1 else "",
+            }
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
 
 
 # Global instance

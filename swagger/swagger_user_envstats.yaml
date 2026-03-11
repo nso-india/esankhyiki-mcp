@@ -1,0 +1,400 @@
+openapi: 3.0.1
+info:
+  title: Environment Statistics
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: Environment Statistics.
+  description: Indicator-wise environment statistics in India.
+paths:
+  /api/env/getEnvStatsRecords:
+    get:
+      summary: Get data for an indicator
+      description: "- **Required:** `indicator_code`  \n- **Filters (optional):**\
+        \ All parameters below (without _code suffix, keeping API typos)\n"
+      parameters:
+      - in: query
+        name: indicator_code
+        required: true
+        schema:
+          type: integer
+          pattern: ^\d+$
+        description: Indicator code (primary filter, single value only)
+      - in: query
+        name: year
+        schema:
+          type: string
+          pattern: ^\d{4}(,\d{4})*$
+      - in: query
+        name: wetland_area_type
+        schema:
+          type: string
+        description: Filter by wetland area type (Lake, Tank, etc.)
+      - in: query
+        name: month
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: quarter
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: state
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: region
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: sector
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: sub_indicator
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: livestock_marine_products
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: area
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: area_type
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: basin
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: broad_discipline
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: carbon_pool
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: causes
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: cities
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: commodity
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: cultivated_area
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: emission_source
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: fertilizer
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: foodgrain
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: fuel_mineral_sub_cate
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: fuel_type
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: foodgrains
+        schema:
+          type: string
+        description: Filter by foodgrains type (Rice, Wheat, etc.)
+      - in: query
+        name: hazardous_waste
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: land_cover
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: land_degradation
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: land_use_category
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: land_use_sub_category
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: lenght_of_road
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+        description: API uses typo "lenght" not "length"
+      - in: query
+        name: major_discipline
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: metalic_mineral_sub_cate
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+        description: API uses typo "metalic" not "metallic"
+      - in: query
+        name: minerals_category
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: minerals_metal
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: monitoring_station
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: movement_by_road_transport
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: nfhs_round
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: nonmetalic_minerl_sub_cate
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+        description: API uses typos "nonmetalic" and "minerl"
+      - in: query
+        name: ore
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: ozone_depleting_substance
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: pesticides_insecticides
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: phylum
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: period
+        schema:
+          type: string
+          pattern: ^[A-Za-z]+(,[A-Za-z]+)*$
+        description: Filter by period (Annual/Quarterly/Monthly)
+      - in: query
+        name: ramsar_site
+        schema:
+          type: string
+        description: Filter by Ramsar wetland site name
+      - in: query
+        name: revenue_realised
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: risk_category
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: risk_status
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: river
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: river_length
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: scheme
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: site
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: slums
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: soil
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: source_drinking_water
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: source_irrigation
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: source_power_generation
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: species
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: sub_basin
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: subsidy_scheme
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: type_of_coal
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: towns
+        schema:
+          type: string
+        description: Filter by town type (Statutory towns, Census towns, etc.)
+      - in: query
+        name: vehicles_registered
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: zone
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          default: 20
+          pattern: ^\d+$
+      - in: query
+        name: page
+        schema:
+          type: integer
+          minimum: 1
+          pattern: ^\d+$
+      - in: query
+        name: Format
+        required: true
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+        description: Output format (JSON or CSV)
+      responses:
+        '200':
+          description: A JSON array of user information
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'

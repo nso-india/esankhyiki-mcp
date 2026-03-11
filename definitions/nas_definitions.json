@@ -1,0 +1,112 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Gross Value Added",
+    "description": "Gross Value Added"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Net Taxes on Products",
+    "description": "Net Taxes on Products"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Taxes on Products",
+    "description": "Taxes on Products"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Subsidies on Products",
+    "description": "Subsidies on Products"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Gross Domestic Product",
+    "description": "Gross Domestic Product"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Consumption of Fixed Capital",
+    "description": "Consumption of Fixed Capital"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Net Domestic Product",
+    "description": "Net Domestic Product"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Gross Capital Formation by Industry of Use",
+    "description": "Gross Capital Formation by Industry of Use"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Gross Fixed Capital Formation",
+    "description": "Gross Fixed Capital Formation"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Private Final Consumption Expenditure",
+    "description": "Private Final Consumption Expenditure"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Government Final Consumption Expenditure",
+    "description": "Government Final Consumption Expenditure"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Change in Stock",
+    "description": "Change in Stock"
+  },
+  {
+    "indicator_code": 13,
+    "name": "Valuables",
+    "description": "Valuables"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Export of Goods and Services",
+    "description": "Export of Goods and Services"
+  },
+  {
+    "indicator_code": 15,
+    "name": "Import of Goods and Services",
+    "description": "Import of Goods and Services"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Primary Income Receivable Net From Row",
+    "description": "Primary Income Receivable Net From Row"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Gross National Income",
+    "description": "Gross National Income"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Other Current Transfers Net From Row",
+    "description": "Other Current Transfers Net From Row"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Gross National Disposable Income",
+    "description": "Gross National Disposable Income"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Gross Saving",
+    "description": "Gross Saving"
+  },
+  {
+    "indicator_code": 21,
+    "name": "GVA Growth Rate",
+    "description": "GVA Growth Rate"
+  },
+  {
+    "indicator_code": 22,
+    "name": "GDP Growth Rate",
+    "description": "GDP Growth Rate"
+  }
+]
