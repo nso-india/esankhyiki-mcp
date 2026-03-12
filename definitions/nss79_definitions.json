@@ -1,0 +1,142 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Percentage of persons able to read and write short simple statements in their everyday life with understanding",
+    "description": "Percentage of persons able to read and write short simple statements in their everyday life with understanding"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Percentage of persons able to read and write short simple statements in their everyday life with understanding and also able to perform simple arithmetic calculations",
+    "description": "Percentage of persons able to read and write short simple statements in their everyday life with understanding and also able to perform simple arithmetic calculations"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Mean years of schooling in formal education",
+    "description": "Mean years of schooling in formal education"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Percentage of persons of age 6 to 10 years currently enrolled in primary education (Class I to Class V)",
+    "description": "Percentage of persons of age 6 to 10 years currently enrolled in primary education (Class I to Class V)"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Percentage of persons (25 years and above) with some secondary education",
+    "description": "Percentage of persons (25 years and above) with some secondary education"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Percentage distribution of persons of age 6 to 18 years who never enrolled in formal education at the time of survey",
+    "description": "Percentage distribution of persons of age 6 to 18 years who never enrolled in formal education at the time of survey"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Percentage of persons graduated in science and technology among all graduates",
+    "description": "Percentage of persons graduated in science and technology among all graduates"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Percentage of youth in formal and non-formal education and training in the previous 12 months",
+    "description": "Percentage of youth in formal and non-formal education and training in the previous 12 months"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Percentage of youth not in education, employment, or training",
+    "description": "Percentage of youth not in education, employment, or training"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Average medical expenditure (Rs.) on hospitalised treatment (including institutional delivery) during the last 365 days",
+    "description": "Average medical expenditure (Rs.) on hospitalised treatment (including institutional delivery) during the last 365 days"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Average medical expenditure (Rs.) on non-hospitalised treatment during the last 30 days",
+    "description": "Average medical expenditure (Rs.) on non-hospitalised treatment during the last 30 days"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Average out-of-pocket medical expenditure (OOPME) for treatment on hospitalisation (including institutional delivery) during last 365 days",
+    "description": "Average out-of-pocket medical expenditure (OOPME) for treatment on hospitalisation (including institutional delivery) during last 365 days"
+  },
+  {
+    "indicator_code": 13,
+    "name": "Average out-of-pocket medical expenditure (OOPME) for treatment non-hospitalisation during last 30 days",
+    "description": "Average out-of-pocket medical expenditure (OOPME) for treatment non-hospitalisation during last 30 days"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Percentage of persons who have an account individually or jointly in any bank/ other financial institution/mobile money service provider (age 18 years & above)",
+    "description": "Percentage of persons who have an account individually or jointly in any bank/ other financial institution/mobile money service provider (age 18 years & above)"
+  },
+  {
+    "indicator_code": 15,
+    "name": "Number of borrowers per 1,00,000 persons (age 18 years & above)",
+    "description": "Number of borrowers per 1,00,000 persons (age 18 years & above)"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Percentage of persons able to use mobile (including smartphone)",
+    "description": "Percentage of persons able to use mobile (including smartphone)"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Percentage of persons who used mobile telephone during the last 3 months preceding the date of survey",
+    "description": "Percentage of persons who used mobile telephone during the last 3 months preceding the date of survey"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Percentage of persons able to use internet",
+    "description": "Percentage of persons able to use internet"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Percentage of persons who used internet during the last 3 months preceding the date of survey",
+    "description": "Percentage of persons who used internet during the last 3 months preceding the date of survey"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Percentage of population covered by 4G or above mobile technology",
+    "description": "Percentage of population covered by 4G or above mobile technology"
+  },
+  {
+    "indicator_code": 21,
+    "name": "Percentage of persons who send messages with attached files using mobile or computer-like devices during last three months",
+    "description": "Percentage of persons who send messages (e.g., e-mail, messaging service, SMS) with attached files (e.g., documents, pictures, video) using mobile or computer-like devices during last three months preceding the date of survey"
+  },
+  {
+    "indicator_code": 22,
+    "name": "Percentage of persons who performed copy and paste tools using mobile or computer-like devices during last three months",
+    "description": "Percentage of persons who performed copy and paste tools to duplicate or move data, information, documents, etc using mobile or computer-like devices during last three months preceding the date of survey"
+  },
+  {
+    "indicator_code": 23,
+    "name": "Percentage of persons who can search internet, send/receive emails, and perform online banking transactions",
+    "description": "Percentage of persons who can search internet for information and percentage of persons who can send or receive emails and percentage of persons who can perform online banking transactions"
+  },
+  {
+    "indicator_code": 24,
+    "name": "Percentage of households possessing different assets as on date of survey",
+    "description": "Percentage of households possessing different assets as on date of survey"
+  },
+  {
+    "indicator_code": 25,
+    "name": "Percentage of population having convenient access to transport facilities and all-weather roads",
+    "description": "Percentage of population having convenient access to transport facilities and all-weather roads"
+  },
+  {
+    "indicator_code": 26,
+    "name": "Percentage of persons of age less than 5 years who have registered with civil authority for birth certificate",
+    "description": "Percentage of persons of age less than 5 years who have registered with civil authority for the birth certificate ever"
+  },
+  {
+    "indicator_code": 27,
+    "name": "Percentage of households using clean fuel for cooking",
+    "description": "Percentage of households using clean fuel for cooking"
+  },
+  {
+    "indicator_code": 28,
+    "name": "Percentage of households having access to improved principal sources of drinking water and improved latrine",
+    "description": "Percentage of households having access to improved principal sources of drinking water and improved latrine"
+  }
+]

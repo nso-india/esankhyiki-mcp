@@ -80,6 +80,7 @@ class MoSPI:
             "RBI": "/api/rbi/getRbiRecords",
             "NSS77": "/api/nss-77/getNss77Records",
             "NSS78": "/api/nss-78/getNss78Records",
+            "NSS79": "/api/nss-79/getNSS79Records",
             "CPIALRL": "/api/cpialrl/getCpialrlRecords",
             "HCES": "/api/hces/getHcesRecords",
             "TUS": "/api/tus/getTusRecords",
@@ -839,6 +840,47 @@ class MoSPI:
         try:
             response = self.session.get(
                 f"{self.base_url}/api/nss-78/getFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # NSS79 (NSS 79th Round - CAMS) Methods
+    # =========================================================================
+
+    def get_nss79_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS79 indicators from MoSPI API.
+
+        Returns 28 indicators from NSS 79th Round (Comprehensive Annual Modular Survey)
+        covering education, health expenditure, financial inclusion, digital literacy,
+        and household living conditions.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-79/getNSS79IndicatorList",
+                params={"survey_code": 1},
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss79_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available NSS79 filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-28)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-79/getNSS79FilterByIndicatorId",
                 params=params,
                 timeout=30
             )
