@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- NSS79 (79th Round - Comprehensive Annual Modular Survey / CAMS) with 28 indicators: literacy, numeracy, school enrolment, NEET youth, health expenditure (hospitalised and non-hospitalised, out-of-pocket), financial inclusion (bank accounts, borrowers), digital literacy (mobile/internet usage, 4G coverage, online banking, file sharing), and household living conditions (assets, clean fuel, drinking water, sanitation, birth registration, transport access)
+- NSS79 (79th Round - CAMS + AYUSH) with 35 indicators across two modules: CAMS module (indicators 1-28) covering literacy, school enrolment, NEET youth, health expenditure, financial inclusion, digital literacy, and household living conditions; AYUSH module (indicators 29-35) covering awareness, usage, treatment types, therapy knowledge, and expenditure on AYUSH systems
 - Indicator definitions (definitions/) for all 15 datasets with indicator_code support — enriches step2_get_indicators responses with human-readable descriptions
 
 ### Changed

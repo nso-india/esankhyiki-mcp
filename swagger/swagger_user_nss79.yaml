@@ -5,20 +5,20 @@ info:
 servers:
 - url: https://api.mospi.gov.in/
 tags:
-- name: National Sample Survey (NSS 79th Round - CAMS)
-  description: Comprehensive Annual Modular Survey (CAMS) - NSS 79th Round.
+- name: National Sample Survey (NSS 79th Round - CAMS + AYUSH)
+  description: Comprehensive Annual Modular Survey (CAMS) and AYUSH module - NSS 79th Round.
 paths:
   /api/nss-79/getNSS79Records:
     get:
       tags:
-      - National Sample Survey (NSS 79th Round - CAMS)
-      description: Indicator-wise data from NSS 79th Round (CAMS).
+      - National Sample Survey (NSS 79th Round - CAMS + AYUSH)
+      description: Indicator-wise data from NSS 79th Round. Indicators 1-28 are CAMS module, indicators 29-35 are AYUSH module.
       operationId: NSS79IndicatorValues
       parameters:
       - name: indicator_code
         required: true
         in: query
-        description: Indicator code (1-28)
+        description: Indicator code (1-35). Indicators 1-28 = CAMS module (education, health, digital literacy, household conditions). Indicators 29-35 = AYUSH module (awareness, usage, treatment, expenditure).
         schema:
           type: integer
       - name: sub_indicator_code

@@ -138,5 +138,40 @@
     "indicator_code": 28,
     "name": "Percentage of households having access to improved principal sources of drinking water and improved latrine",
     "description": "Percentage of households having access to improved principal sources of drinking water and improved latrine"
+  },
+  {
+    "indicator_code": 29,
+    "name": "Persons (per 1000) aware of Ayush (age 15 years & above)",
+    "description": "Persons (per 1000) aware of Ayush (age 15 years & above)"
+  },
+  {
+    "indicator_code": 30,
+    "name": "Persons (per 1000) used Ayush during last 365 days (age 15 years & above)",
+    "description": "Persons (per 1000) used Ayush during last 365 days (age 15 years & above)"
+  },
+  {
+    "indicator_code": 31,
+    "name": "Persons (per 1000) using Ayush during last 365 days by type of treatment",
+    "description": "Persons (per 1000) using Ayush during last 365 days by type of treatment"
+  },
+  {
+    "indicator_code": 32,
+    "name": "Households (per 1000) reported at least one member aware about AYUSH Therapy",
+    "description": "Households (per 1000) reported at least one member of the household aware about AYUSH Therapy"
+  },
+  {
+    "indicator_code": 33,
+    "name": "Households (per 1000) reported at least one member with knowledge about AYUSH Therapy",
+    "description": "Households (per 1000) reported at least one member of the household have knowledge about AYUSH Therapy"
+  },
+  {
+    "indicator_code": 34,
+    "name": "Persons (per 1000) availing Ayush treatment and average expenditure per person",
+    "description": "Persons (per 1,000) availing Ayush treatment and average expenditure incurred per person for treatment"
+  },
+  {
+    "indicator_code": 35,
+    "name": "Proportion (per 1000) of households using Ayush by reason",
+    "description": "Proportion (per 1000) of households using Ayush by reason"
   }
 ]
