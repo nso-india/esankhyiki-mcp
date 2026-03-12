@@ -37,7 +37,7 @@ MCP (Model Context Protocol) server for accessing India's Ministry of Statistics
 This server provides AI-ready access to official Indian government statistics through the Model Context Protocol (MCP). It acts as a bridge between AI assistants (Claude, ChatGPT, Cursor, etc.) and MoSPI's open data APIs, enabling natural language queries for economic, demographic, and social indicators.
 
 **Key Features:**
-- 19 statistical datasets covering employment, inflation, industrial production, GDP, energy, higher education, gender, health, environment, trade, agriculture, consumption, and economic census
+- 20 statistical datasets covering employment, inflation, industrial production, GDP, energy, higher education, gender, health, environment, trade, agriculture, consumption, economic census, and digital literacy
 - Sequential 4-tool workflow designed for LLM consumption
 - Swagger-driven parameter validation
 - Full OpenTelemetry integration for observability
@@ -68,6 +68,7 @@ This server provides AI-ready access to official Indian government statistics th
 | **HCES** | Household Consumption Expenditure Survey | Consumer spending, poverty analysis, inequality (Gini) |
 | **TUS** | Time Use Survey | Time allocation, unpaid work, gender time gaps |
 | **EC** | Economic Census | Establishments, enterprises, district-wise business count, workers |
+| **NSS79** | NSS 79th Round (CAMS) | Literacy, school enrolment, NEET youth, health expenditure, financial inclusion, digital skills, internet access |
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 
 ---
@@ -250,7 +251,7 @@ mospi-mcp-api/
 │   └── swagger_user_*.yaml
 ├── observability/
 │   └── telemetry.py         # OpenTelemetry middleware for tracing
-├── tests/                   # Pytest suite (62 tests across all 19 datasets)
+├── tests/                   # Pytest suite (covering all 20 datasets)
 ├── Dockerfile               # Production container with OTEL instrumentation
 ├── docker-compose.yml       # Full stack with Jaeger
 └── requirements.txt
@@ -274,7 +275,7 @@ pip install -r tests/requirements-test.txt
 pytest tests/ -v -p no:anyio
 ```
 
-Runs in-process against the MCP server (no running server needed). Covers all 19 datasets across all 4 tools. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
+Runs in-process against the MCP server (no running server needed). Covers all 20 datasets across all 4 tools. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
 
 ---
 

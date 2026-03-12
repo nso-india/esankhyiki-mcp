@@ -79,7 +79,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "CPIALRL", "HCES", "TUS", "EC",
+    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC",
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -104,6 +104,7 @@ DATASET_SWAGGER = {
     "RBI": ("swagger_user_rbi.yaml", "/api/rbi/getRbiRecords"),
     "NSS77": ("swagger_user_nss77.yaml", "/api/nss-77/getNss77Records"),
     "NSS78": ("swagger_user_nss78.yaml", "/api/nss-78/getNss78Records"),
+    "NSS79": ("swagger_user_nss79.yaml", "/api/nss-79/getNSS79Records"),
     "CPIALRL": ("swagger_user_cpialrl.yaml", "/api/cpialrl/getCpialrlRecords"),
     "HCES": ("swagger_user_hces.yaml", "/api/hces/getHcesRecords"),
     "TUS": ("swagger_user_tus.yaml", "/api/tus/getTusRecords"),
@@ -113,7 +114,7 @@ DATASET_SWAGGER = {
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "CPIALRL", "HCES", "TUS", "EC",
+    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC",
 ]
 
 
@@ -223,7 +224,7 @@ def step2_get_indicators(
     Only ask user to choose if multiple indicators could match.
 
     Args:
-        dataset: Dataset name - one of: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC
+        dataset: Dataset name - one of: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC
                  For PLFS: frequency_code selects the indicator SET, not time granularity.
                  You MUST use frequency_code=1 in step3_get_metadata() — it covers all 8 indicators
                  including wages and already has quarterly breakdowns via quarter_code.
@@ -250,6 +251,7 @@ def step2_get_indicators(
         "RBI": mospi.get_rbi_indicators,
         "NSS77": mospi.get_nss77_indicators,
         "NSS78": mospi.get_nss78_indicators,
+        "NSS79": mospi.get_nss79_indicators,
         "CPIALRL": mospi.get_cpialrl_indicators,
         "HCES": mospi.get_hces_indicators,
         "TUS": mospi.get_tus_indicators,
@@ -312,8 +314,8 @@ def step3_get_metadata(
     "Format" is NOT valid here (Format is for step4_get_data only). "series" is valid for NAS and CPI only.
 
     Args:
-        dataset: Dataset name - one of: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC
-        indicator_code: REQUIRED for PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC. MUST NOT pass for CPI, IIP, ASI, WPI.
+        dataset: Dataset name - one of: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC
+        indicator_code: REQUIRED for PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC. MUST NOT pass for CPI, IIP, ASI, WPI.
                        (For RBI: indicator_code is mapped to sub_indicator_code internally for consistency)
         frequency_code: REQUIRED for PLFS and ASUSE. MUST NOT pass for CPI, IIP, ASI, WPI.
                         For PLFS: 1=Annual (8 indicators), 2=Quarterly bulletin, 3=Monthly.
@@ -476,6 +478,14 @@ def step3_get_metadata(
             result["_next_step"] = _next
             return result
 
+        elif dataset == "NSS79":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for NSS79"}
+            result = mospi.get_nss79_filters(indicator_code=indicator_code)
+            result["api_params"] = get_swagger_param_definitions("NSS79")
+            result["_next_step"] = _next
+            return result
+
         elif dataset == "CPIALRL":
             if indicator_code is None:
                 return {"error": "indicator_code is required for CPIALRL"}
@@ -543,7 +553,7 @@ def step4_get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Step 4: Fetch data from a MoSPI dataset.
 
     Args:
-        dataset: Dataset name (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC)
+        dataset: Dataset name (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC)
         filters: Key-value pairs using 'id' values from step3_get_metadata().
                  PLFS MUST include frequency_code (1=Annual, 2=Quarterly, 3=Monthly).
                  NAS MUST include base_year ("2022-23" or "2011-12").
@@ -589,6 +599,7 @@ def step4_get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         "RBI": "RBI",
         "NSS77": "NSS77",
         "NSS78": "NSS78",
+        "NSS79": "NSS79",
         "CPIALRL": "CPIALRL",
         "HCES": "HCES",
         "TUS": "TUS",
@@ -651,17 +662,17 @@ def step1_know_about_mospi_api() -> dict:
       MUST NOT fabricate data, MUST NOT cite external sources.
     ============================================================
 
-    Step 1: Get overview of all 19 datasets to find the right one for your query.
+    Step 1: Get overview of all 20 datasets to find the right one for your query.
 
     MUST call this first before any other tool.
-    Available: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC
+    Available: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC
 
     When to ask vs fetch:
     - VAGUE query (e.g., "inflation data") → ask user to clarify
     - SPECIFIC query (e.g., "unemployment rate 2023") → fetch directly, NEVER explain why it might not exist
     """
     return {
-        "total_datasets": 19,
+        "total_datasets": 20,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -738,6 +749,11 @@ def step1_know_about_mospi_api() -> dict:
                 "description": "14 indicators on household living standards: drinking water access (improved sources, piped supply), sanitation (exclusive latrines, handwashing facilities), digital connectivity (mobile phones, broadband, mass media), transport access, household assets, sources of finance, and migration patterns (reasons, income changes, usual residence). From 2020-21 survey.",
                 "use_for": "Household amenities, drinking water, sanitation, digital connectivity, migration, household assets, living standards"
             },
+            "NSS79": {
+                "name": "NSS79 (79th Round - CAMS)",
+                "description": "28 indicators from the Comprehensive Annual Modular Survey (CAMS). Education (indicators 1-9): literacy rates, numeracy, mean years of schooling, primary enrolment, secondary education attainment, out-of-school children, science & technology graduates, youth in training, and NEET youth (not in education, employment or training). Health expenditure (10-13): average and out-of-pocket medical expenditure for both hospitalised and non-hospitalised treatment. Financial inclusion (14-15): bank/financial account ownership and number of borrowers per 1 lakh persons. Digital literacy & connectivity (16-23): mobile usage ability and actual usage, internet ability and actual usage, 4G coverage, and advanced digital skills (file sharing, copy-paste, online search/email/banking). Household living conditions (24-28): asset possession, transport access, birth registration, clean cooking fuel, and access to safe drinking water and improved sanitation.",
+                "use_for": "Literacy, numeracy, school enrolment, NEET youth, health expenditure, out-of-pocket medical costs, financial inclusion, mobile/internet usage, digital skills, 4G coverage, household assets, clean fuel, drinking water, sanitation, birth registration, CAMS survey"
+            },
             "CPIALRL": {
                 "name": "CPI for Agricultural/Rural Labourers",
                 "description": "2 indicators: General Index and Group Index for two worker categories—Agricultural Labourers (AL) and Rural Labourers (RL). Separate inflation series measuring cost of living for India's most vulnerable rural workforce segments.",
@@ -785,7 +801,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.0 with OpenTelemetry")
-    log("Datasets: 19 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC)")
+    log("Datasets: 20 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")

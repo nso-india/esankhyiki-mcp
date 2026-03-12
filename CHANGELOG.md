@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- NSS79 (79th Round - Comprehensive Annual Modular Survey / CAMS) with 28 indicators: literacy, numeracy, school enrolment, NEET youth, health expenditure (hospitalised and non-hospitalised, out-of-pocket), financial inclusion (bank accounts, borrowers), digital literacy (mobile/internet usage, 4G coverage, online banking, file sharing), and household living conditions (assets, clean fuel, drinking water, sanitation, birth registration, transport access)
+- Indicator definitions (definitions/) for all 15 datasets with indicator_code support — enriches step2_get_indicators responses with human-readable descriptions
+
+### Changed
+- Total datasets: 19 → 20
+- step1 updated to reflect 20 datasets and NSS79 description
+
+---
+
 ## [2.0.0] - 2026-02-22
 
 ### Added
@@ -22,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Total datasets: 7 → 19
 - Tool names: `1_know_about_mospi_api` → `step1_know_about_mospi_api` (all 4 tools renamed)
-- step1 now returns overview of all 19 datasets
+- step1 now returns overview of all 19 datasets (as of v2.0.0)
 - step2/step3/step4 updated to route all new datasets
 - Swagger specs corrected for existing datasets (ASI, IIP, PLFS, WPI, Energy, NAS)
 - README updated with full dataset table
