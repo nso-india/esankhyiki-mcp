@@ -68,7 +68,7 @@ This server provides AI-ready access to official Indian government statistics th
 | **HCES** | Household Consumption Expenditure Survey | Consumer spending, poverty analysis, inequality (Gini) |
 | **TUS** | Time Use Survey | Time allocation, unpaid work, gender time gaps |
 | **EC** | Economic Census | Establishments, enterprises, district-wise business count, workers |
-| **NSS79** | NSS 79th Round (CAMS) | Literacy, school enrolment, NEET youth, health expenditure, financial inclusion, digital skills, internet access |
+| **NSS79** | NSS 79th Round (CAMS + AYUSH) | Literacy, school enrolment, NEET youth, health expenditure, financial inclusion, digital skills, AYUSH awareness and usage |
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 
 ---

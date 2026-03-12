@@ -849,24 +849,38 @@ class MoSPI:
             return {"error": str(e), "statusCode": False}
 
     # =========================================================================
-    # NSS79 (NSS 79th Round - CAMS) Methods
+    # NSS79 (NSS 79th Round - CAMS + AYUSH) Methods
     # =========================================================================
 
     def get_nss79_indicators(self) -> Dict[str, Any]:
         """Fetch list of NSS79 indicators from MoSPI API.
 
-        Returns 28 indicators from NSS 79th Round (Comprehensive Annual Modular Survey)
-        covering education, health expenditure, financial inclusion, digital literacy,
-        and household living conditions.
+        Returns all 35 indicators from NSS 79th Round — two survey modules combined:
+        - survey_code=1 (CAMS): 28 indicators on education, health expenditure,
+          financial inclusion, digital literacy, and household living conditions.
+        - survey_code=2 (AYUSH): 7 indicators on AYUSH awareness, usage,
+          treatment types, therapy knowledge, and expenditure.
         """
         try:
-            response = self.session.get(
+            resp1 = self.session.get(
                 f"{self.base_url}/api/nss-79/getNSS79IndicatorList",
                 params={"survey_code": 1},
                 timeout=30
             )
-            response.raise_for_status()
-            return response.json()
+            resp1.raise_for_status()
+            result = resp1.json()
+
+            resp2 = self.session.get(
+                f"{self.base_url}/api/nss-79/getNSS79IndicatorList",
+                params={"survey_code": 2},
+                timeout=30
+            )
+            resp2.raise_for_status()
+            ayush = resp2.json().get("data", [])
+
+            result["data"] = result.get("data", []) + ayush
+            result["count"] = len(result["data"])
+            return result
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 
@@ -874,7 +888,7 @@ class MoSPI:
         """Fetch available NSS79 filters for given indicator.
 
         Args:
-            indicator_code: Indicator code (1-28)
+            indicator_code: Indicator code (1-35). 1-28 = CAMS module, 29-35 = AYUSH module.
         """
         params = {"indicator_code": indicator_code}
 
