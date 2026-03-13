@@ -37,4 +37,4 @@ EXPOSE 8000
 
 # Run the server with OpenTelemetry instrumentation wrapper
 # FastMCP middleware handles IP tracking and input/output capture
-CMD ["opentelemetry-instrument", "fastmcp", "run", "mospi_server.py:mcp", "--transport", "http", "--port", "8000", "--host", "0.0.0.0", "--stateless"]
+CMD ["opentelemetry-instrument", "python", "mospi_server.py"]
