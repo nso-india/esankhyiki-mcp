@@ -65,6 +65,13 @@ def log(msg: str):
 # Initialize FastMCP server
 mcp = FastMCP("MoSPI Data Server")
 
+# Disable listChanged notifications — ChatGPT opens a persistent GET SSE stream
+# when listChanged:true, waiting for notifications that never come in stateless mode,
+# causing 424 errors. Setting to false tells ChatGPT not to subscribe.
+mcp._mcp_server.notification_options.tools_changed = False
+mcp._mcp_server.notification_options.prompts_changed = False
+mcp._mcp_server.notification_options.resources_changed = False
+
 # Add telemetry middleware for IP tracking and input/output capture
 mcp.add_middleware(TelemetryMiddleware())
 
@@ -782,4 +789,4 @@ if __name__ == "__main__":
     # Run with HTTP transport for remote access
     # For stdio (local MCP clients): mcp.run()
     # For HTTP (remote/web access): mcp.run(transport="http", port=8000)
-    mcp.run(transport="http", host="0.0.0.0", port=8000, stateless_http=True, json_response=True)
+    mcp.run(transport="http", host="0.0.0.0", port=8000, stateless_http=True)
