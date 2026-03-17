@@ -8,6 +8,11 @@ import yaml, os
 import math, random
 from bs4 import BeautifulSoup
 from typing import Optional, Dict, Any
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+
+RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
 
 
 class MoSPI:
@@ -19,6 +24,19 @@ class MoSPI:
         self.base_url = base_url
         self.session = requests.Session()
         self.session.headers.update({"User-Agent": "Mozilla/5.0"})
+        retry = Retry(
+            total=3,
+            connect=2,
+            read=2,
+            status=3,
+            backoff_factor=0.6,
+            status_forcelist=sorted(RETRYABLE_STATUS_CODES),
+            allowed_methods=frozenset({"GET", "POST"}),
+            respect_retry_after_header=True,
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        self.session.mount("https://", adapter)
+        self.session.mount("http://", adapter)
         self.api_endpoints = {
             "PLFS": "/api/plfs/getData",
             "CPI_Group": "/api/cpi/getCPIIndex",
