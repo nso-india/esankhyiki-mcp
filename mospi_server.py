@@ -198,7 +198,7 @@ def step2_get_indicators(
     level: Optional[str] = None,
     series: Optional[str] = None,
     Format: Optional[str] = None
-) -> Dict[str, Any]:
+):
     """
     ============================================================
     RULES (MUST follow exactly):
@@ -292,7 +292,7 @@ def step3_get_metadata(
     sub_indicator_code: Optional[int] = None,
     Format: Optional[str] = None,
     type: Optional[str] = None
-) -> Dict[str, Any]:
+):
     """
     ============================================================
     RULES (MUST follow exactly):
@@ -522,7 +522,7 @@ def step3_get_metadata(
 
 
 @mcp.tool(name="step4_get_data")
-def step4_get_data(dataset: str, filters: Dict[str, Any]) -> Dict[str, Any]:
+def step4_get_data(dataset: str, filters: Dict[str, Any]):
     """
     ============================================================
     RULES (MUST follow exactly):
@@ -629,7 +629,7 @@ def step4_get_data(dataset: str, filters: Dict[str, Any]) -> Dict[str, Any]:
 
 # Comprehensive API documentation tool
 @mcp.tool(name="step1_know_about_mospi_api")
-def step1_know_about_mospi_api() -> Dict[str, Any]:
+def step1_know_about_mospi_api():
     """
     ============================================================
     RULES (MUST follow exactly):
