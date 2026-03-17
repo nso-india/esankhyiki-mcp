@@ -17,153 +17,203 @@ paths:
       - name: indicator_code
         required: true
         in: query
-        description: Enter the Indicator Code (1 - 8)
+        description: >
+          Indicator code. SINGLE VALUE ONLY — comma-separated causes 500 error for all frequency codes.
+          frequency_code=1 (Annual): 1=LFPR, 2=WPR, 3=UR, 4=Percentage distribution of workers,
+          5=Employment conditions of regular wage/salaried employees, 6=Average salaried wage/salary earnings (₹/month),
+          7=Average casual labour wage earnings (₹/day), 8=Average self-employment gross earnings (₹/month).
+          frequency_code=2 (Quarterly bulletin): 1=LFPR, 2=WPR, 3=UR only (codes 4-8 not available).
+          frequency_code=3 (Monthly): 1=LFPR, 2=WPR, 3=UR only (codes 4-8 not available).
         schema:
-          type: integer
-          pattern: ^\d+(,\d+)*$
+          type: string
+          pattern: ^\d+$
       - name: frequency_code
         required: true
         in: query
-        description: Enter the Frequency Code (1 - Annually, 2 - Quarterly, 3 - Monthly)
+        description: >
+          Controls which indicator SET is available — not just time granularity.
+          1 = Annual (indicators 1-8, data from 2017-18 to 2023-24, financial year format).
+          2 = Quarterly bulletin (indicators 1-3 only, data from 2017-18 to 2025-26 by quarter, financial year format).
+          3 = Monthly (indicators 1-3 only, data from 2025 onwards, plain calendar year format).
+          Use frequency_code=3 for latest/recent data. Use frequency_code=2 only when user explicitly asks for quarterly bulletin.
         schema:
           type: string
-          pattern: ^\d+(,\d+)*$
+          pattern: ^\d+$
       - name: year
         in: query
-        description: Enter the Financial Year (format YYYY-YY. Comma separated for
-          multiple values)
+        description: >
+          Year filter. Format depends on frequency_code:
+          frequency_code=1 (Annual): financial year YYYY-YY (e.g. "2023-24"). Data: 2017-18 to 2023-24.
+          frequency_code=2 (Quarterly bulletin): financial year YYYY-YY (e.g. "2024-25"). Data: 2017-18 to 2025-26.
+          frequency_code=3 (Monthly): plain calendar year YYYY (e.g. "2025", "2026"). Do NOT use YYYY-YY for monthly.
+          Comma-separated for multiple values.
         schema:
           type: string
-          pattern: ^\d{4}-\d{2}(,\d{4}-\d{2})*$
+          pattern: ^\d{4}(-\d{2})?(,\d{4}(-\d{2})?)*$
       - name: month_code
         in: query
-        description: Enter the Month code (from 1 to 12. Comma separated for multiple
-          values)
+        description: >
+          Only for frequency_code=3 (Monthly). Do NOT pass for Annual or Quarterly bulletin.
+          1=January, 2=February, 4=April, 5=May, 6=June, 7=July, 8=August, 9=September,
+          10=October, 11=November, 12=December. March (code 3) data added when released.
+          Comma-separated for multiple values.
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
       - name: state_code
         in: query
-        description: Enter the State code (from 1 to 38. Comma separated for multiple
-          values)
+        description: >
+          State code. Valid codes: 1-38 (individual states/UTs) and 99 (All India aggregate).
+          Use state_code=99 for All India. Omitting state_code returns ALL states (many more records).
+          Note: frequency_code=2 (Quarterly bulletin) has fewer states available — use step3 to check.
+          Comma-separated for multiple values.
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
       - name: gender_code
         in: query
-        description: Enter the Gender code (from 1 to 3. Comma separated for multiple
-          values)
+        description: >
+          1=Male, 2=Female, 3=Person (all genders combined). Default to 3 unless user asks for gender breakdown.
+          Available for all frequency codes. Comma-separated for multiple values.
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
       - name: age_code
         in: query
-        description: Enter the Age code (from 1 to 4. Comma separated for multiple
-          values)
+        description: >
+          Age group code.
+          frequency_code=1 (Annual): 1=15 years and above, 2=15-29 years, 3=15-59 years, 4=all.
+          frequency_code=2 and 3: 1=15 years and above, 2=15-29 years, 4=all. Code 3 (15-59) not available.
+          Default to 4 (all) unless user asks for age breakdown. Comma-separated for multiple values.
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
       - name: sector_code
         in: query
-        description: Enter the Sector code (from 1 to 3. Comma separated for multiple
-          values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: weekly_status_code
-        in: query
-        description: Enter the Weekly Status code (from 1 to 2. Comma separated for
-          multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: religion_code
-        in: query
-        description: Enter the Religion code (from 1 to 5. Comma separated for multiple
-          values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: social_category_code
-        in: query
-        description: Enter the Social category code (from 1 to 5. Comma separated
-          for multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: education_code
-        in: query
-        description: Enter the Education code (from 1 to 10. Comma separated for multiple
-          values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: broad_industry_work_code
-        in: query
-        description: Enter the Broad industry work code (from 1 to 4. Comma separated
-          for multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: broad_status_employment_code
-        in: query
-        description: Enter the Broad status employment code (from 1 to 6. Comma separated
-          for multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: employee_contract_code
-        in: query
-        description: Enter the Employee contract code (from 1 to 5. Comma separated
-          for multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: enterprise_size_code
-        in: query
-        description: Enter the Enterprise size code (from 1 to 6. Comma separated
-          for multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: enterprise_type_code
-        in: query
-        description: Enter the Enterprise type code (from 1 to 9. Comma separated
-          for multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: industry_section_code
-        in: query
-        description: Enter the Industry section code (from 1 to 22. Comma separated
-          for multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: nco_division_code
-        in: query
-        description: Enter the NCO division code (from 1 to 11. Comma separated for
-          multiple values)
-        schema:
-          type: string
-          pattern: ^\d+(,\d+)*$
-      - name: nic_group_code
-        in: query
-        description: Enter the NIC group code (from 1 to 14. Comma separated for multiple
-          values)
+        description: >
+          1=Rural, 2=Urban, 3=Rural+Urban combined. Default to 3 unless user asks for rural/urban breakdown.
+          Available for all frequency codes. Comma-separated for multiple values.
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
       - name: quarter_code
         in: query
-        description: Enter the Quarter code (from 1 to 35. Comma separated for multiple
-          values)
+        description: >
+          Quarter filter. Actual codes: 2=JUL-SEP, 3=OCT-DEC, 4=JAN-MAR, 5=APR-JUN.
+          For frequency_code=1 (Annual): only useful for indicator_codes 6, 7, 8 (wage indicators that have quarterly breakdowns). Indicators 1-3 show "quarter: all" and are unaffected.
+          For frequency_code=2 (Quarterly bulletin): use to filter by specific quarter.
+          Do NOT use for frequency_code=3 (Monthly) — use month_code instead.
+          Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: weekly_status_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual). Not available for Quarterly bulletin or Monthly.
+          1=PS+SS (principal + subsidiary status), 2=CWS (current weekly status).
+          Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: religion_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual). Not available for Quarterly bulletin or Monthly.
+          1=All, 2=Hinduism, 3=Islam, 4=Christianity, 5=Sikhism.
+          Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: social_category_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual). Not available for Quarterly bulletin or Monthly.
+          1=All, 2=Scheduled Tribe, 3=Scheduled Caste, 4=Other Backward Class, 5=Others.
+          Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: education_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual). Not available for Quarterly bulletin or Monthly.
+          1=Not literate, 2=Literate & upto primary, 3=Middle, 4=Secondary, 5=Higher secondary,
+          6=Diploma/certificate, 7=Graduate, 8=Post graduate & above, 9=Secondary & above, 10=All.
+          Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: broad_industry_work_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual) AND indicator_code=4 (Percentage distribution of workers).
+          Returns empty for any other indicator_code or frequency. Codes 1-4. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: broad_status_employment_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual) AND indicator_code=4 (Percentage distribution of workers).
+          Returns empty for any other indicator_code or frequency. Codes 1-6. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: employee_contract_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual) AND indicator_code=5 (Employment conditions of regular wage/salaried employees).
+          Returns empty for any other indicator_code or frequency. Codes 1-5. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: enterprise_size_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual) AND indicator_code=4 (Percentage distribution of workers).
+          Returns empty for any other indicator_code or frequency. Codes 1-6. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: enterprise_type_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual) AND indicator_code=4 (Percentage distribution of workers).
+          Returns empty for any other indicator_code or frequency. Codes 1-9. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: industry_section_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual) AND indicator_code=4 (Percentage distribution of workers).
+          Returns empty for any other indicator_code or frequency. Codes 1-22. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: nco_division_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual) AND indicator_code=4 (Percentage distribution of workers).
+          Returns empty for any other indicator_code or frequency. Codes 1-11. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: nic_group_code
+        in: query
+        description: >
+          Only for frequency_code=1 (Annual) AND indicator_code=4 (Percentage distribution of workers).
+          Returns empty for any other indicator_code or frequency. Codes 1-14. Comma-separated for multiple values.
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
       - name: limit
         in: query
-        description: Number of records per page (default 10)
+        description: >
+          Records per page (default 10). IMPORTANT: 10 is too low for most queries.
+          Use 50+ for monthly data (11 records/indicator), 100+ for quarterly/annual with breakdowns.
+          Annual indicator_code=4 can have 1000+ records across all breakdown dimensions.
         schema:
           type: integer
           pattern: ^\d+$

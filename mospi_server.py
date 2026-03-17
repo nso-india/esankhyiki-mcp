@@ -376,12 +376,16 @@ def step3_get_metadata(
                 "dataset": "PLFS",
                 "filter_values": filters,
                 "api_params": get_swagger_param_definitions("PLFS"),
-                "_note": "frequency_code selects the indicator SET, NOT time granularity. "
-                         "frequency_code=1 (Annual): Indicators 1-8 (LFPR, WPR, UR, wages, worker distribution, employment conditions). "
-                         "Already has quarterly breakdowns — use quarter_code to filter by quarter. "
-                         "frequency_code=2 (Quarterly bulletin): Different indicators for quarterly bulletin tables only. "
-                         "Use ONLY when the user explicitly asks for quarterly bulletin specific data. "
-                         "MUST pass the correct frequency_code in step4_get_data().",
+                "_note": "frequency_code selects the indicator SET, NOT just time granularity. "
+                         "CRITICAL: indicator_code MUST be a single integer — comma-separated causes 500 error for ALL frequency codes. Make one step4 call per indicator. "
+                         "frequency_code=1 (Annual, 2017-18 to 2023-24): Indicators 1=LFPR, 2=WPR, 3=UR, 4=Worker distribution, 5=Employment conditions, 6=Salaried wages, 7=Casual wages, 8=Self-employment earnings. "
+                         "Year format: YYYY-YY (e.g. 2023-24). state_code=99 for All India. Supports religion/social_category/education/weekly_status filters. "
+                         "frequency_code=2 (Quarterly bulletin, 2017-18 to 2025-26): Indicators 1-3 only. Year format: YYYY-YY. quarter_code: 2=JUL-SEP, 3=OCT-DEC, 4=JAN-MAR, 5=APR-JUN. "
+                         "Use ONLY when user explicitly asks for quarterly bulletin. "
+                         "frequency_code=3 (Monthly, 2025 onwards): Indicators 1-3 only. Year format: plain YYYY (e.g. 2025). Do NOT use YYYY-YY format. "
+                         "MUST pass the correct frequency_code in step4_get_data(). "
+                         "For latest data: use frequency_code=3 (Monthly) — most recent. "
+                         "ALWAYS use state_code=99 for All India; omitting state_code returns ALL states (far more records).",
                 "_next_step": _next,
             }
 
