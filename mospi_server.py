@@ -792,5 +792,5 @@ if __name__ == "__main__":
 
     # Run with HTTP transport for remote access
     # For stdio (local MCP clients): mcp.run()
-    # For HTTP (remote/web access): mcp.run(transport="http", port=8000)
-    mcp.run(transport="http", host="0.0.0.0", port=8000, stateless_http=True)
+    # For HTTP (remote/web access): mcp.run(transport="sse", port=8000)
+    mcp.run(transport="sse", host="0.0.0.0", port=8000)
