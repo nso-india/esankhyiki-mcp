@@ -41,30 +41,11 @@ def truncate_json(value: Any, max_size: int = MAX_ATTRIBUTE_SIZE) -> tuple[str, 
     return serialized, original_size
 
 
-def extract_client_ip(headers: dict) -> str:
-    """
-    Extract client IP from headers, checking proxy headers first.
-
-    Priority: X-Forwarded-For -> X-Real-IP -> unknown
-    """
-    # X-Forwarded-For may contain multiple IPs: "client, proxy1, proxy2"
-    x_forwarded_for = headers.get("x-forwarded-for", "")
-    if x_forwarded_for:
-        return x_forwarded_for.split(",")[0].strip()
-
-    x_real_ip = headers.get("x-real-ip", "")
-    if x_real_ip:
-        return x_real_ip.strip()
-
-    return "unknown"
-
-
 class TelemetryMiddleware(Middleware):
     """
     FastMCP middleware that captures telemetry data in OpenTelemetry spans.
 
     Creates a child span named 'tool.{tool_name}' with custom attributes:
-    - client.ip: Client IP address
     - client.user_agent: User-Agent header
     - tool.name: Name of the tool being called
     - tool.input: JSON-serialized input arguments (truncated to 4KB)
@@ -113,7 +94,7 @@ class TelemetryMiddleware(Middleware):
         return result
 
     def _add_client_info_to_span(self, context: MiddlewareContext, span) -> None:
-        """Extract and add client IP and User-Agent to the span."""
+        """Extract and add User-Agent to the span."""
         try:
             # Access FastMCP's request context for HTTP headers
             fastmcp_ctx = context.fastmcp_context
@@ -136,10 +117,6 @@ class TelemetryMiddleware(Middleware):
                 headers_dict = {k.lower(): v for k, v in headers.items()}
             else:
                 return
-
-            # Extract and set client IP
-            client_ip = extract_client_ip(headers_dict)
-            span.set_attribute("client.ip", client_ip)
 
             # Extract and set User-Agent
             user_agent = headers_dict.get("user-agent", "unknown")
