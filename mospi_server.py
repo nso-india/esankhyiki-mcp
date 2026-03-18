@@ -187,7 +187,7 @@ def transform_filters(filters: Dict[str, Any]) -> Dict[str, str]:
     return result
 
 
-@mcp.tool(name="step2_get_indicators")
+@mcp.tool(name="step2_get_indicators", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
 def step2_get_indicators(
     dataset: str,
     user_query: Optional[str] = None,
@@ -198,7 +198,7 @@ def step2_get_indicators(
     level: Optional[str] = None,
     series: Optional[str] = None,
     Format: Optional[str] = None
-):
+) -> dict:
     """
     ============================================================
     RULES (MUST follow exactly):
@@ -278,7 +278,7 @@ def step2_get_indicators(
     return result
 
 
-@mcp.tool(name="step3_get_metadata")
+@mcp.tool(name="step3_get_metadata", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
 def step3_get_metadata(
     dataset: str,
     indicator_code: Optional[int] = None,
@@ -292,7 +292,7 @@ def step3_get_metadata(
     sub_indicator_code: Optional[int] = None,
     Format: Optional[str] = None,
     type: Optional[str] = None
-):
+) -> dict:
     """
     ============================================================
     RULES (MUST follow exactly):
@@ -521,8 +521,8 @@ def step3_get_metadata(
         return {"error": str(e)}
 
 
-@mcp.tool(name="step4_get_data")
-def step4_get_data(dataset: str, filters: Dict[str, Any]):
+@mcp.tool(name="step4_get_data", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
+def step4_get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     """
     ============================================================
     RULES (MUST follow exactly):
@@ -628,8 +628,8 @@ def step4_get_data(dataset: str, filters: Dict[str, Any]):
 
 
 # Comprehensive API documentation tool
-@mcp.tool(name="step1_know_about_mospi_api")
-def step1_know_about_mospi_api():
+@mcp.tool(name="step1_know_about_mospi_api", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False})
+def step1_know_about_mospi_api() -> dict:
     """
     ============================================================
     RULES (MUST follow exactly):

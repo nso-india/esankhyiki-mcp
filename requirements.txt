@@ -1,7 +1,5 @@
-# FastMCP 3.0 beta - includes OpenTelemetry telemetry support
-# Note: 3.0 is still in beta, pin to specific version for stability
-fastmcp==3.0.0b1
-mcp==1.26.0
+# FastMCP 3.1 - structured content support for ChatGPT app compatibility
+fastmcp==3.1.1
 
 # Core dependencies
 requests>=2.31.0
