@@ -187,7 +187,7 @@ def transform_filters(filters: Dict[str, Any]) -> Dict[str, str]:
     return result
 
 
-@mcp.tool(name="step2_get_indicators", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
+@mcp.tool(name="step2_get_indicators", title="Browse Dataset Indicators", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
 def step2_get_indicators(
     dataset: str,
     user_query: Optional[str] = None,
@@ -278,7 +278,7 @@ def step2_get_indicators(
     return result
 
 
-@mcp.tool(name="step3_get_metadata", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
+@mcp.tool(name="step3_get_metadata", title="Get Filter Options & Parameters", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
 def step3_get_metadata(
     dataset: str,
     indicator_code: Optional[int] = None,
@@ -521,7 +521,7 @@ def step3_get_metadata(
         return {"error": str(e)}
 
 
-@mcp.tool(name="step4_get_data", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
+@mcp.tool(name="step4_get_data", title="Fetch Statistical Data", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
 def step4_get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     """
     ============================================================
@@ -628,7 +628,7 @@ def step4_get_data(dataset: str, filters: Dict[str, Any]) -> dict:
 
 
 # Comprehensive API documentation tool
-@mcp.tool(name="step1_know_about_mospi_api", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False})
+@mcp.tool(name="step1_know_about_mospi_api", title="Discover Available Datasets", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False})
 def step1_know_about_mospi_api() -> dict:
     """
     ============================================================
