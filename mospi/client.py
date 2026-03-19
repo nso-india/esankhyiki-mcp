@@ -35,6 +35,7 @@ class MoSPI:
             respect_retry_after_header=True,
         )
         adapter = HTTPAdapter(max_retries=retry)
+        self.session.verify = False
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
         self.api_endpoints = {
