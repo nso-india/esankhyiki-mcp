@@ -211,7 +211,7 @@ async def test_step1_know_about_mospi_api(mcp_target):
     assert "datasets" in data
     assert set(data["datasets"].keys()) == EXPECTED_DATASETS
     assert "workflow" in data
-    assert "rules" in data
+    assert "next_step" in data
 
 
 # ---------------------------------------------------------------------------

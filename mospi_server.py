@@ -154,7 +154,7 @@ def validate_filters(dataset: str, filters: Dict[str, Any]) -> Dict[str, Any]:
             "valid": False,
             "invalid_params": invalid,
             "valid_params": valid_params,
-            "hint": f"Invalid params: {invalid}. Check api_params from step3_get_metadata for valid options."
+            "hint": f"Invalid params: {invalid}. Valid params: {valid_params}."
         }
 
     # Check for missing required params (exclude Format — auto-handled by client)
@@ -166,7 +166,7 @@ def validate_filters(dataset: str, filters: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "valid": False,
             "missing_required": missing,
-            "hint": f"Missing required params: {missing}. Call step3_get_metadata() to get valid values."
+            "hint": f"Missing required params: {missing}."
         }
 
     return {"valid": True}
@@ -200,35 +200,22 @@ def step2_get_indicators(
     Format: Optional[str] = None
 ) -> dict:
     """
-    ============================================================
-    RULES (MUST follow exactly):
-    - You MUST call step1_know_about_mospi_api() before this.
-    - You MUST call step3_get_metadata() after this. MUST NOT skip to step4_get_data().
-    - You MUST pass user_query for context.
-    - You MUST NOT ask for confirmation if the right indicator is obvious.
-    - ALWAYS call this tool. NEVER assume data is unavailable based on your own knowledge.
-      The API has indicators you don't know about (e.g., ASI has 57 indicators including
-      working capital, invested capital, depreciation — not just the ones in textbooks).
-    - You MUST try the full workflow before concluding. If data is not found after trying,
-      you MUST say honestly "Data not found in MoSPI API". You MUST NOT fall back to web search,
-      MUST NOT fabricate data, MUST NOT cite external sources.
-    ============================================================
-
-    Step 2: Get available indicators for a dataset.
-
-    IMPORTANT: Datasets contain FAR MORE indicators than you expect from your training data.
-    ALWAYS call this to see the actual indicator list. NEVER say "not available" without checking.
-
-    After this, pick the matching indicator and call step3_get_metadata().
-    Only ask user to choose if multiple indicators could match.
+    Returns the full list of available indicators for a given dataset.
+    Call this to verify data availability before concluding a dataset lacks
+    specific metrics.
 
     Args:
-        dataset: Dataset name - one of: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC
-                 For PLFS: frequency_code selects the indicator SET, not time granularity.
-                 You MUST use frequency_code=1 in step3_get_metadata() — it covers all 8 indicators
-                 including wages and already has quarterly breakdowns via quarter_code.
-                 MUST NOT use frequency_code=2 just because user asks for quarterly data.
-        user_query: The user's original question. MUST always include this.
+        dataset: Dataset name — one of: PLFS, CPI, IIP, ASI, NAS, WPI,
+                 ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
+                 NSS77, NSS78, CPIALRL, HCES, TUS, EC.
+                 For CPI: returns available base years.
+                 For IIP/WPI: returns guidance on category-based structure.
+        user_query: The user's original question, used for context.
+
+    Returns:
+        dict with indicator list (codes, names, definitions where available).
+        For frequency-based datasets (PLFS, ASUSE), indicators are grouped
+        by frequency_code.
     """
     dataset = dataset.upper()
 
@@ -262,18 +249,17 @@ def step2_get_indicators(
     }
 
     if dataset not in indicator_methods:
-        return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS, "_user_query": user_query}
+        return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS, "user_query": user_query}
 
     result = indicator_methods[dataset]()
     result = enrich_indicators(result, dataset)
 
-    result["_user_query"] = user_query
-    result["_next_step"] = "Call step3_get_metadata() with the matching indicator and required dataset params. MUST NOT skip to step4_get_data."
-    result["_retry_hint"] = (
-        "If none of the indicators above match the user's query, you may have picked the WRONG dataset. "
-        "Similar datasets overlap: IIP (production index/growth rates) vs ASI (factory financials like capital, wages, GVA). "
-        "CPI (consumer inflation) vs WPI (wholesale inflation). "
-        "Go back to step1_know_about_mospi_api() and try a different dataset."
+    result["user_query"] = user_query
+    result["next_step"] = "step3_get_metadata(dataset, indicator_code) to retrieve valid filter values."
+    result["related_datasets"] = (
+        "Datasets with overlapping coverage: "
+        "IIP (production index, growth rates) vs ASI (factory financials: capital, wages, GVA). "
+        "CPI (consumer inflation) vs WPI (wholesale inflation)."
     )
     return result
 
@@ -294,42 +280,37 @@ def step3_get_metadata(
     type: Optional[str] = None
 ) -> dict:
     """
-    ============================================================
-    RULES (MUST follow exactly):
-    - You MUST call this before step4_get_data(). MUST NOT skip this step.
-    - You MUST use the filter values returned here in step4_get_data(). MUST NOT guess codes.
-    - If user asked for a breakdown that's not available, tell them what IS available.
-    - You MUST try the full workflow before concluding. If data is not found after trying,
-      you MUST say honestly "Data not found in MoSPI API". You MUST NOT fall back to web search,
-      MUST NOT fabricate data, MUST NOT cite external sources.
-    ============================================================
-
-    Step 3: Get available filter options for a dataset/indicator.
-
-    Returns all valid filter values (states, years, quarters, etc.) to use in step4_get_data().
-
-    MUST NOT pass params that don't belong to this function.
-    "Format" is NOT valid here (Format is for step4_get_data only). "series" is valid for NAS and CPI only.
+    Returns the valid filter values (states, years, quarters, etc.) for a
+    given dataset and indicator. Use the returned values when calling
+    step4_get_data — filter codes are dataset-specific and cannot be inferred.
 
     Args:
-        dataset: Dataset name - one of: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC
-        indicator_code: REQUIRED for PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC. MUST NOT pass for CPI, IIP, ASI, WPI.
-                       (For RBI: indicator_code is mapped to sub_indicator_code internally for consistency)
-        frequency_code: REQUIRED for PLFS and ASUSE. MUST NOT pass for CPI, IIP, ASI, WPI.
-                        For PLFS: 1=Annual (8 indicators), 2=Quarterly bulletin, 3=Monthly.
-                        For ASUSE: 1=Annual (35 indicators), 2=Quarterly (8 indicators including market establishments).
-                        Use frequency_code=2 for ASUSE quarterly/recent data.
-        base_year: REQUIRED for CPI ("2024"/"2012"/"2010"), IIP ("2011-12"/"2004-05"/"1993-94"), NAS ("2022-23"/"2011-12"). MUST NOT pass for PLFS, ASI, WPI.
-        level: REQUIRED for CPI ("Group"/"Item"). MUST NOT pass for other datasets.
-        frequency: REQUIRED for IIP ("Annually"/"Monthly"). MUST NOT pass for other datasets.
-        classification_year: REQUIRED for ASI ("2008"/"2004"/"1998"/"1987"). MUST NOT pass for other datasets.
-        series: For CPI and NAS only ("Current"/"Back"). MUST NOT pass for other datasets.
-        use_of_energy_balance_code: For ENERGY only (1=Supply, 2=Consumption). MUST NOT pass for other datasets.
+        dataset: Dataset name (same values as step2_get_indicators).
+        indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
+                        NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC.
+                        Not applicable for: CPI, IIP, ASI, WPI.
+                        For RBI, this maps to sub_indicator_code internally.
+        frequency_code: Required for PLFS and ASUSE.
+                        PLFS: 1=Annual, 2=Quarterly bulletin, 3=Monthly.
+                        ASUSE: 1=Annual, 2=Quarterly.
+        base_year: Required for CPI ("2024"/"2012"/"2010"),
+                   IIP ("2011-12"/"2004-05"/"1993-94"),
+                   NAS ("2022-23"/"2011-12").
+        level: Required for CPI ("Group"/"Item").
+        frequency: Required for IIP ("Annually"/"Monthly").
+        classification_year: Required for ASI ("2008"/"2004"/"1998"/"1987").
+        series: For CPI and NAS only ("Current"/"Back").
+        use_of_energy_balance_code: For ENERGY only (1=Supply, 2=Consumption).
+
+    Returns:
+        dict with 'filter_values' (valid codes for each parameter),
+        'api_params' (parameter definitions), and dataset-specific
+        parameter documentation.
     """
     dataset = dataset.upper()
 
     try:
-        _next = "Call step4_get_data(dataset, filters) using ONLY the filter values returned above. MUST NOT guess any codes."
+        _next = "step4_get_data(dataset, filters) using the filter values returned above."
 
         if dataset == "CPI":
             swagger_key = "CPI_ITEM" if (level or "Group") == "Item" else "CPI_GROUP"
@@ -339,11 +320,11 @@ def step3_get_metadata(
                 series_code=series or "Current"
             )
             result["api_params"] = get_swagger_param_definitions(swagger_key)
-            result["_next_step"] = _next
-            result["_retry_hint"] = (
-                f"If requested item/year not found in base_year='{base_year or '2024'}', "
-                "try OTHER base years ('2024', '2012', '2010') before concluding data unavailable. "
-                "Different base years have different item structures and time coverage."
+            result["next_step"] = _next
+            result["base_year_coverage"] = (
+                f"Current base_year='{base_year or '2024'}'. "
+                "Other available base years: '2024', '2012', '2010'. "
+                "Each base year has different item structures and time coverage."
             )
             return result
 
@@ -351,19 +332,19 @@ def step3_get_metadata(
             swagger_key = "IIP_MONTHLY" if (frequency or "Annually") == "Monthly" else "IIP_ANNUAL"
             result = mospi.get_iip_filters(base_year=base_year or "2011-12", frequency=frequency or "Annually")
             result["api_params"] = get_swagger_param_definitions(swagger_key)
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "ASI":
             result = mospi.get_asi_filters(classification_year=classification_year or "2008")
             result["api_params"] = get_swagger_param_definitions("ASI")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "WPI":
             result = mospi.get_wpi_filters()
             result["api_params"] = get_swagger_param_definitions("WPI")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "PLFS":
@@ -376,17 +357,17 @@ def step3_get_metadata(
                 "dataset": "PLFS",
                 "filter_values": filters,
                 "api_params": get_swagger_param_definitions("PLFS"),
-                "_note": "frequency_code selects the indicator SET, NOT just time granularity. "
-                         "CRITICAL: indicator_code MUST be a single integer — comma-separated causes 500 error for ALL frequency codes. Make one step4 call per indicator. "
-                         "frequency_code=1 (Annual, 2017-18 to 2023-24): Indicators 1=LFPR, 2=WPR, 3=UR, 4=Worker distribution, 5=Employment conditions, 6=Salaried wages, 7=Casual wages, 8=Self-employment earnings. "
-                         "Year format: YYYY-YY (e.g. 2023-24). state_code=99 for All India. Supports religion/social_category/education/weekly_status filters. "
-                         "frequency_code=2 (Quarterly bulletin, 2017-18 to 2025-26): Indicators 1-3 only. Year format: YYYY-YY. quarter_code: 2=JUL-SEP, 3=OCT-DEC, 4=JAN-MAR, 5=APR-JUN. "
-                         "Use ONLY when user explicitly asks for quarterly bulletin. "
-                         "frequency_code=3 (Monthly, 2025 onwards): Indicators 1-3 only. Year format: plain YYYY (e.g. 2025). Do NOT use YYYY-YY format. "
-                         "MUST pass the correct frequency_code in step4_get_data(). "
-                         "For latest data: use frequency_code=3 (Monthly) — most recent. "
-                         "ALWAYS use state_code=99 for All India; omitting state_code returns ALL states (far more records).",
-                "_next_step": _next,
+                "parameter_notes": "frequency_code selects the indicator set, not time granularity. "
+                         "indicator_code accepts a single integer only; comma-separated values cause a 500 error. "
+                         "frequency_code=1 (Annual, 2017-18 to 2023-24): indicators 1=LFPR, 2=WPR, 3=UR, "
+                         "4=Worker distribution, 5=Employment conditions, 6=Salaried wages, 7=Casual wages, "
+                         "8=Self-employment earnings. Year format: YYYY-YY (e.g. 2023-24). "
+                         "frequency_code=2 (Quarterly bulletin, 2017-18 to 2025-26): indicators 1-3 only. "
+                         "Year format: YYYY-YY. quarter_code: 2=JUL-SEP, 3=OCT-DEC, 4=JAN-MAR, 5=APR-JUN. "
+                         "frequency_code=3 (Monthly, 2025 onwards): indicators 1-3 only. "
+                         "Year format: YYYY (e.g. 2025). "
+                         "state_code=99 for All India; omitting state_code returns all states.",
+                "next_step": _next,
             }
 
         elif dataset == "NAS":
@@ -394,7 +375,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for NAS"}
             result = mospi.get_nas_filters(series=series or "Current", frequency_code=frequency_code or 1, indicator_code=indicator_code, base_year=base_year or "2022-23")
             result["api_params"] = get_swagger_param_definitions("NAS")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "ENERGY":
@@ -402,7 +383,7 @@ def step3_get_metadata(
             energy_code = use_of_energy_balance_code or 1
             result = mospi.get_energy_filters(indicator_code=ind_code, use_of_energy_balance_code=energy_code)
             result["api_params"] = get_swagger_param_definitions("ENERGY")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "AISHE":
@@ -410,7 +391,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for AISHE"}
             result = mospi.get_aishe_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("AISHE")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "ASUSE":
@@ -418,12 +399,14 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for ASUSE"}
             result = mospi.get_asuse_filters(indicator_code=indicator_code, frequency_code=frequency_code or 1)
             result["api_params"] = get_swagger_param_definitions("ASUSE")
-            result["_note"] = (
-                "IMPORTANT: Do NOT include frequency_code in step4_get_data() - indicator_code already determines annual vs quarterly. "
-                "MUTUALLY EXCLUSIVE FILTERS: Do NOT use sector_code AND broad_activity_category_code together. "
-                "The data has EITHER sector breakdown (Rural/Urban/Combined) OR activity breakdown (Manufacturing/Trade/Services/Others), not both."
+            result["parameter_notes"] = (
+                "frequency_code is not a parameter for step4_get_data; the indicator_code "
+                "already determines annual vs quarterly data. "
+                "sector_code and broad_activity_category_code are mutually exclusive: "
+                "data has either sector breakdown (Rural/Urban/Combined) or activity "
+                "breakdown (Manufacturing/Trade/Services/Others), not both."
             )
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "GENDER":
@@ -431,7 +414,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for GENDER"}
             result = mospi.get_gender_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("GENDER")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "NFHS":
@@ -439,7 +422,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for NFHS"}
             result = mospi.get_nfhs_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("NFHS")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "ENVSTATS":
@@ -447,7 +430,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for ENVSTATS"}
             result = mospi.get_envstats_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("ENVSTATS")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "RBI":
@@ -457,7 +440,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code (or sub_indicator_code) is required for RBI"}
             result = mospi.get_rbi_filters(sub_indicator_code=rbi_indicator)
             result["api_params"] = get_swagger_param_definitions("RBI")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "NSS77":
@@ -465,7 +448,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for NSS77"}
             result = mospi.get_nss77_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("NSS77")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "NSS78":
@@ -473,7 +456,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for NSS78"}
             result = mospi.get_nss78_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("NSS78")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "CPIALRL":
@@ -481,7 +464,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for CPIALRL"}
             result = mospi.get_cpialrl_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("CPIALRL")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "HCES":
@@ -489,7 +472,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for HCES"}
             result = mospi.get_hces_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("HCES")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "TUS":
@@ -497,7 +480,7 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for TUS"}
             result = mospi.get_tus_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("TUS")
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         elif dataset == "EC":
@@ -505,13 +488,15 @@ def step3_get_metadata(
                 return {"error": "indicator_code is required for EC. 1=EC6 (2013-14), 2=EC5 (2005), 3=EC4 (1998)"}
             result = mospi.get_ec_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("EC")
-            result["_mode_note"] = (
-                "EC supports two query modes — pass mode in step4_get_data: "
-                "mode='ranking' (default): calls filterDistrict, returns top/bottom N districts by establishment count. Use top5opt to control N. "
-                "mode='detail': calls submitForm, returns 20 row-level records per page with social group, NIC description, workers breakdown. Use pageNum to paginate. "
-                "EC5 does not support activity filtering (omit activity for EC5)."
+            result["query_modes"] = (
+                "EC supports two query modes via the 'mode' parameter in step4_get_data: "
+                "mode='ranking' (default): returns top/bottom N districts by establishment count. "
+                "Control N with top5opt parameter. "
+                "mode='detail': returns 20 row-level records per page with social group, NIC "
+                "description, and workers breakdown. Use pageNum to paginate. "
+                "EC5 (indicator_code=2) does not support activity filtering."
             )
-            result["_next_step"] = _next
+            result["next_step"] = _next
             return result
 
         else:
@@ -524,30 +509,28 @@ def step3_get_metadata(
 @mcp.tool(name="step4_get_data", title="Fetch Statistical Data", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
 def step4_get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     """
-    ============================================================
-    RULES (MUST follow exactly):
-    - You MUST have called step3_get_metadata() before this. No exceptions.
-    - You MUST use ONLY the filter values returned by step3_get_metadata().
-    - You MUST NOT guess, infer, or assume any filter codes.
-      Filter codes are non-obvious and arbitrary — guessing WILL produce wrong results.
-    - You MUST include all required params (marked required in api_params).
-    - You MUST try the full workflow before concluding. If data is not found after trying,
-      you MUST say honestly "Data not found in MoSPI API". You MUST NOT fall back to web search,
-      MUST NOT fabricate data, MUST NOT cite external sources.
+    Fetches statistical data from a MoSPI dataset using filter values
+    obtained from step3_get_metadata.
 
-    Before calling, verify:
-    - Did I call step3_get_metadata() for this dataset? If no → call it first.
-    - Are all filter values from step3_get_metadata(), not guessed? If no → fix them.
-    ============================================================
-
-    Step 4: Fetch data from a MoSPI dataset.
+    Filter codes are dataset-specific and non-obvious. Use only the values
+    returned by step3_get_metadata to avoid errors.
 
     Args:
-        dataset: Dataset name (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC)
-        filters: Key-value pairs using 'id' values from step3_get_metadata().
-                 PLFS MUST include frequency_code (1=Annual, 2=Quarterly, 3=Monthly).
-                 NAS MUST include base_year ("2022-23" or "2011-12").
-                 Pass limit (e.g., "50", "100") if you expect more than 10 records.
+        dataset: Dataset name (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY,
+                 AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
+                 NSS78, CPIALRL, HCES, TUS, EC).
+                 CPI auto-routes to Group or Item endpoint based on
+                 whether filters contain item_code.
+                 IIP auto-routes to Annual or Monthly based on
+                 whether filters contain month_code.
+        filters: Key-value pairs from step3_get_metadata filter_values.
+                 PLFS requires frequency_code (1=Annual, 2=Quarterly, 3=Monthly).
+                 NAS requires base_year ("2022-23" or "2011-12").
+                 Pass limit (e.g., "50") to retrieve more than 10 records.
+
+    Returns:
+        dict with statistical records, or an error/validation message
+        if parameters are invalid.
     """
     dataset = dataset.upper()
 
@@ -614,13 +597,12 @@ def step4_get_data(dataset: str, filters: Dict[str, Any]) -> dict:
 
     # If no data found, hint to retry with different filters
     if isinstance(result, dict) and result.get("msg") == "No Data Found":
-        result["_hint"] = (
-            "No data for this filter combination. Try these fixes IN ORDER: "
-            "1) MUTUALLY EXCLUSIVE FILTERS: Remove conflicting filters (e.g., ASUSE: sector_code + broad_activity_category_code). "
-            "2) COMMA-SEPARATED VALUES: Try single value instead (e.g., '1' not '1,2,3'). "
-            "3) Alternative params: Swap param names (e.g., broad_industry_work_code vs nic_group_code). "
-            "4) Simplify: Remove optional filters one at a time. "
-            "5) WRONG DATASET: If none work, try a DIFFERENT similar dataset - pick one yourself and retry full workflow from step 1."
+        result["troubleshooting"] = (
+            "Common causes of empty results: "
+            "1) Mutually exclusive filters (e.g., ASUSE: sector_code and broad_activity_category_code cannot be combined). "
+            "2) Comma-separated values: some parameters accept only single values. "
+            "3) Parameter name variants (e.g., broad_industry_work_code vs nic_group_code). "
+            "4) Optional filters narrowing results too much."
         )
 
     return result
@@ -631,34 +613,18 @@ def step4_get_data(dataset: str, filters: Dict[str, Any]) -> dict:
 @mcp.tool(name="step1_know_about_mospi_api", title="Discover Available Datasets", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False})
 def step1_know_about_mospi_api() -> dict:
     """
-    ============================================================
-    RULES (MUST follow exactly):
-    - NEVER use your own knowledge about what data MoSPI publishes. These datasets contain
-      MORE indicators than you expect. ALWAYS call step2_get_indicators() to see the actual list.
-    - You MUST NOT say data is "not available", "not directly reported", "needs to be computed",
-      or "requires unit-level access" without FIRST calling step2_get_indicators() and step3_get_metadata()
-      to verify. Your training data about MoSPI is outdated — the API has indicators you don't know about.
-    - You MUST follow this workflow in order:
-      1. step1_know_about_mospi_api() → find dataset (MANDATORY first step)
-      2. step2_get_indicators(dataset) → list indicators
-      3. step3_get_metadata(dataset, indicator_code) → get filter values (MANDATORY)
-      4. step4_get_data(dataset, filters) → fetch data (ONLY after step 3)
-    - You MUST NOT skip step 3. Violations produce wrong results.
-    - You MUST NOT ask "Shall I proceed?" if the query is specific enough.
-    - ALWAYS attempt to fetch data. NEVER refuse or explain limitations without trying first.
-    - You MUST try the full workflow before concluding. If data is not found after trying,
-      you MUST say honestly "Data not found in MoSPI API". You MUST NOT fall back to web search,
-      MUST NOT fabricate data, MUST NOT cite external sources.
-    ============================================================
+    Returns an overview of all 19 MoSPI statistical datasets with descriptions and coverage.
+    Use this to identify which dataset contains the indicators relevant to a query.
 
-    Step 1: Get overview of all 19 datasets to find the right one for your query.
+    This is the entry point of a four-step workflow:
+      1. step1_know_about_mospi_api() — identify the dataset
+      2. step2_get_indicators(dataset) — list available indicators
+      3. step3_get_metadata(dataset, indicator_code) — retrieve valid filter values
+      4. step4_get_data(dataset, filters) — fetch the data
 
-    MUST call this first before any other tool.
-    Available: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC
-
-    When to ask vs fetch:
-    - VAGUE query (e.g., "inflation data") → ask user to clarify
-    - SPECIFIC query (e.g., "unemployment rate 2023") → fetch directly, NEVER explain why it might not exist
+    Returns:
+        dict with 'datasets' (name, description, use_for for each dataset)
+        and 'workflow' (the four-step sequence).
     """
     return {
         "total_datasets": 19,
@@ -676,12 +642,12 @@ def step1_know_about_mospi_api() -> dict:
             "IIP": {
                 "name": "Index of Industrial Production",
                 "description": "Category-based structure with base years (1993-94, 2004-05, 2011-12) and frequency options (monthly/annual). Measures industrial output across manufacturing, mining, and electricity sectors using use-based classification (basic goods, capital goods, intermediate goods, consumer durables/non-durables).",
-                "use_for": "IIP index, industrial production index, manufacturing index, mining/electricity index, growth rates, textiles, metals, vehicles, consumer durables, capital goods — use for ANY query about IIP or industrial production index"
+                "use_for": "IIP index, industrial production index, manufacturing index, mining/electricity index, growth rates, textiles, metals, vehicles, consumer durables, capital goods"
             },
             "ASI": {
                 "name": "Annual Survey of Industries",
                 "description": "57 indicators providing deep factory-sector analytics: capital structure (fixed/working capital, investments), production metrics (output, inputs, value added), employment details (workers by gender, contract status, mandays), wage components (salaries, bonuses, employer contributions), fuel consumption patterns, and profitability measures. Uses NIC classification across 4 classification years (1987-2008).",
-                "use_for": "Factory-level financials: working capital, fixed capital, wages, employment counts, GVA, fuel consumption, profitability — NOT for production index (use IIP for index)"
+                "use_for": "Factory-level financials: working capital, fixed capital, wages, employment counts, GVA, fuel consumption, profitability (distinct from IIP which covers production indices)"
             },
             "NAS": {
                 "name": "National Accounts Statistics",
@@ -760,21 +726,12 @@ def step1_know_about_mospi_api() -> dict:
             },
         },
         "workflow": [
-            "1. step1_know_about_mospi_api() → find dataset (MANDATORY first step)",
-            "2. step2_get_indicators(dataset) → list indicators",
-            "3. step3_get_metadata(dataset, indicator_code) → get filter values (MANDATORY before step 4)",
-            "4. step4_get_data(dataset, filters) → fetch data (MUST use values from step 3, MUST NOT guess)"
+            "1. step1_know_about_mospi_api() — identify the relevant dataset",
+            "2. step2_get_indicators(dataset) — list available indicators",
+            "3. step3_get_metadata(dataset, indicator_code) — retrieve valid filter values",
+            "4. step4_get_data(dataset, filters) — fetch the data using filter values from step 3"
         ],
-        "rules": [
-            "NEVER claim data is unavailable, needs computation, or requires special access — ALWAYS call step2_get_indicators() first to check. Your knowledge about MoSPI is outdated; the API has more indicators than you expect.",
-            "MUST NOT skip step3_get_metadata() — filter codes are arbitrary and differ across datasets",
-            "MUST NOT guess filter codes — use ONLY values from step3_get_metadata()",
-            "MUST include frequency_code for PLFS in step4_get_data()",
-            "Comma-separated values work for multiple codes (e.g., '1,2,3')",
-            "ALWAYS attempt to fetch data. NEVER explain limitations or refuse without trying the full workflow first.",
-            "You MUST try the full workflow before concluding. If data is not found after trying, you MUST say honestly 'Data not found in MoSPI API'. You MUST NOT fall back to web search, MUST NOT fabricate data, MUST NOT cite external sources."
-        ],
-        "_next_step": "Call step2_get_indicators(dataset) with the dataset that matches the user's query."
+        "next_step": "step2_get_indicators(dataset) to list available indicators for the chosen dataset."
     }
 
 if __name__ == "__main__":
