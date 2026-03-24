@@ -196,10 +196,10 @@ class MoSPI:
             # Add guidance about base years
             result["_note"] = (
                 "CPI has multiple base years with different data coverage. "
-                "DEFAULT to latest base_year (2024) for recent data unless user specifies otherwise. "
+                "Latest base_year is '2024'. "
                 "base_year='2024': Latest data (2026+), new hierarchical structure (division/class/sub_class). "
                 "base_year='2012': Data up to 2025. base_year='2010': Historical data. "
-                "If data not found in default base year, try others before concluding unavailable."
+                "Each base year covers a different time period."
             )
             return result
         except requests.RequestException as e:
@@ -338,7 +338,7 @@ class MoSPI:
             result["_note"] = (
                 "NAS requires base_year in get_metadata and get_data. "
                 "Available base years: '2022-23' (latest) and '2011-12'. "
-                "DEFAULT to '2022-23' for recent data unless user specifies otherwise. "
+                "Latest base_year is '2022-23'. "
                 "Pass base_year along with series, frequency_code, and indicator_code."
             )
             return result
@@ -970,7 +970,7 @@ class MoSPI:
                 "statusCode": True,
                 "_note": (
                     "state is required. All other filters are optional. "
-                    "In step4, pass mode='ranking' for top/bottom N districts (uses top5opt). "
+                    "In get_data, pass mode='ranking' for top/bottom N districts (uses top5opt). "
                     "Pass mode='detail' for row-level data with social group, NIC description, workers (uses pageNum, 20 rows/page)."
                 ),
             }

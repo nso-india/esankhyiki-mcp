@@ -205,7 +205,7 @@ async def test_list_tools(mcp_target):
 
 
 async def test_list_datasets(mcp_target):
-    """step1: API overview returns all 19 datasets and workflow instructions."""
+    """list_datasets: API overview returns all 19 datasets and workflow instructions."""
     data = await call(mcp_target, "list_datasets", {})
     assert isinstance(data, dict)
     assert "datasets" in data
@@ -215,13 +215,13 @@ async def test_list_datasets(mcp_target):
 
 
 # ---------------------------------------------------------------------------
-# Step 2: get_indicators — one test per dataset
+# get_indicators — one test per dataset
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.parametrize("dataset,step3_kwargs,step4_filters", DATASETS)
 async def test_get_indicators(mcp_target, dataset, step3_kwargs, step4_filters):
-    """step2: get_indicators returns non-empty indicator data for each dataset."""
+    """get_indicators: returns non-empty indicator data for each dataset."""
     data = await call(
         mcp_target,
         "get_indicators",
@@ -231,17 +231,17 @@ async def test_get_indicators(mcp_target, dataset, step3_kwargs, step4_filters):
     assert "error" not in data
     # Response should contain dataset-specific content beyond internal keys
     content_keys = set(data.keys()) - _INTERNAL_KEYS
-    assert content_keys, f"{dataset}: step2 returned only internal keys, no indicator data"
+    assert content_keys, f"{dataset}: get_indicators returned only internal keys, no indicator data"
 
 
 # ---------------------------------------------------------------------------
-# Step 3: get_metadata — one test per dataset
+# get_metadata — one test per dataset
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.parametrize("dataset,step3_kwargs,step4_filters", DATASETS)
 async def test_get_metadata(mcp_target, dataset, step3_kwargs, step4_filters):
-    """step3: get_metadata returns filter options and API param definitions."""
+    """get_metadata: returns filter options and API param definitions."""
     data = await call(
         mcp_target,
         "get_metadata",
@@ -249,20 +249,20 @@ async def test_get_metadata(mcp_target, dataset, step3_kwargs, step4_filters):
     )
     assert isinstance(data, dict)
     assert "error" not in data
-    # Every step3 response should include swagger param definitions
-    assert "api_params" in data, f"{dataset}: step3 missing 'api_params'"
+    # Every get_metadata response should include swagger param definitions
+    assert "api_params" in data, f"{dataset}: get_metadata missing 'api_params'"
     assert isinstance(data["api_params"], list)
     assert len(data["api_params"]) > 0, f"{dataset}: api_params is empty"
 
 
 # ---------------------------------------------------------------------------
-# Step 4: get_data — one test per dataset
+# get_data — one test per dataset
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.parametrize("dataset,step3_kwargs,step4_filters", DATASETS)
 async def test_get_data(mcp_target, dataset, step3_kwargs, step4_filters):
-    """step4: get_data returns records (not 'No Data Found') for each dataset."""
+    """get_data: returns records (not 'No Data Found') for each dataset."""
     data = await call(
         mcp_target,
         "get_data",
@@ -280,7 +280,7 @@ async def test_get_data(mcp_target, dataset, step3_kwargs, step4_filters):
 
 
 async def test_get_indicators_invalid_dataset(mcp_target):
-    """step2: invalid dataset name returns an error with valid_datasets hint."""
+    """get_indicators: invalid dataset name returns an error with valid_datasets hint."""
     data = await call(
         mcp_target,
         "get_indicators",
@@ -291,7 +291,7 @@ async def test_get_indicators_invalid_dataset(mcp_target):
 
 
 async def test_get_metadata_missing_required_indicator(mcp_target):
-    """step3: omitting indicator_code for a dataset that requires it returns an error."""
+    """get_metadata: omitting indicator_code for a dataset that requires it returns an error."""
     data = await call(
         mcp_target,
         "get_metadata",
@@ -301,7 +301,7 @@ async def test_get_metadata_missing_required_indicator(mcp_target):
 
 
 async def test_get_data_unknown_filter_param(mcp_target):
-    """step4: passing an unknown filter param returns a validation error."""
+    """get_data: passing an unknown filter param returns a validation error."""
     data = await call(
         mcp_target,
         "get_data",

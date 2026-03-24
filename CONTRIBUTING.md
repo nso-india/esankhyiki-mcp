@@ -57,8 +57,8 @@ Add a `pytest.param` entry to the `DATASETS` list in `tests/test_mcp_server.py`:
 ```python
 pytest.param(
     "YOUR_DATASET",
-    {"indicator_code": 1},                          # step3_kwargs
-    {"indicator_code": "1", "limit": "1"},           # step4_filters
+    {"indicator_code": 1},                          # get_metadata kwargs
+    {"indicator_code": "1", "limit": "1"},           # get_data filters
     id="YOUR_DATASET",
 ),
 ```

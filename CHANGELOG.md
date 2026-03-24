@@ -21,9 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Total datasets: 7 → 19
-- Tool names: `1_know_about_mospi_api` → `step1_know_about_mospi_api` (all 4 tools renamed)
-- step1 now returns overview of all 19 datasets
-- step2/step3/step4 updated to route all new datasets
+- Tool names: `1_know_about_mospi_api` → `step1_know_about_mospi_api` → `list_datasets` (all 4 tools renamed)
+- list_datasets now returns overview of all 19 datasets
+- get_indicators/get_metadata/get_data updated to route all new datasets
 - Swagger specs corrected for existing datasets (ASI, IIP, PLFS, WPI, Energy, NAS)
 - README updated with full dataset table
 
@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public release
 - 7 datasets: PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY
-- 4-step MCP tool workflow (`step1_know_about_mospi_api`, `step2_get_indicators`, `step3_get_metadata`, `step4_get_data`)
+- 4-step MCP tool workflow (`list_datasets`, `get_indicators`, `get_metadata`, `get_data`)
 - Swagger-driven parameter validation
 - OpenTelemetry integration for observability
 - Docker and docker-compose deployment
