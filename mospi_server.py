@@ -172,6 +172,30 @@ def validate_filters(dataset: str, filters: Dict[str, Any]) -> Dict[str, Any]:
     return {"valid": True}
 
 
+def _check_empty_metadata(result, dataset, **params):
+    """Annotate metadata result if upstream returned empty filter values."""
+    data = result.get("filter_values", result.get("data", {}))
+    if isinstance(data, dict):
+        inner = data.get("data", data)
+        if isinstance(inner, dict):
+            values = [v for v in inner.values() if isinstance(v, list)]
+            is_empty = (not inner) or (values and all(len(v) == 0 for v in values))
+        else:
+            is_empty = False
+    else:
+        is_empty = False
+
+    if is_empty:
+        param_str = ", ".join(f"{k}={v}" for k, v in params.items() if v is not None)
+        result["troubleshooting"] = (
+            f"The upstream API returned empty filter values for {dataset} "
+            f"with {param_str}. This usually means the parameter values are "
+            "out of range. Check get_indicators() for valid codes."
+        )
+        result["suggestion"] = f"Call get_indicators(dataset='{dataset}') to verify valid indicator codes."
+    return result
+
+
 def _safe_int(value, param_name: str):
     """Validate and coerce a value to int. Returns (int_value, None) or (None, error_dict)."""
     if value is None:
@@ -350,20 +374,20 @@ def get_metadata(
                 "Other available base years: '2024', '2012', '2010'. "
                 "Each base year has different item structures and time coverage."
             )
-            return result
+            return _check_empty_metadata(result, dataset, base_year=base_year, level=level, series=series)
 
         elif dataset == "IIP":
             swagger_key = "IIP_MONTHLY" if (frequency or "Annually") == "Monthly" else "IIP_ANNUAL"
             result = mospi.get_iip_filters(base_year=base_year or "2011-12", frequency=frequency or "Annually")
             result["api_params"] = get_swagger_param_definitions(swagger_key)
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, base_year=base_year, frequency=frequency)
 
         elif dataset == "ASI":
             result = mospi.get_asi_filters(classification_year=classification_year or "2008")
             result["api_params"] = get_swagger_param_definitions("ASI")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, classification_year=classification_year)
 
         elif dataset == "WPI":
             result = mospi.get_wpi_filters()
@@ -377,7 +401,7 @@ def get_metadata(
 
             filters = mospi.get_plfs_filters(indicator_code=indicator_code, frequency_code=frequency_code or 1)
 
-            return {
+            result = {
                 "dataset": "PLFS",
                 "filter_values": filters,
                 "api_params": get_swagger_param_definitions("PLFS"),
@@ -393,6 +417,7 @@ def get_metadata(
                          "state_code=99 for All India; omitting state_code returns all states.",
                 "next_step": _next,
             }
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, frequency_code=frequency_code)
 
         elif dataset == "NAS":
             if indicator_code is None:
@@ -400,7 +425,7 @@ def get_metadata(
             result = mospi.get_nas_filters(series=series or "Current", frequency_code=frequency_code or 1, indicator_code=indicator_code, base_year=base_year or "2022-23")
             result["api_params"] = get_swagger_param_definitions("NAS")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, base_year=base_year, frequency_code=frequency_code)
 
         elif dataset == "ENERGY":
             ind_code = indicator_code or 1
@@ -408,7 +433,7 @@ def get_metadata(
             result = mospi.get_energy_filters(indicator_code=ind_code, use_of_energy_balance_code=energy_code)
             result["api_params"] = get_swagger_param_definitions("ENERGY")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, use_of_energy_balance_code=use_of_energy_balance_code)
 
         elif dataset == "AISHE":
             if indicator_code is None:
@@ -416,7 +441,7 @@ def get_metadata(
             result = mospi.get_aishe_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("AISHE")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         elif dataset == "ASUSE":
             if indicator_code is None:
@@ -431,7 +456,7 @@ def get_metadata(
                 "breakdown (Manufacturing/Trade/Services/Others), not both."
             )
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, frequency_code=frequency_code)
 
         elif dataset == "GENDER":
             if indicator_code is None:
@@ -439,7 +464,7 @@ def get_metadata(
             result = mospi.get_gender_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("GENDER")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         elif dataset == "NFHS":
             if indicator_code is None:
@@ -447,7 +472,7 @@ def get_metadata(
             result = mospi.get_nfhs_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("NFHS")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         elif dataset == "ENVSTATS":
             if indicator_code is None:
@@ -455,7 +480,7 @@ def get_metadata(
             result = mospi.get_envstats_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("ENVSTATS")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         elif dataset == "RBI":
             # RBI uses sub_indicator_code, but accept indicator_code for consistency
@@ -465,7 +490,7 @@ def get_metadata(
             result = mospi.get_rbi_filters(sub_indicator_code=rbi_indicator)
             result["api_params"] = get_swagger_param_definitions("RBI")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         elif dataset == "NSS77":
             if indicator_code is None:
@@ -473,7 +498,7 @@ def get_metadata(
             result = mospi.get_nss77_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("NSS77")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         elif dataset == "NSS78":
             if indicator_code is None:
@@ -481,7 +506,7 @@ def get_metadata(
             result = mospi.get_nss78_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("NSS78")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         elif dataset == "CPIALRL":
             if indicator_code is None:
@@ -489,7 +514,7 @@ def get_metadata(
             result = mospi.get_cpialrl_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("CPIALRL")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         elif dataset == "HCES":
             if indicator_code is None:
@@ -497,7 +522,7 @@ def get_metadata(
             result = mospi.get_hces_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("HCES")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         elif dataset == "TUS":
             if indicator_code is None:
@@ -505,7 +530,7 @@ def get_metadata(
             result = mospi.get_tus_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("TUS")
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         elif dataset == "EC":
             if indicator_code is None:
@@ -521,7 +546,7 @@ def get_metadata(
                 "EC5 (indicator_code=2) does not support activity filtering."
             )
             result["next_step"] = _next
-            return result
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         else:
             return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
@@ -624,6 +649,18 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         return {"error": "Invalid parameters", **validation}
 
     result = mospi.get_data(api_dataset, transformed_filters)
+
+    # Upstream error (500s, timeouts, etc.)
+    if isinstance(result, dict) and "error" in result and "msg" not in result:
+        filter_str = ", ".join(f"{k}={v}" for k, v in transformed_filters.items() if k not in ("Format", "limit", "page"))
+        result["troubleshooting"] = (
+            f"The upstream API returned an error for dataset '{dataset}' "
+            f"with filters: {filter_str}. "
+            "Common causes: 1) indicator_code or other numeric codes are out of range. "
+            "2) Non-integer values like '1.0', 'abc', or empty strings in numeric fields. "
+            "3) Comma-separated values where only single values are accepted (e.g. NAS indicator_code)."
+        )
+        result["suggestion"] = f"Call get_indicators(dataset='{dataset}') to check valid codes, then get_metadata() for filter values."
 
     # If no data found, hint to retry with different filters
     if isinstance(result, dict) and result.get("msg") == "No Data Found":
