@@ -48,8 +48,8 @@ async def call(mcp_target, tool_name: str, arguments: dict, retries: int = 2) ->
 # Dataset definitions: each tuple is
 #   (dataset, step3_kwargs, step4_filters)
 #
-# step3_kwargs  — extra keyword args for step3_get_metadata (beyond 'dataset')
-# step4_filters — the 'filters' dict for step4_get_data
+# step3_kwargs  — extra keyword args for get_metadata (beyond 'dataset')
+# step4_filters — the 'filters' dict for get_data
 # ---------------------------------------------------------------------------
 
 DATASETS = [
@@ -170,10 +170,10 @@ DATASETS = [
 ]
 
 EXPECTED_TOOLS = {
-    "step1_know_about_mospi_api",
-    "step2_get_indicators",
-    "step3_get_metadata",
-    "step4_get_data",
+    "list_datasets",
+    "get_indicators",
+    "get_metadata",
+    "get_data",
 }
 
 EXPECTED_DATASETS = {
@@ -183,7 +183,7 @@ EXPECTED_DATASETS = {
 }
 
 # Internal keys injected by the server (not dataset-specific content)
-_INTERNAL_KEYS = {"_user_query", "_next_step", "_retry_hint"}
+_INTERNAL_KEYS = {"user_query", "next_step", "related_datasets"}
 
 
 # ---------------------------------------------------------------------------
@@ -204,14 +204,14 @@ async def test_list_tools(mcp_target):
 # ---------------------------------------------------------------------------
 
 
-async def test_step1_know_about_mospi_api(mcp_target):
+async def test_list_datasets(mcp_target):
     """step1: API overview returns all 19 datasets and workflow instructions."""
-    data = await call(mcp_target, "step1_know_about_mospi_api", {})
+    data = await call(mcp_target, "list_datasets", {})
     assert isinstance(data, dict)
     assert "datasets" in data
     assert set(data["datasets"].keys()) == EXPECTED_DATASETS
     assert "workflow" in data
-    assert "rules" in data
+    assert "next_step" in data
 
 
 # ---------------------------------------------------------------------------
@@ -220,11 +220,11 @@ async def test_step1_know_about_mospi_api(mcp_target):
 
 
 @pytest.mark.parametrize("dataset,step3_kwargs,step4_filters", DATASETS)
-async def test_step2_get_indicators(mcp_target, dataset, step3_kwargs, step4_filters):
+async def test_get_indicators(mcp_target, dataset, step3_kwargs, step4_filters):
     """step2: get_indicators returns non-empty indicator data for each dataset."""
     data = await call(
         mcp_target,
-        "step2_get_indicators",
+        "get_indicators",
         {"dataset": dataset, "user_query": "health check"},
     )
     assert isinstance(data, dict)
@@ -240,11 +240,11 @@ async def test_step2_get_indicators(mcp_target, dataset, step3_kwargs, step4_fil
 
 
 @pytest.mark.parametrize("dataset,step3_kwargs,step4_filters", DATASETS)
-async def test_step3_get_metadata(mcp_target, dataset, step3_kwargs, step4_filters):
+async def test_get_metadata(mcp_target, dataset, step3_kwargs, step4_filters):
     """step3: get_metadata returns filter options and API param definitions."""
     data = await call(
         mcp_target,
-        "step3_get_metadata",
+        "get_metadata",
         {"dataset": dataset, **step3_kwargs},
     )
     assert isinstance(data, dict)
@@ -261,11 +261,11 @@ async def test_step3_get_metadata(mcp_target, dataset, step3_kwargs, step4_filte
 
 
 @pytest.mark.parametrize("dataset,step3_kwargs,step4_filters", DATASETS)
-async def test_step4_get_data(mcp_target, dataset, step3_kwargs, step4_filters):
+async def test_get_data(mcp_target, dataset, step3_kwargs, step4_filters):
     """step4: get_data returns records (not 'No Data Found') for each dataset."""
     data = await call(
         mcp_target,
-        "step4_get_data",
+        "get_data",
         {"dataset": dataset, "filters": step4_filters},
     )
     assert isinstance(data, dict)
@@ -279,32 +279,65 @@ async def test_step4_get_data(mcp_target, dataset, step3_kwargs, step4_filters):
 # ---------------------------------------------------------------------------
 
 
-async def test_step2_invalid_dataset(mcp_target):
+async def test_get_indicators_invalid_dataset(mcp_target):
     """step2: invalid dataset name returns an error with valid_datasets hint."""
     data = await call(
         mcp_target,
-        "step2_get_indicators",
+        "get_indicators",
         {"dataset": "NONEXISTENT", "user_query": "test"},
     )
     assert "error" in data
     assert "valid_datasets" in data
 
 
-async def test_step3_missing_required_indicator(mcp_target):
+async def test_get_metadata_missing_required_indicator(mcp_target):
     """step3: omitting indicator_code for a dataset that requires it returns an error."""
     data = await call(
         mcp_target,
-        "step3_get_metadata",
+        "get_metadata",
         {"dataset": "PLFS"},  # PLFS requires indicator_code
     )
     assert "error" in data
 
 
-async def test_step4_unknown_filter_param(mcp_target):
+async def test_get_data_unknown_filter_param(mcp_target):
     """step4: passing an unknown filter param returns a validation error."""
     data = await call(
         mcp_target,
-        "step4_get_data",
+        "get_data",
         {"dataset": "WPI", "filters": {"totally_bogus_param": "1"}},
     )
     assert "error" in data or "invalid_params" in data
+
+
+# ---------------------------------------------------------------------------
+# Input type validation tests (Issue 3)
+# ---------------------------------------------------------------------------
+
+
+async def test_get_metadata_invalid_int(mcp_target):
+    """get_metadata: non-integer indicator_code raises a validation error, not 500."""
+    from fastmcp.exceptions import ToolError
+    with pytest.raises(ToolError):
+        await asyncio.sleep(THROTTLE)
+        async with Client(mcp_target) as c:
+            await c.call_tool("get_metadata", {"dataset": "PLFS", "indicator_code": "abc", "frequency_code": 1})
+
+
+async def test_get_indicators_invalid_frequency(mcp_target):
+    """get_indicators: non-integer frequency_code raises a validation error, not 500."""
+    from fastmcp.exceptions import ToolError
+    with pytest.raises(ToolError):
+        await asyncio.sleep(THROTTLE)
+        async with Client(mcp_target) as c:
+            await c.call_tool("get_indicators", {"dataset": "PLFS", "frequency_code": "abc"})
+
+
+async def test_get_data_ec_invalid_indicator(mcp_target):
+    """get_data: non-integer indicator_code for EC returns a validation error, not 500."""
+    data = await call(
+        mcp_target,
+        "get_data",
+        {"dataset": "EC", "filters": {"indicator_code": "abc"}},
+    )
+    assert "error" in data
