@@ -77,17 +77,17 @@ This server provides AI-ready access to official Indian government statistics th
 The server exposes 4 tools that follow a sequential workflow:
 
 ```
-step1_know_about_mospi_api  →  step2_get_indicators  →  step3_get_metadata  →  step4_get_data
+list_datasets  →  get_indicators  →  get_metadata  →  get_data
 ```
 
 | Step | Tool | Description |
 |------|------|-------------|
-| 1 | `step1_know_about_mospi_api()` | Overview of all datasets. Start here to find the right dataset. |
-| 2 | `step2_get_indicators(dataset)` | List available indicators for the chosen dataset. |
-| 3 | `step3_get_metadata(dataset, ...)` | Get valid filter values (states, years, categories) and API parameters. |
-| 4 | `step4_get_data(dataset, filters)` | Fetch data using filter key-value pairs from metadata. |
+| 1 | `list_datasets()` | Overview of all datasets. Start here to find the right dataset. |
+| 2 | `get_indicators(dataset)` | List available indicators for the chosen dataset. |
+| 3 | `get_metadata(dataset, ...)` | Get valid filter values (states, years, categories) and API parameters. |
+| 4 | `get_data(dataset, filters)` | Fetch data using filter key-value pairs from metadata. |
 
-**Important:** Tools must be called in order. Skipping `step3_get_metadata` will result in invalid filter codes.
+**Important:** Tools must be called in order. Skipping `get_metadata` will result in invalid filter codes.
 
 ---
 
@@ -199,7 +199,7 @@ from fastmcp import Client
 
 async def main():
     async with Client("http://localhost:8000/mcp") as client:
-        overview = await client.call_tool("step1_know_about_mospi_api", {})
+        overview = await client.call_tool("list_datasets", {})
         print(overview)
 
 asyncio.run(main())
@@ -263,7 +263,7 @@ mospi-mcp-api/
 | **Swagger as Source of Truth** | API parameters validated against YAML specs in `swagger/`, not hardcoded |
 | **Auto-routing** | CPI routes to Group/Item endpoint based on filters; IIP routes to Annual/Monthly |
 | **Validation First** | All filters validated before API calls with clear error messages |
-| **LLM-Optimized** | Tool docstrings contain explicit rules and workflow instructions |
+| **LLM-Optimized** | Tool docstrings document parameters, return values, and workflow sequence |
 
 ---
 
