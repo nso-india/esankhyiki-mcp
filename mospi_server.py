@@ -292,7 +292,7 @@ def get_indicators(
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
         "IIP": lambda: {"message": "IIP uses categories instead of indicators. Call get_metadata with base_year and frequency params.", "dataset": "IIP"},
-        "WPI": lambda: {"message": "WPI uses hierarchical commodity codes. Call get_metadata to see available groups/items.", "dataset": "WPI"},
+        "WPI": mospi.get_wpi_base_years,
         "ASI": mospi.get_asi_indicators,
     }
 
@@ -351,7 +351,9 @@ def get_metadata(
                         ASUSE: 1=Annual, 2=Quarterly.
         base_year: Required for CPI ("2024"/"2012"/"2010"),
                    IIP ("2011-12"/"2004-05"/"1993-94"),
-                   NAS ("2022-23"/"2011-12").
+                   NAS ("2022-23"/"2011-12"),
+                   WPI ("2011-12"/"2004-05"/"1993-94").
+                   Not applicable for PLFS, ASI.
         level: Required for CPI ("Group"/"Item").
         frequency: Required for IIP ("Annually"/"Monthly").
         classification_year: Required for ASI ("2008"/"2004"/"1998"/"1987").
@@ -408,10 +410,15 @@ def get_metadata(
             return _check_empty_metadata(result, dataset, classification_year=classification_year)
 
         elif dataset == "WPI":
-            result = mospi.get_wpi_filters()
+            result = mospi.get_wpi_filters(base_year=base_year or "2011-12")
             result["api_params"] = get_swagger_param_definitions("WPI")
             result["next_step"] = _next
-            return result
+            result["base_year_coverage"] = (
+                f"Current base_year='{base_year or '2011-12'}'. "
+                "Other available base years: '2011-12', '2004-05', '1993-94'. "
+                "Each base year has different commodity structures and time coverage."
+            )
+            return _check_empty_metadata(result, dataset, base_year=base_year)
 
         elif dataset == "PLFS":
             if indicator_code is None:
@@ -754,7 +761,7 @@ def list_datasets() -> dict:
             },
             "WPI": {
                 "name": "Wholesale Price Index",
-                "description": "Hierarchical commodity structure with 1000+ items across 5 levels: Major Groups (Primary articles, Fuel & power, Manufactured products, Food index) → Groups (22) → Sub-groups (90+) → Sub-sub-groups → Items. Tracks wholesale/producer price inflation monthly.",
+                "description": "Hierarchical commodity structure with 1000+ items across 5 levels: Major Groups (Primary articles, Fuel & power, Manufactured products, Food index) → Groups (22) → Sub-groups (90+) → Sub-sub-groups → Items. Tracks wholesale/producer price inflation monthly. Three base years available: 2011-12 (latest, default), 2004-05, and 1993-94.",
                 "use_for": "Wholesale inflation, producer prices, commodity price trends"
             },
             "ENERGY": {

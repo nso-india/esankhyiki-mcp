@@ -14,6 +14,15 @@ paths:
       - Wholesale Price Index.
       operationId: WPIIndicatorValues.
       parameters:
+      - name: base_year
+        in: query
+        description: Base year for the index ("2011-12", "2004-05", "1993-94"). Defaults to "2011-12".
+        schema:
+          type: string
+          enum:
+          - "2011-12"
+          - "2004-05"
+          - "1993-94"
       - name: year
         in: query
         description: Enter the Year (format YYYY. Comma separated for multiple values)
