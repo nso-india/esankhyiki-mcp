@@ -84,6 +84,7 @@ class MoSPI:
             "CPIALRL": "/api/cpialrl/getCpialrlRecords",
             "HCES": "/api/hces/getHcesRecords",
             "TUS": "/api/tus/getTusRecords",
+            "UDISE": "/api/udise/getUdiseRecords",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -1315,6 +1316,52 @@ class MoSPI:
                 "statusCode": True,
                 "_note": f"Showing page {page_num} of {total_pages} ({total_records} total records). Pass pageNum to fetch next page." if total_pages > 1 else "",
             }
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # UDISE (Unified District Information System for Education) Methods
+    # =========================================================================
+
+    def get_udise_indicators(self) -> Dict[str, Any]:
+        """Fetch list of UDISE indicators from MoSPI API.
+
+        Returns 46 active indicators covering:
+        - Schools: total count, infrastructure, management type, level, AWC sections
+        - Teachers: total, by management, by gender/class, trained, professionally qualified
+        - Enrolment: total, CWSN, pre-school experience, GER, NER, ANER, ASER, GPI
+        - Social groups: OBC, Muslim minority, all minority enrolment percentages
+        - Transition metrics: promotion, repetition, dropout, transition, retention rates
+        - Ratios: pupil-teacher ratio, average teachers/enrolments per school
+        - Special focus: zero-enrolment schools, single-teacher schools, enrolment brackets
+        - Facilities: drinking water, ICT labs, computers, digital initiatives, library
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/udise/getIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_udise_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available UDISE filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/udise/getUdiseFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 

@@ -37,7 +37,7 @@ MCP (Model Context Protocol) server for accessing India's Ministry of Statistics
 This server provides AI-ready access to official Indian government statistics through the Model Context Protocol (MCP). It acts as a bridge between AI assistants (Claude, ChatGPT, Cursor, etc.) and MoSPI's open data APIs, enabling natural language queries for economic, demographic, and social indicators.
 
 **Key Features:**
-- 20 statistical datasets covering employment, inflation, industrial production, GDP, energy, higher education, gender, health, environment, trade, agriculture, consumption, economic census, and digital literacy
+- 21 statistical datasets covering employment, inflation, industrial production, GDP, energy, higher education, school education, gender, health, environment, trade, agriculture, consumption, economic census, and digital literacy
 - Sequential 4-tool workflow designed for LLM consumption
 - Swagger-driven parameter validation
 - Full OpenTelemetry integration for observability
@@ -69,6 +69,7 @@ This server provides AI-ready access to official Indian government statistics th
 | **TUS** | Time Use Survey | Time allocation, unpaid work, gender time gaps |
 | **EC** | Economic Census | Establishments, enterprises, district-wise business count, workers |
 | **NSS79** | NSS 79th Round (CAMS + AYUSH) | Literacy, school enrolment, NEET youth, health expenditure, financial inclusion, digital skills, AYUSH awareness and usage |
+| **UDISE** | UDISE+ (Unified District Information System for Education) | Schools, enrolment, dropout rates, teachers, PTR, GER, NER, GPI, CWSN, school infrastructure, ICT labs, minority enrolment |
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 
 ---
@@ -275,7 +276,7 @@ pip install -r tests/requirements-test.txt
 pytest tests/ -v -p no:anyio
 ```
 
-Runs in-process against the MCP server (no running server needed). Covers all 20 datasets across all 4 tools. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
+Runs in-process against the MCP server (no running server needed). Covers all 21 datasets across all 4 tools. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
 
 ---
 
