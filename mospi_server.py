@@ -439,6 +439,7 @@ def get_metadata(
                          "Year format: YYYY-YY. quarter_code: 2=JUL-SEP, 3=OCT-DEC, 4=JAN-MAR, 5=APR-JUN. "
                          "frequency_code=3 (Monthly, 2025 onwards): indicators 1-3 only. "
                          "Year format: YYYY (e.g. 2025). "
+                         "year_type_code: 1=Agriculture Year (financial year YYYY-YY), 2=Calendar Year (YYYY). "
                          "state_code=99 for All India; omitting state_code returns all states.",
                 "next_step": _next,
             }

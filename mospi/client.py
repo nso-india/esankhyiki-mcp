@@ -122,7 +122,8 @@ class MoSPI:
         indicator_code: int,
         frequency_code: int = 1,
         year: Optional[str] = None,
-        month_code: Optional[str] = None
+        month_code: Optional[str] = None,
+        year_type_code: Optional[int] = None
     ) -> Dict[str, Any]:
         """Fetch available PLFS filters for given indicator/frequency/year/month."""
         params = {
@@ -133,6 +134,8 @@ class MoSPI:
             params["year"] = year
         if month_code:
             params["month_code"] = month_code
+        if year_type_code is not None:
+            params["year_type_code"] = year_type_code
 
         try:
             response = self.session.get(

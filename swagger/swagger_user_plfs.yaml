@@ -107,6 +107,16 @@ paths:
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
+      - name: year_type_code
+        in: query
+        description: >
+          Year type classification. 1=Agriculture Year (financial year format, e.g. 2023-24),
+          2=Calendar Year (plain year format, e.g. 2023).
+          Use to filter data by year classification type.
+          Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
       - name: weekly_status_code
         in: query
         description: >
