@@ -89,9 +89,7 @@ DATASET_SWAGGER = {
     "CPI": ("swagger_user_cpi.yaml", "/api/cpi/getCPIIndex"),
     "CPI_GROUP": ("swagger_user_cpi.yaml", "/api/cpi/getCPIIndex"),
     "CPI_ITEM": ("swagger_user_cpi.yaml", "/api/cpi/getItemIndex"),
-    "IIP": ("swagger_user_iip.yaml", "/api/iip/getIIPAnnual"),
-    "IIP_ANNUAL": ("swagger_user_iip.yaml", "/api/iip/getIIPAnnual"),
-    "IIP_MONTHLY": ("swagger_user_iip.yaml", "/api/iip/getIIPMonthly"),
+    "IIP": ("swagger_user_iip.yaml", "/api/iip/getIipData"),
     "ASI": ("swagger_user_asi.yaml", "/api/asi/getASIData"),
     "NAS": ("swagger_user_nas.yaml", "/api/nas/getNASData"),
     "WPI": ("swagger_user_wpi.yaml", "/api/wpi/getWpiRecords"),
@@ -252,8 +250,7 @@ def get_indicators(
         dataset: Dataset name — one of: PLFS, CPI, IIP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
                  NSS77, NSS78, CPIALRL, HCES, TUS, EC.
-                 For CPI: returns available base years.
-                 For IIP/WPI: returns guidance on category-based structure.
+                 For CPI, IIP, WPI: returns available base years and frequencies.
         user_query: The user's original question, used for context.
 
     Returns:
@@ -291,7 +288,7 @@ def get_indicators(
         "EC": mospi.get_ec_indicators,
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
-        "IIP": lambda: {"message": "IIP uses categories instead of indicators. Call get_metadata with base_year and frequency params.", "dataset": "IIP"},
+        "IIP": mospi.get_iip_base_years,
         "WPI": mospi.get_wpi_base_years,
         "ASI": mospi.get_asi_indicators,
     }
@@ -397,10 +394,15 @@ def get_metadata(
             return _check_empty_metadata(result, dataset, base_year=base_year, level=level, series=series)
 
         elif dataset == "IIP":
-            swagger_key = "IIP_MONTHLY" if (frequency or "Annually") == "Monthly" else "IIP_ANNUAL"
             result = mospi.get_iip_filters(base_year=base_year or "2011-12", frequency=frequency or "Annually")
-            result["api_params"] = get_swagger_param_definitions(swagger_key)
+            result["api_params"] = get_swagger_param_definitions("IIP")
             result["next_step"] = _next
+            result["base_year_coverage"] = (
+                f"Current base_year='{base_year or '2011-12'}', frequency='{frequency or 'Annually'}'. "
+                "Other available base years: '2011-12', '2004-05', '1993-94'. "
+                "frequency='Annually': use financial_year param (YYYY-YY). "
+                "frequency='Monthly': use year (YYYY) and month_code params."
+            )
             return _check_empty_metadata(result, dataset, base_year=base_year, frequency=frequency)
 
         elif dataset == "ASI":
@@ -601,8 +603,8 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
                  NSS78, CPIALRL, HCES, TUS, EC).
                  CPI auto-routes to Group or Item endpoint based on
                  whether filters contain item_code.
-                 IIP auto-routes to Annual or Monthly based on
-                 whether filters contain month_code.
+                 IIP uses a single endpoint; pass frequency="Annually" or
+                 frequency="Monthly" in filters.
         filters: Key-value pairs from get_metadata filter_values.
                  PLFS requires frequency_code (1=Annual, 2=Quarterly, 3=Monthly).
                  NAS requires base_year ("2022-23" or "2011-12").
@@ -628,23 +630,11 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         else:
             dataset = "CPI_GROUP"
 
-    if dataset == "IIP":
-        if "month_code" in filters:
-            dataset = "IIP_MONTHLY"
-        else:
-            dataset = "IIP_ANNUAL"
-
-    # IIP metadata returns 'year' but Annual endpoint expects 'financial_year'
-    if dataset == "IIP_ANNUAL":
-        if "year" in filters and "financial_year" not in filters:
-            filters["financial_year"] = filters.pop("year")
-
     # Map friendly names to API dataset keys
     dataset_map = {
         "CPI_GROUP": "CPI_Group",
         "CPI_ITEM": "CPI_Item",
-        "IIP_ANNUAL": "IIP_Annual",
-        "IIP_MONTHLY": "IIP_Monthly",
+        "IIP": "IIP",
         "PLFS": "PLFS",
         "ASI": "ASI",
         "NAS": "NAS",
