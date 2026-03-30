@@ -382,8 +382,31 @@ class MoSPI:
     # WPI Metadata Methods
     # =========================================================================
 
-    def get_wpi_filters(self) -> Dict[str, Any]:
-        """Fetch available WPI filters from MoSPI API.
+    def get_wpi_base_years(self) -> Dict[str, Any]:
+        """Fetch available WPI base years from MoSPI API."""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/wpi/getWpiBaseYear",
+                timeout=30
+            )
+            response.raise_for_status()
+            result = response.json()
+            result["_note"] = (
+                "WPI has multiple base years with different commodity structures and time coverage. "
+                "Latest base_year is '2011-12'. "
+                "base_year='2011-12': Data from 2012 onwards. "
+                "base_year='2004-05': Data from 2005 to 2017. "
+                "base_year='1993-94': Historical data from 1995 to 2010."
+            )
+            return result
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_wpi_filters(self, base_year: str = "2011-12") -> Dict[str, Any]:
+        """Fetch available WPI filters for a given base year.
+
+        Args:
+            base_year: "2011-12" (default/latest), "2004-05", or "1993-94"
 
         Returns:
             Available filters: year, month, major_group, group, sub_group, sub_sub_group, item
@@ -391,6 +414,7 @@ class MoSPI:
         try:
             response = self.session.get(
                 f"{self.base_url}/api/wpi/getWpiData",
+                params={"base_year": base_year},
                 timeout=30
             )
             response.raise_for_status()
