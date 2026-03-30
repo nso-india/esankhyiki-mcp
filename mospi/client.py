@@ -42,8 +42,7 @@ class MoSPI:
             "PLFS": "/api/plfs/getData",
             "CPI_Group": "/api/cpi/getCPIIndex",
             "CPI_Item": "/api/cpi/getItemIndex",
-            "IIP_Annual": "/api/iip/getIIPAnnual",
-            "IIP_Monthly": "/api/iip/getIIPMonthly",
+            "IIP": "/api/iip/getIipData",
             "ASI": "/api/asi/getASIData",
             "NAS": "/api/nas/getNASData",
             "WPI": "/api/wpi/getWpiRecords",
@@ -211,6 +210,28 @@ class MoSPI:
     # =========================================================================
     # IIP Metadata Methods
     # =========================================================================
+
+    def get_iip_base_years(self) -> Dict[str, Any]:
+        """Fetch available IIP base years and frequencies from MoSPI API."""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/iip/getIipBaseYear",
+                timeout=30
+            )
+            response.raise_for_status()
+            result = response.json()
+            result["_note"] = (
+                "IIP has multiple base years with different commodity structures and time coverage. "
+                "Latest base_year is '2011-12'. "
+                "base_year='2011-12': Data from 2012-13 onwards. "
+                "base_year='2004-05': Data from 2005-06 to 2016-17. "
+                "base_year='1993-94': Historical data. "
+                "frequency='Annually': annual data using financial_year param (YYYY-YY). "
+                "frequency='Monthly': monthly data using year and month_code params."
+            )
+            return result
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
 
     def get_iip_filters(
         self,

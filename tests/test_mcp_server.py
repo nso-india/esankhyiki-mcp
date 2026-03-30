@@ -68,7 +68,7 @@ DATASETS = [
     pytest.param(
         "IIP",
         {"base_year": "2011-12", "frequency": "Annually"},
-        {"base_year": "2011-12", "type": "All", "limit": "1"},
+        {"base_year": "2011-12", "frequency": "Annually", "type": "All", "limit": "1"},
         id="IIP",
     ),
     pytest.param(
