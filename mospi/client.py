@@ -45,7 +45,8 @@ class MoSPI:
         self.session.headers.update({"User-Agent": "Mozilla/5.0"})
         ssl_context = ssl.create_default_context()
         ssl_context.minimum_version = ssl.TLSVersion.TLSv1_2
-        ssl_context.options |= ssl.OP_LEGACY_SERVER_CONNECT
+        legacy_server_connect = getattr(ssl, "OP_LEGACY_SERVER_CONNECT", 0x4)
+        ssl_context.options |= legacy_server_connect
         ssl_context.check_hostname = False
         ssl_context.verify_mode = ssl.CERT_NONE
         retry = Retry(
