@@ -3,16 +3,35 @@ MoSPI API Client
 Handles all API calls to the MoSPI data portal
 """
 
+import ssl
 import requests
 import yaml, os
 import math, random
 from bs4 import BeautifulSoup
 from typing import Optional, Dict, Any
 from requests.adapters import HTTPAdapter
+from urllib3 import PoolManager
 from urllib3.util.retry import Retry
 
 
 RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
+
+
+class LegacyRenegotiationAdapter(HTTPAdapter):
+    """HTTP adapter that enables OpenSSL legacy server connect for MoSPI."""
+
+    def __init__(self, ssl_context: ssl.SSLContext, **kwargs):
+        self.ssl_context = ssl_context
+        super().__init__(**kwargs)
+
+    def init_poolmanager(self, connections, maxsize, block=False, **pool_kwargs):
+        pool_kwargs["ssl_context"] = self.ssl_context
+        self.poolmanager = PoolManager(
+            num_pools=connections,
+            maxsize=maxsize,
+            block=block,
+            **pool_kwargs,
+        )
 
 
 class MoSPI:
@@ -24,6 +43,11 @@ class MoSPI:
         self.base_url = base_url
         self.session = requests.Session()
         self.session.headers.update({"User-Agent": "Mozilla/5.0"})
+        ssl_context = ssl.create_default_context()
+        ssl_context.minimum_version = ssl.TLSVersion.TLSv1_2
+        ssl_context.options |= ssl.OP_LEGACY_SERVER_CONNECT
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
         retry = Retry(
             total=3,
             connect=2,
@@ -34,7 +58,7 @@ class MoSPI:
             allowed_methods=frozenset({"GET", "POST"}),
             respect_retry_after_header=True,
         )
-        adapter = HTTPAdapter(max_retries=retry)
+        adapter = LegacyRenegotiationAdapter(ssl_context=ssl_context, max_retries=retry)
         self.session.verify = False
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
