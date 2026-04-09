@@ -80,9 +80,11 @@ class MoSPI:
             "RBI": "/api/rbi/getRbiRecords",
             "NSS77": "/api/nss-77/getNss77Records",
             "NSS78": "/api/nss-78/getNss78Records",
+            "NSS79": "/api/nss-79/getNSS79Records",
             "CPIALRL": "/api/cpialrl/getCpialrlRecords",
             "HCES": "/api/hces/getHcesRecords",
             "TUS": "/api/tus/getTusRecords",
+            "UDISE": "/api/udise/getUdiseRecords",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -848,6 +850,61 @@ class MoSPI:
             return {"error": str(e), "statusCode": False}
 
     # =========================================================================
+    # NSS79 (NSS 79th Round - CAMS + AYUSH) Methods
+    # =========================================================================
+
+    def get_nss79_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS79 indicators from MoSPI API.
+
+        Returns all 35 indicators from NSS 79th Round — two survey modules combined:
+        - survey_code=1 (CAMS): 28 indicators on education, health expenditure,
+          financial inclusion, digital literacy, and household living conditions.
+        - survey_code=2 (AYUSH): 7 indicators on AYUSH awareness, usage,
+          treatment types, therapy knowledge, and expenditure.
+        """
+        try:
+            resp1 = self.session.get(
+                f"{self.base_url}/api/nss-79/getNSS79IndicatorList",
+                params={"survey_code": 1},
+                timeout=30
+            )
+            resp1.raise_for_status()
+            result = resp1.json()
+
+            resp2 = self.session.get(
+                f"{self.base_url}/api/nss-79/getNSS79IndicatorList",
+                params={"survey_code": 2},
+                timeout=30
+            )
+            resp2.raise_for_status()
+            ayush = resp2.json().get("data", [])
+
+            result["data"] = result.get("data", []) + ayush
+            result["count"] = len(result["data"])
+            return result
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss79_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available NSS79 filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-35). 1-28 = CAMS module, 29-35 = AYUSH module.
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-79/getNSS79FilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
     # CPIALRL (CPI for Agricultural Labourers and Rural Labourers) Methods
     # =========================================================================
 
@@ -1259,6 +1316,52 @@ class MoSPI:
                 "statusCode": True,
                 "_note": f"Showing page {page_num} of {total_pages} ({total_records} total records). Pass pageNum to fetch next page." if total_pages > 1 else "",
             }
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # UDISE (Unified District Information System for Education) Methods
+    # =========================================================================
+
+    def get_udise_indicators(self) -> Dict[str, Any]:
+        """Fetch list of UDISE indicators from MoSPI API.
+
+        Returns 46 active indicators covering:
+        - Schools: total count, infrastructure, management type, level, AWC sections
+        - Teachers: total, by management, by gender/class, trained, professionally qualified
+        - Enrolment: total, CWSN, pre-school experience, GER, NER, ANER, ASER, GPI
+        - Social groups: OBC, Muslim minority, all minority enrolment percentages
+        - Transition metrics: promotion, repetition, dropout, transition, retention rates
+        - Ratios: pupil-teacher ratio, average teachers/enrolments per school
+        - Special focus: zero-enrolment schools, single-teacher schools, enrolment brackets
+        - Facilities: drinking water, ICT labs, computers, digital initiatives, library
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/udise/getIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_udise_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available UDISE filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/udise/getUdiseFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 

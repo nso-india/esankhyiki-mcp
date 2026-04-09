@@ -79,7 +79,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "CPIALRL", "HCES", "TUS", "EC",
+    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE",
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -102,16 +102,18 @@ DATASET_SWAGGER = {
     "RBI": ("swagger_user_rbi.yaml", "/api/rbi/getRbiRecords"),
     "NSS77": ("swagger_user_nss77.yaml", "/api/nss-77/getNss77Records"),
     "NSS78": ("swagger_user_nss78.yaml", "/api/nss-78/getNss78Records"),
+    "NSS79": ("swagger_user_nss79.yaml", "/api/nss-79/getNSS79Records"),
     "CPIALRL": ("swagger_user_cpialrl.yaml", "/api/cpialrl/getCpialrlRecords"),
     "HCES": ("swagger_user_hces.yaml", "/api/hces/getHcesRecords"),
     "TUS": ("swagger_user_tus.yaml", "/api/tus/getTusRecords"),
     "EC": ("swagger_user_ec.yaml", "/EC/filterDistrict6"),
+    "UDISE": ("swagger_user_udise.yaml", "/api/udise/getUdiseRecords"),
 }
 
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "CPIALRL", "HCES", "TUS", "EC",
+    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE",
 ]
 
 
@@ -249,7 +251,7 @@ def get_indicators(
     Args:
         dataset: Dataset name — one of: PLFS, CPI, IIP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
-                 NSS77, NSS78, CPIALRL, HCES, TUS, EC.
+                 NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE.
                  For CPI, IIP, WPI: returns available base years and frequencies.
         user_query: The user's original question, used for context.
 
@@ -282,10 +284,12 @@ def get_indicators(
         "RBI": mospi.get_rbi_indicators,
         "NSS77": mospi.get_nss77_indicators,
         "NSS78": mospi.get_nss78_indicators,
+        "NSS79": mospi.get_nss79_indicators,
         "CPIALRL": mospi.get_cpialrl_indicators,
         "HCES": mospi.get_hces_indicators,
         "TUS": mospi.get_tus_indicators,
         "EC": mospi.get_ec_indicators,
+        "UDISE": mospi.get_udise_indicators,
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
         "IIP": mospi.get_iip_base_years,
@@ -340,7 +344,7 @@ def get_metadata(
     Args:
         dataset: Dataset name (same values as get_indicators).
         indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
-                        NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC.
+                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE.
                         Not applicable for: CPI, IIP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
         frequency_code: Required for PLFS and ASUSE.
@@ -536,6 +540,14 @@ def get_metadata(
             result["next_step"] = _next
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
+        elif dataset == "NSS79":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for NSS79"}
+            result = mospi.get_nss79_filters(indicator_code=indicator_code)
+            result["api_params"] = get_swagger_param_definitions("NSS79")
+            result["_next_step"] = _next
+            return result
+
         elif dataset == "CPIALRL":
             if indicator_code is None:
                 return {"error": "indicator_code is required for CPIALRL"}
@@ -576,6 +588,14 @@ def get_metadata(
             result["next_step"] = _next
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
+        elif dataset == "UDISE":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for UDISE"}
+            result = mospi.get_udise_filters(indicator_code=indicator_code)
+            result["api_params"] = get_swagger_param_definitions("UDISE")
+            result["next_step"] = _next
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
+
         else:
             return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
 
@@ -600,7 +620,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY,
                  AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
-                 NSS78, CPIALRL, HCES, TUS, EC).
+                 NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE).
                  CPI auto-routes to Group or Item endpoint based on
                  whether filters contain item_code.
                  IIP uses a single endpoint; pass frequency="Annually" or
@@ -648,9 +668,11 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         "RBI": "RBI",
         "NSS77": "NSS77",
         "NSS78": "NSS78",
+        "NSS79": "NSS79",
         "CPIALRL": "CPIALRL",
         "HCES": "HCES",
         "TUS": "TUS",
+        "UDISE": "UDISE",
     }
 
     api_dataset = dataset_map.get(dataset)
@@ -723,7 +745,7 @@ def list_datasets() -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 19,
+        "total_datasets": 20,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -800,6 +822,11 @@ def list_datasets() -> dict:
                 "description": "14 indicators on household living standards: drinking water access (improved sources, piped supply), sanitation (exclusive latrines, handwashing facilities), digital connectivity (mobile phones, broadband, mass media), transport access, household assets, sources of finance, and migration patterns (reasons, income changes, usual residence). From 2020-21 survey.",
                 "use_for": "Household amenities, drinking water, sanitation, digital connectivity, migration, household assets, living standards"
             },
+            "NSS79": {
+                "name": "NSS79 (79th Round - CAMS + AYUSH)",
+                "description": "35 indicators from two modules of NSS 79th Round. CAMS module (indicators 1-28): education (literacy, numeracy, mean years of schooling, primary enrolment, secondary attainment, out-of-school children, S&T graduates, youth in training, NEET youth), health expenditure (hospitalised and non-hospitalised, out-of-pocket), financial inclusion (bank accounts, borrowers), digital literacy (mobile/internet usage and ability, 4G coverage, file sharing, online banking), and household living conditions (assets, clean fuel, drinking water, sanitation, birth registration, transport access). AYUSH module (indicators 29-35): awareness of AYUSH systems per 1000 persons, usage in last 365 days, treatment type breakdown, household-level awareness and knowledge of AYUSH therapy, average expenditure per person availing AYUSH treatment, and household reasons for using AYUSH.",
+                "use_for": "Literacy, school enrolment, NEET youth, health expenditure, out-of-pocket costs, financial inclusion, mobile/internet usage, digital skills, 4G coverage, household assets, AYUSH awareness, AYUSH usage, traditional medicine, alternative treatment expenditure, CAMS survey"
+            },
             "CPIALRL": {
                 "name": "CPI for Agricultural/Rural Labourers",
                 "description": "2 indicators: General Index and Group Index for two worker categories—Agricultural Labourers (AL) and Rural Labourers (RL). Separate inflation series measuring cost of living for India's most vulnerable rural workforce segments.",
@@ -820,6 +847,11 @@ def list_datasets() -> dict:
                 "description": "3 indicators (EC6, EC5, EC4) providing district-wise establishment and worker counts from India's Economic Censuses. EC6 (2013-14): 36 States/UTs, 24 activity sectors. EC5 (2005): 35 States/UTs, 313 NIC-based activity codes. EC4 (1998): 35 States/UTs, 18 activity sectors. Filters: state, activity type, nature of operation, source of finance, ownership type.",
                 "use_for": "Establishments, enterprises, economic census, district-wise business count, workers, employment by sector, ownership"
             },
+            "UDISE": {
+                "name": "UDISE+ (Unified District Information System for Education)",
+                "description": "46 indicators on school education across India (2018-19 to 2024-25). Overview (1-9): total schools, enrolments, teachers, percentage shares by category/level, PTR, average teachers/enrolments per school. Special focus (10-15): zero-enrolment schools, single-teacher schools, enrolment brackets, proportion by level. Schools (16, 18-20): by infrastructure facility, by level of education, by management and school category, AWC/pre-primary sections. Teachers (21-26): total by management, by gender and class taught, PTR by level, percentage trained, percentage professionally qualified. Enrolment (28-38): total students, CWSN, pre-school experience, GER, NER, ANER, ASER by age group, GPI of GER, OBC/Muslim minority/all minority enrolment percentages. Transition metrics (39-43): promotion, repetition, dropout, transition, retention rates. Facilities (45-49): drinking water (by source type), library books per school, educational parameters by management, computers and digital initiatives (by sub-indicator), ICT labs.",
+                "use_for": "Schools, enrolment, dropout rates, teachers, pupil-teacher ratio, GER, NER, GPI, CWSN, school infrastructure, ICT labs, drinking water in schools, minority enrolment, OBC enrolment, trained teachers, school education statistics"
+            },
         },
         "workflow": [
             "1. list_datasets() — identify the relevant dataset",
@@ -838,7 +870,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.0 with OpenTelemetry")
-    log("Datasets: 19 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, CPIALRL, HCES, TUS, EC)")
+    log("Datasets: 21 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")
