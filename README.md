@@ -24,6 +24,7 @@ MCP (Model Context Protocol) server for accessing India's Ministry of Statistics
   - [FastMCP Cloud](#fastmcp-cloud)
 - [Architecture](#architecture)
 - [Configuration](#configuration)
+- [Examples](#examples-what-can-you-do-with-this)
 - [Contributing](#contributing)
 - [Resources](#resources)
 - [License](#license)
@@ -301,6 +302,23 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 - Project structure
 - Development setup
 - Code style
+
+---
+
+## Examples: What Can You Do With This?
+
+We ran 6 real investigations using the MCP server — from simple single-dataset queries to a 4-dataset anomaly detection loop. Each example includes the exact query, findings, and a breakdown of the API calls made.
+
+| # | Investigation | Datasets | Finding |
+|---|--------------|----------|---------|
+| 1 | [Jobless Growth Detector](examples/example_1_jobless_growth_detector.md) | NAS + PLFS | Youth unemployment is 3x overall rate even in 9% GDP growth years |
+| 2 | [Education-Unemployment Paradox](examples/example_2_education_unemployment_paradox.md) | PLFS | Postgraduates are 12x more likely to be unemployed than illiterates |
+| 3 | [Capital vs. Labor in Manufacturing](examples/example_3_capital_vs_labor_manufacturing.md) | ASI | Automation isn't replacing labor — all 3 industries added workers massively |
+| 4 | [Rural Food Inflation Squeeze](examples/example_4_rural_food_inflation_squeeze.md) | CPI | Rural and urban fuel prices are moving in opposite directions |
+| 5 | [Energy Transition Reality Check](examples/example_5_energy_transition_reality_check.md) | ENERGY | Coal's share *increased* from 56% to 59% over 12 years |
+| 6 | [The Great Squeeze](examples/example_6_the_great_squeeze.md) | ASI + CPI + WPI + PLFS | Factory profits doubled while real wages fell — 3 paradoxes converge |
+
+See the [examples README](examples/README.md) for the full guide, complexity progression, and how to reproduce.
 
 ---
 
