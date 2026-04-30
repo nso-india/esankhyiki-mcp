@@ -85,6 +85,7 @@ class MoSPI:
             "HCES": "/api/hces/getHcesRecords",
             "TUS": "/api/tus/getTusRecords",
             "UDISE": "/api/udise/getUdiseRecords",
+            "MNRE": "/api/mnre/getDataByEnergy",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -1357,6 +1358,52 @@ class MoSPI:
         try:
             response = self.session.get(
                 f"{self.base_url}/api/udise/getUdiseFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # MNRE (Ministry of New and Renewable Energy) Methods
+    # =========================================================================
+
+    def get_mnre_indicators(self) -> Dict[str, Any]:
+        """Fetch list of MNRE renewable energy types.
+
+        Returns 5 types of renewable energy: Solar Power, Wind Power, Hydro Power,
+        Bio Power, Total Power. The type_of_renewable_energy_code field is exposed
+        as indicator_code for consistency with other datasets.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/mnre/getTypeOfRenewableEnergy",
+                timeout=30
+            )
+            response.raise_for_status()
+            result = response.json()
+            for item in result.get("data", []):
+                if "type_of_renewable_energy_code" in item:
+                    item["indicator_code"] = item["type_of_renewable_energy_code"]
+            return result
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_mnre_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available MNRE filters for given energy type.
+
+        Args:
+            indicator_code: Renewable energy type code (1=Solar, 2=Wind, 3=Hydro,
+                            4=Bio, 5=Total). Solar (1), Hydro (3), and Bio (4)
+                            have categories; Wind (2) and Total (5) have none.
+        """
+        params = {"type_of_renewable_energy_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/mnre/getFilterByEnergy",
                 params=params,
                 timeout=30
             )
