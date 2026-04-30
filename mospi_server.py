@@ -349,8 +349,6 @@ def get_metadata(
                         NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE.
                         Not applicable for: CPI, IIP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
-                        For MNRE, this maps to type_of_renewable_energy_code internally
-                        (1=Solar, 2=Wind, 3=Hydro, 4=Bio, 5=Total Power).
         frequency_code: Required for PLFS and ASUSE.
                         PLFS: 1=Annual, 2=Quarterly bulletin, 3=Monthly.
                         ASUSE: 1=Annual, 2=Quarterly.
