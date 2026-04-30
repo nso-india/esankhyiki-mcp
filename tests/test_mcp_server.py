@@ -61,8 +61,8 @@ DATASETS = [
     ),
     pytest.param(
         "CPI",
-        {"base_year": "2024", "level": "Group"},
-        {"base_year": "2024", "series": "Current", "limit": "1"},
+        {"base_year": "2012", "level": "Group"},
+        {"base_year": "2012", "series": "Current", "limit": "1"},
         id="CPI",
     ),
     pytest.param(
