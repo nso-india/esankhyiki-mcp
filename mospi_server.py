@@ -79,7 +79,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE",
+    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE",
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -108,12 +108,13 @@ DATASET_SWAGGER = {
     "TUS": ("swagger_user_tus.yaml", "/api/tus/getTusRecords"),
     "EC": ("swagger_user_ec.yaml", "/EC/filterDistrict6"),
     "UDISE": ("swagger_user_udise.yaml", "/api/udise/getUdiseRecords"),
+    "MNRE": ("swagger_user_mnre.yaml", "/api/mnre/getDataByEnergy"),
 }
 
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE",
+    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE",
 ]
 
 
@@ -290,6 +291,7 @@ def get_indicators(
         "TUS": mospi.get_tus_indicators,
         "EC": mospi.get_ec_indicators,
         "UDISE": mospi.get_udise_indicators,
+        "MNRE": mospi.get_mnre_indicators,
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
         "IIP": mospi.get_iip_base_years,
@@ -596,6 +598,22 @@ def get_metadata(
             result["next_step"] = _next
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
+        elif dataset == "MNRE":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for MNRE. 1=Solar, 2=Wind, 3=Hydro, 4=Bio, 5=Total Power"}
+            result = mospi.get_mnre_filters(indicator_code=indicator_code)
+            result["api_params"] = get_swagger_param_definitions("MNRE")
+            result["parameter_notes"] = (
+                "indicator_code maps to type_of_renewable_energy_code in the API. "
+                "Solar (1), Hydro (3), and Bio (4) have category_code values; "
+                "Wind (2) and Total Power (5) have no categories. "
+                "year is YYYY (calendar year). state_code=36 is All India. "
+                "Values represent installed capacity in MW. "
+                "Frequency is monthly."
+            )
+            result["next_step"] = _next
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
+
         else:
             return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
 
@@ -620,7 +638,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY,
                  AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
-                 NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE).
+                 NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE).
                  CPI auto-routes to Group or Item endpoint based on
                  whether filters contain item_code.
                  IIP uses a single endpoint; pass frequency="Annually" or
@@ -628,6 +646,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         filters: Key-value pairs from get_metadata filter_values.
                  PLFS requires frequency_code (1=Annual, 2=Quarterly, 3=Monthly).
                  NAS requires base_year ("2022-23" or "2011-12").
+                 MNRE: indicator_code (1-5) is mapped to type_of_renewable_energy_code.
                  Pass limit (e.g., "50") to retrieve more than 10 records.
 
     Returns:
@@ -673,6 +692,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         "HCES": "HCES",
         "TUS": "TUS",
         "UDISE": "UDISE",
+        "MNRE": "MNRE",
     }
 
     api_dataset = dataset_map.get(dataset)
@@ -685,6 +705,10 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     # RBI uses sub_indicator_code but accept indicator_code for consistency
     if dataset == "RBI" and "indicator_code" in transformed_filters:
         transformed_filters["sub_indicator_code"] = transformed_filters.pop("indicator_code")
+
+    # MNRE uses type_of_renewable_energy_code but accept indicator_code for consistency
+    if dataset == "MNRE" and "indicator_code" in transformed_filters:
+        transformed_filters["type_of_renewable_energy_code"] = transformed_filters.pop("indicator_code")
 
     # Validate params against swagger spec
     validation = validate_filters(dataset, transformed_filters)
@@ -726,7 +750,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
 @mcp.tool(name="list_datasets", title="Discover Available Datasets", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False})
 def list_datasets() -> dict:
     """
-    Returns an overview of all 19 MoSPI statistical datasets with descriptions and coverage.
+    Returns an overview of all MoSPI statistical datasets with descriptions and coverage.
     This is the starting point — call this first to identify the right dataset.
 
     The API covers 500+ indicators across employment, prices, industry, national
@@ -745,7 +769,7 @@ def list_datasets() -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 20,
+        "total_datasets": 22,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -852,6 +876,11 @@ def list_datasets() -> dict:
                 "description": "46 indicators on school education across India (2018-19 to 2024-25). Overview (1-9): total schools, enrolments, teachers, percentage shares by category/level, PTR, average teachers/enrolments per school. Special focus (10-15): zero-enrolment schools, single-teacher schools, enrolment brackets, proportion by level. Schools (16, 18-20): by infrastructure facility, by level of education, by management and school category, AWC/pre-primary sections. Teachers (21-26): total by management, by gender and class taught, PTR by level, percentage trained, percentage professionally qualified. Enrolment (28-38): total students, CWSN, pre-school experience, GER, NER, ANER, ASER by age group, GPI of GER, OBC/Muslim minority/all minority enrolment percentages. Transition metrics (39-43): promotion, repetition, dropout, transition, retention rates. Facilities (45-49): drinking water (by source type), library books per school, educational parameters by management, computers and digital initiatives (by sub-indicator), ICT labs.",
                 "use_for": "Schools, enrolment, dropout rates, teachers, pupil-teacher ratio, GER, NER, GPI, CWSN, school infrastructure, ICT labs, drinking water in schools, minority enrolment, OBC enrolment, trained teachers, school education statistics"
             },
+            "MNRE": {
+                "name": "Renewable Energy (Ministry of New and Renewable Energy)",
+                "description": "5 indicators on state-wise monthly installed renewable energy capacity (MW): 1=Solar Power (5 categories: ground-mounted, rooftop, hybrid, off-grid/KUSUM, total), 2=Wind Power (no categories), 3=Hydro Power (small, large), 4=Bio Power (waste-to-energy, biomass cogeneration, bagasse, off-grid, total), 5=Total Power (aggregate of all renewables). Coverage from 2020 onwards, 36 states/UTs plus All India, monthly granularity.",
+                "use_for": "Renewable energy capacity, solar power installed capacity, wind power, hydro power, bio power, rooftop solar, KUSUM, biomass, state-wise renewable energy, MNRE statistics, clean energy, green energy capacity"
+            },
         },
         "workflow": [
             "1. list_datasets() — identify the relevant dataset",
@@ -870,7 +899,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.0 with OpenTelemetry")
-    log("Datasets: 21 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE)")
+    log("Datasets: 22 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")

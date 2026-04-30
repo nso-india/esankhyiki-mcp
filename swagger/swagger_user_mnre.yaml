@@ -1,0 +1,102 @@
+openapi: 3.0.1
+info:
+  title: Renewable Energy (MNRE)
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: Ministry of New and Renewable Energy
+  description: State-wise installed capacity of renewable energy sources from MNRE.
+paths:
+  /api/mnre/getDataByEnergy:
+    get:
+      tags:
+      - Ministry of New and Renewable Energy
+      description: State-wise monthly installed capacity for solar, wind, hydro, bio, and total renewable power in MW.
+      operationId: MNREEnergyValues
+      parameters:
+      - name: type_of_renewable_energy_code
+        required: true
+        in: query
+        description: Type of renewable energy. 1=Solar Power, 2=Wind Power, 3=Hydro Power, 4=Bio Power, 5=Total Power. Single integer only.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 5
+      - name: year
+        in: query
+        description: Calendar year (YYYY format, comma separated for multiple values).
+        schema:
+          type: string
+          pattern: ^\d{4}(,\d{4})*$
+      - name: month_code
+        in: query
+        description: Month code (1=January, 2=February, ..., 12=December. Comma separated for multiple values).
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: state_code
+        in: query
+        description: State code (36=All India, 1-40 for individual states/UTs. Comma separated for multiple values).
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: category_code
+        in: query
+        description: Category code within the energy type (only Solar=1-5, Hydro=7-8, Bio=9-15 have categories. Wind and Total Power have none. Comma separated for multiple values).
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: isGroupView
+        in: query
+        description: Toggle group view aggregation (default false).
+        schema:
+          type: boolean
+          default: false
+      - name: limit
+        in: query
+        description: Number of records per page (default 20).
+        schema:
+          type: integer
+          default: 20
+      - name: page
+        in: query
+        description: Page number (from 1 to n).
+        schema:
+          type: integer
+          minimum: 1
+      - name: Format
+        in: query
+        description: Output format (JSON or CSV).
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+      responses:
+        '200':
+          description: A JSON array of installed capacity records (value in MW).
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: "2.0"
