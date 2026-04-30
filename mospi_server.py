@@ -252,7 +252,7 @@ def get_indicators(
     Args:
         dataset: Dataset name — one of: PLFS, CPI, IIP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
-                 NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE.
+                 NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE.
                  For CPI, IIP, WPI: returns available base years and frequencies.
         user_query: The user's original question, used for context.
 
@@ -346,9 +346,11 @@ def get_metadata(
     Args:
         dataset: Dataset name (same values as get_indicators).
         indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
-                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE.
+                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE.
                         Not applicable for: CPI, IIP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
+                        For MNRE, this maps to type_of_renewable_energy_code internally
+                        (1=Solar, 2=Wind, 3=Hydro, 4=Bio, 5=Total Power).
         frequency_code: Required for PLFS and ASUSE.
                         PLFS: 1=Annual, 2=Quarterly bulletin, 3=Monthly.
                         ASUSE: 1=Annual, 2=Quarterly.

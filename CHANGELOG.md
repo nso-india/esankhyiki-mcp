@@ -10,11 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - UDISE+ (Unified District Information System for Education) with 46 indicators on school education across India (2018-19 to 2024-25): schools by level/management/infrastructure, teachers by management/gender/class/training, enrolment (total, CWSN, GER, NER, ANER, ASER, GPI), OBC/minority enrolment, transition metrics (promotion, repetition, dropout, transition, retention rates), and facilities (drinking water, ICT labs, computers, digital initiatives, library)
 - NSS79 (79th Round - CAMS + AYUSH) with 35 indicators across two modules: CAMS module (indicators 1-28) covering literacy, school enrolment, NEET youth, health expenditure, financial inclusion, digital literacy, and household living conditions; AYUSH module (indicators 29-35) covering awareness, usage, treatment types, therapy knowledge, and expenditure on AYUSH systems
+- MNRE (Ministry of New and Renewable Energy) with 5 indicators on state-wise monthly installed renewable energy capacity in MW: Solar Power (with categories for ground-mounted, rooftop, hybrid, off-grid/KUSUM, and total), Wind Power, Hydro Power (small and large hydro), Bio Power (waste-to-energy, biomass cogeneration, bagasse, off-grid), and Total Power. Coverage from 2020 onwards across all states/UTs at monthly granularity. indicator_code (1-5) maps to type_of_renewable_energy_code in the API for consistency with other datasets, similar to the RBI sub_indicator_code pattern.
 - Indicator definitions (definitions/) for all 15 datasets with indicator_code support — enriches step2_get_indicators responses with human-readable descriptions
 
 ### Changed
-- Total datasets: 20 → 21
-- step1 updated to reflect 21 datasets and UDISE description
+- Total datasets: 20 → 22
+- step1 updated to reflect 22 datasets including UDISE and MNRE descriptions
 
 ---
 

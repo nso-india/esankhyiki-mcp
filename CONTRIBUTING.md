@@ -2,7 +2,7 @@
 
 ## Adding a New Dataset
 
-The server currently supports 20 datasets. To add a new one:
+The server currently supports 22 datasets. To add a new one:
 
 ### 1. Get the Swagger spec
 
@@ -111,7 +111,7 @@ pip install -r tests/requirements-test.txt
 pytest tests/ -v -p no:anyio
 ```
 
-This runs tests covering all 20 datasets across all 4 tools, plus negative/error-path tests. Tests hit the live MoSPI API with a 0.5s throttle between calls to avoid rate-limiting.
+This runs tests covering all 22 datasets across all 4 tools, plus negative/error-path tests. Tests hit the live MoSPI API with a 0.5s throttle between calls to avoid rate-limiting.
 
 To test against a deployed server instead of in-process:
 
