@@ -365,6 +365,9 @@ def get_metadata(
         classification_year: Required for ASI ("2008"/"2004"/"1998"/"1987").
         series: For CPI and NAS only ("Current"/"Back").
         use_of_energy_balance_code: For ENERGY only (1=Supply, 2=Consumption).
+        survey_code: For NSS80 only. 1=CMST (Telecom), 2=CMSE (Education).
+                     Auto-derived from indicator_code if not supplied
+                     (1-20 -> CMST, 23-42 -> CMSE).
 
     Returns:
         dict with 'filter_values' (valid codes for each parameter),
