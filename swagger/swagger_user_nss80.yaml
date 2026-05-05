@@ -1,0 +1,187 @@
+openapi: 3.0.1
+info:
+  title: National Sample Survey (NSS 80th Round)
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: National Sample Survey (NSS 80th Round - CMST + CMSE)
+  description: Comprehensive Modular Survey on Telecom (CMST) and Education (CMSE) - NSS 80th Round.
+paths:
+  /api/nss-80/getNSS80Records:
+    get:
+      tags:
+      - National Sample Survey (NSS 80th Round - CMST + CMSE)
+      description: Indicator-wise data from NSS 80th Round. Indicators 1-20 are CMST module (telecom, mobile, internet usage), indicators 23-42 are CMSE module (school education expenditure). survey_code is required (1=CMST, 2=CMSE).
+      operationId: NSS80IndicatorValues
+      parameters:
+      - name: indicator_code
+        required: true
+        in: query
+        description: Indicator code. CMST module covers 1-20 (telecom, mobile, internet). CMSE module covers 23-42 (school education expenditure).
+        schema:
+          type: integer
+      - name: survey_code
+        required: true
+        in: query
+        description: Survey module. 1=CMST (Telecom), 2=CMSE (Education).
+        schema:
+          type: integer
+          enum:
+          - 1
+          - 2
+      - name: sub_indicator_code
+        in: query
+        description: Sub-indicator code (comma separated for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sector_code
+        in: query
+        description: Sector code (1=Rural, 2=Urban, 3=Combined). Comma separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: state_code
+        in: query
+        description: State code (1-37 including All-India=37). Comma separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: agegroup_code
+        in: query
+        description: Age group code (comma separated for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: gender_code
+        in: query
+        description: Gender code (1=Male, 2=Female, 3=Person). Comma separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: mobile_type_code
+        in: query
+        description: Mobile type code (CMST module)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: major_reason_code
+        in: query
+        description: Major reason code (comma separated for multiple values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: internet_access_code
+        in: query
+        description: Internet access code (CMST module)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: type_of_device_and_network_code
+        in: query
+        description: Type of device and network code (CMST module)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: mode_of_transaction_code
+        in: query
+        description: Mode of transaction code (CMST online banking)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: mobile_household_assets_code
+        in: query
+        description: Mobile household assets code (CMST household connectivity)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: type_of_network_code
+        in: query
+        description: Type of network code (CMST internet service type)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: type_of_goods_code
+        in: query
+        description: Type of goods code (CMST online purchases)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: level_of_enrollment_code
+        in: query
+        description: Level of enrollment code (CMSE pre-primary, primary, middle, secondary, etc.)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: type_of_school_code
+        in: query
+        description: Type of school code (CMSE government, private aided, private unaided, etc.)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: expenditure_item_code
+        in: query
+        description: Expenditure item code (CMSE course fees, books, uniforms, transport, etc.)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sof_code
+        in: query
+        description: Source of funding code (CMSE)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: household_members_code
+        in: query
+        description: Household members code (CMSE)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: limit
+        in: query
+        description: Number of records per page (default 20)
+        schema:
+          type: integer
+          default: 20
+      - name: page
+        in: query
+        description: Page number (from 1 to n)
+        schema:
+          type: integer
+          minimum: 1
+      - name: Format
+        in: query
+        description: Output format (JSON or xlsx for Excel download)
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - xlsx
+      responses:
+        '200':
+          description: A JSON array of indicator data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: "2.0"

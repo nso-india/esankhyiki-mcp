@@ -86,6 +86,7 @@ class MoSPI:
             "TUS": "/api/tus/getTusRecords",
             "UDISE": "/api/udise/getUdiseRecords",
             "MNRE": "/api/mnre/getDataByEnergy",
+            "NSS80": "/api/nss-80/getNSS80Records",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -1404,6 +1405,85 @@ class MoSPI:
         try:
             response = self.session.get(
                 f"{self.base_url}/api/mnre/getFilterByEnergy",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # NSS80 (NSS 80th Round - CMST + CMSE) Methods
+    # =========================================================================
+
+    @staticmethod
+    def _nss80_survey_for(indicator_code: int) -> Optional[int]:
+        """Map indicator_code to its survey_code.
+
+        CMST (survey_code=1): indicators 1-20.
+        CMSE (survey_code=2): indicators 23-42.
+        """
+        if 1 <= indicator_code <= 20:
+            return 1
+        if 23 <= indicator_code <= 42:
+            return 2
+        return None
+
+    def get_nss80_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS80 indicators from MoSPI API.
+
+        Returns 38 indicators from NSS 80th Round across two modules:
+        - survey_code=1 (CMST - Comprehensive Modular Survey: Telecom): 20 indicators
+          on mobile/internet usage, online banking, cybercrime reporting, household
+          connectivity, and online purchases.
+        - survey_code=2 (CMSE - Comprehensive Modular Survey: Education): 18 indicators
+          on school education enrolment, expenditure by level/type/item, course fees,
+          private coaching, and sources of funding.
+        """
+        try:
+            resp1 = self.session.get(
+                f"{self.base_url}/api/nss-80/getIndicatorList",
+                params={"survey_code": 1},
+                timeout=30
+            )
+            resp1.raise_for_status()
+            result = resp1.json()
+
+            resp2 = self.session.get(
+                f"{self.base_url}/api/nss-80/getIndicatorList",
+                params={"survey_code": 2},
+                timeout=30
+            )
+            resp2.raise_for_status()
+            cmse = resp2.json().get("data", [])
+
+            result["data"] = result.get("data", []) + cmse
+            result["count"] = len(result["data"])
+            return result
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss80_filters(self, indicator_code: int, survey_code: Optional[int] = None) -> Dict[str, Any]:
+        """Fetch available NSS80 filters for given indicator and survey.
+
+        Args:
+            indicator_code: Indicator code (1-20 = CMST, 23-42 = CMSE).
+            survey_code: Survey module (1=CMST Telecom, 2=CMSE Education).
+                         Auto-derived from indicator_code if not supplied.
+        """
+        if survey_code is None:
+            survey_code = self._nss80_survey_for(indicator_code)
+            if survey_code is None:
+                return {
+                    "error": f"indicator_code {indicator_code} is out of range. CMST=1-20, CMSE=23-42.",
+                    "statusCode": False,
+                }
+
+        params = {"indicator_code": indicator_code, "survey_code": survey_code}
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-80/getFilterBySurveryAndIndicator",
                 params=params,
                 timeout=30
             )

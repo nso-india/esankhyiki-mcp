@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-04-30
+
+### Added
+- NSS80 (80th Round - CMST + CMSE) with 38 indicators across two Comprehensive Modular Surveys fielded in 2025: CMST module (Comprehensive Modular Survey: Telecom, indicators 1-20, Jan-Mar 2025) covering mobile/internet usage, online banking, cybercrime reporting, household telecom connectivity, and online purchases; CMSE module (Comprehensive Modular Survey: Education, indicators 23-42, Apr-Jun 2025) covering school enrolment, expenditure by level/type/items, course fees, private coaching, and sources of education funding. survey_code (1=CMST, 2=CMSE) is required by the data API and is auto-derived from indicator_code.
+- `survey_code` parameter on `get_metadata` to support NSS80 filter lookups (auto-derived when not supplied).
+
+### Changed
+- Total datasets: 22 → 23
+- list_datasets, get_indicators, and get_metadata updated to include NSS80
+
+---
+
 ## [2.2.0] - 2026-04-30
 
 ### Added
@@ -78,6 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 2.3.0 | 2026-04-30 | NSS80 (CMST + CMSE) dataset (23 total) |
 | 2.2.0 | 2026-04-30 | MNRE renewable energy dataset (22 total) |
 | 2.1.0 | 2026-04-09 | UDISE+ and NSS79 datasets (21 total) |
 | 2.0.0 | 2026-02-22 | 12 new datasets (19 total), EC integration, CPI base year 2024 |

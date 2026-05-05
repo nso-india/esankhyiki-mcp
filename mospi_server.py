@@ -79,7 +79,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE",
+    "NSS77", "NSS78", "NSS79", "NSS80", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE",
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -103,6 +103,7 @@ DATASET_SWAGGER = {
     "NSS77": ("swagger_user_nss77.yaml", "/api/nss-77/getNss77Records"),
     "NSS78": ("swagger_user_nss78.yaml", "/api/nss-78/getNss78Records"),
     "NSS79": ("swagger_user_nss79.yaml", "/api/nss-79/getNSS79Records"),
+    "NSS80": ("swagger_user_nss80.yaml", "/api/nss-80/getNSS80Records"),
     "CPIALRL": ("swagger_user_cpialrl.yaml", "/api/cpialrl/getCpialrlRecords"),
     "HCES": ("swagger_user_hces.yaml", "/api/hces/getHcesRecords"),
     "TUS": ("swagger_user_tus.yaml", "/api/tus/getTusRecords"),
@@ -114,7 +115,7 @@ DATASET_SWAGGER = {
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE",
+    "NSS77", "NSS78", "NSS79", "NSS80", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE",
 ]
 
 
@@ -252,7 +253,7 @@ def get_indicators(
     Args:
         dataset: Dataset name — one of: PLFS, CPI, IIP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
-                 NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE.
+                 NSS77, NSS78, NSS79, NSS80, CPIALRL, HCES, TUS, EC, UDISE, MNRE.
                  For CPI, IIP, WPI: returns available base years and frequencies.
         user_query: The user's original question, used for context.
 
@@ -286,6 +287,7 @@ def get_indicators(
         "NSS77": mospi.get_nss77_indicators,
         "NSS78": mospi.get_nss78_indicators,
         "NSS79": mospi.get_nss79_indicators,
+        "NSS80": mospi.get_nss80_indicators,
         "CPIALRL": mospi.get_cpialrl_indicators,
         "HCES": mospi.get_hces_indicators,
         "TUS": mospi.get_tus_indicators,
@@ -327,6 +329,7 @@ def get_metadata(
     series: Optional[str] = None,
     use_of_energy_balance_code: Optional[int] = None,
     sub_indicator_code: Optional[int] = None,
+    survey_code: Optional[int] = None,
     Format: Optional[str] = None,
     type: Optional[str] = None
 ) -> dict:
@@ -346,7 +349,7 @@ def get_metadata(
     Args:
         dataset: Dataset name (same values as get_indicators).
         indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
-                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE.
+                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, NSS80, CPIALRL, HCES, TUS, EC, UDISE, MNRE.
                         Not applicable for: CPI, IIP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
         frequency_code: Required for PLFS and ASUSE.
@@ -550,6 +553,23 @@ def get_metadata(
             result["_next_step"] = _next
             return result
 
+        elif dataset == "NSS80":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for NSS80. CMST=1-20, CMSE=23-42."}
+            survey_code, err = _safe_int(survey_code, "survey_code")
+            if err:
+                return err
+            result = mospi.get_nss80_filters(indicator_code=indicator_code, survey_code=survey_code)
+            result["api_params"] = get_swagger_param_definitions("NSS80")
+            result["parameter_notes"] = (
+                "survey_code is required by the data API. 1=CMST (Comprehensive Modular Survey: Telecom), "
+                "2=CMSE (Comprehensive Modular Survey: Education). "
+                "It is auto-derived from indicator_code (1-20 -> CMST, 23-42 -> CMSE) but must be passed in get_data filters. "
+                "state_code=37 is All-India."
+            )
+            result["next_step"] = _next
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
+
         elif dataset == "CPIALRL":
             if indicator_code is None:
                 return {"error": "indicator_code is required for CPIALRL"}
@@ -638,7 +658,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY,
                  AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
-                 NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE).
+                 NSS78, NSS79, NSS80, CPIALRL, HCES, TUS, EC, UDISE, MNRE).
                  CPI auto-routes to Group or Item endpoint based on
                  whether filters contain item_code.
                  IIP uses a single endpoint; pass frequency="Annually" or
@@ -688,6 +708,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         "NSS77": "NSS77",
         "NSS78": "NSS78",
         "NSS79": "NSS79",
+        "NSS80": "NSS80",
         "CPIALRL": "CPIALRL",
         "HCES": "HCES",
         "TUS": "TUS",
@@ -709,6 +730,18 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     # MNRE uses type_of_renewable_energy_code but accept indicator_code for consistency
     if dataset == "MNRE" and "indicator_code" in transformed_filters:
         transformed_filters["type_of_renewable_energy_code"] = transformed_filters.pop("indicator_code")
+
+    # NSS80 requires survey_code; auto-derive from indicator_code if not supplied
+    if dataset == "NSS80" and "survey_code" not in transformed_filters:
+        ic = transformed_filters.get("indicator_code")
+        if ic is not None:
+            try:
+                ic_int = int(str(ic).split(",")[0])
+                derived = mospi._nss80_survey_for(ic_int)
+                if derived is not None:
+                    transformed_filters["survey_code"] = str(derived)
+            except (ValueError, AttributeError):
+                pass
 
     # Validate params against swagger spec
     validation = validate_filters(dataset, transformed_filters)
@@ -769,7 +802,7 @@ def list_datasets() -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 22,
+        "total_datasets": 23,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -851,6 +884,11 @@ def list_datasets() -> dict:
                 "description": "35 indicators from two modules of NSS 79th Round. CAMS module (indicators 1-28): education (literacy, numeracy, mean years of schooling, primary enrolment, secondary attainment, out-of-school children, S&T graduates, youth in training, NEET youth), health expenditure (hospitalised and non-hospitalised, out-of-pocket), financial inclusion (bank accounts, borrowers), digital literacy (mobile/internet usage and ability, 4G coverage, file sharing, online banking), and household living conditions (assets, clean fuel, drinking water, sanitation, birth registration, transport access). AYUSH module (indicators 29-35): awareness of AYUSH systems per 1000 persons, usage in last 365 days, treatment type breakdown, household-level awareness and knowledge of AYUSH therapy, average expenditure per person availing AYUSH treatment, and household reasons for using AYUSH.",
                 "use_for": "Literacy, school enrolment, NEET youth, health expenditure, out-of-pocket costs, financial inclusion, mobile/internet usage, digital skills, 4G coverage, household assets, AYUSH awareness, AYUSH usage, traditional medicine, alternative treatment expenditure, CAMS survey"
             },
+            "NSS80": {
+                "name": "NSS80 (80th Round - CMST + CMSE)",
+                "description": "38 indicators from two Comprehensive Modular Surveys of NSS 80th Round, fielded across 2025. CMST module (Comprehensive Modular Survey: Telecom, indicators 1-20, Jan-Mar 2025): mobile phone ownership and usage in last 3 months, internet usage and frequency, type of portable device and network used, ability to send/receive email and attachments, ability to copy-paste, create electronic documents and presentations, online banking ability and modes of transaction, ability to report cybercrime, household possession of landline/mobile/optical fiber, household internet facility by service type, reasons for not having internet, and household online purchases by type of goods. CMSE module (Comprehensive Modular Survey: Education, indicators 23-42, Apr-Jun 2025): distribution of students enrolled in school education by level (pre-primary, primary, middle, secondary, higher secondary) and type of school (government, private aided, private unaided, etc.), percentage reporting course-fee expenditure, average expenditure per student and per reported student by level/type of school/items of expenditure (course fees, books, uniforms, transport, etc.), private coaching attendance and expenditure, and household-level expenditure on members currently attending school.",
+                "use_for": "Mobile phone ownership, internet usage, digital skills, online banking, cybercrime reporting, household telecom connectivity, online shopping, school enrolment, school expenditure, course fees, books, uniforms, transport, private coaching, private tuition, education expenditure by household, CMST survey, CMSE survey, comprehensive modular survey"
+            },
             "CPIALRL": {
                 "name": "CPI for Agricultural/Rural Labourers",
                 "description": "2 indicators: General Index and Group Index for two worker categories—Agricultural Labourers (AL) and Rural Labourers (RL). Separate inflation series measuring cost of living for India's most vulnerable rural workforce segments.",
@@ -899,7 +937,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.0 with OpenTelemetry")
-    log("Datasets: 22 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE)")
+    log("Datasets: 23 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, NSS80, CPIALRL, HCES, TUS, EC, UDISE, MNRE)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")
