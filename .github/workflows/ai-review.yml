@@ -1,13 +1,13 @@
 name: AI PR Review
 
-# Multi-pass PR review using GitHub Models (free in Actions):
-# 1. Bash heuristic picks the top 5 most important changed files.
-# 2. openai/gpt-4o-mini reviews each picked file's full diff in isolation
-#    (per-file passes can't hallucinate "missing X in other file" because
-#    each pass sees one file at a time).
-# 3. openai/gpt-4o synthesizes per-file findings into the final review,
-#    handling cross-file checks (count drift, wiring consistency) and
-#    posting one Markdown comment to the PR.
+# Single-pass AI review focused on code quality.
+#
+# Structural consistency (dataset count drift, missing wiring, broken
+# swagger registration, etc.) is verified deterministically by
+# tests/test_consistency.py — the LLM is told NOT to duplicate those
+# checks. This keeps the LLM scoped to where it adds real value (code
+# smells, edge cases, security, naming) and away from where it
+# hallucinates (line numbers, structural claims).
 
 on:
   pull_request:
@@ -31,7 +31,7 @@ jobs:
       github.actor != 'dependabot[bot]' &&
       !contains(github.event.pull_request.labels.*.name, 'skip-review')
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     steps:
       - name: Checkout
@@ -39,197 +39,157 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Rank and split changed files
-        id: prep
+      - name: Gather diff
+        id: context
         env:
           BASE_REF: ${{ github.event.pull_request.base.ref }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
           git fetch --no-tags --depth=50 origin "$BASE_REF"
-
-          DIFF_DIR="$RUNNER_TEMP/diffs"
-          mkdir -p "$DIFF_DIR"
-
-          # All changed files
-          git diff --name-only "origin/${BASE_REF}...${HEAD_SHA}" > "$DIFF_DIR/all.txt" || true
-
-          # Path-priority ranking (lower = more important to review).
-          rank_path() {
-            case "$1" in
-              tests/*) echo 1 ;;
-              mospi_server.py) echo 2 ;;
-              mospi/client.py) echo 2 ;;
-              mospi/*) echo 3 ;;
-              swagger/*) echo 4 ;;
-              Dockerfile|docker-compose.yml|requirements*.txt|pyproject.toml) echo 4 ;;
-              .github/workflows/*) echo 5 ;;
-              definitions/*) echo 6 ;;
-              README.md|CHANGELOG.md|CONTRIBUTING.md|CLAUDE.md) echo 7 ;;
-              docs/*) echo 8 ;;
-              *) echo 9 ;;
-            esac
-          }
-
-          # Build ranked list, pick top 5
-          : > "$DIFF_DIR/ranked.txt"
-          while IFS= read -r f; do
-            [ -z "$f" ] && continue
-            printf '%d\t%s\n' "$(rank_path "$f")" "$f" >> "$DIFF_DIR/ranked.txt"
-          done < "$DIFF_DIR/all.txt"
-          sort -n "$DIFF_DIR/ranked.txt" | head -n 5 | cut -f2- > "$DIFF_DIR/top.txt"
-
-          # Save per-file diffs, capped at 12 KB each (~3000 tokens).
-          i=1
-          while IFS= read -r f; do
-            [ -z "$f" ] && continue
-            TMP=$(mktemp)
-            git diff "origin/${BASE_REF}...${HEAD_SHA}" -- "$f" > "$TMP" || true
-            head -c 12000 "$TMP" > "$DIFF_DIR/file_${i}.diff"
-            rm -f "$TMP"
-            echo "file_${i}=$f" >> "$GITHUB_OUTPUT"
-            i=$((i+1))
-          done < "$DIFF_DIR/top.txt"
-
-          # Emit aggregate outputs
-          ALL_CHANGED=$(cat "$DIFF_DIR/all.txt")
-          TOP_COUNT=$(wc -l < "$DIFF_DIR/top.txt" | tr -d ' ')
+          TMPDIFF=$(mktemp)
+          trap "rm -f $TMPDIFF" EXIT
+          git diff "origin/${BASE_REF}...${HEAD_SHA}" > "$TMPDIFF"
+          # gpt-4o allows 8000 input tokens. Reserve ~1500 for system prompt
+          # and metadata, leaving ~6500 for the diff. ~26KB at 4 chars/token.
+          DIFF=$(head -c 25000 "$TMPDIFF")
+          CHANGED=$(git diff --name-only "origin/${BASE_REF}...${HEAD_SHA}")
           {
-            echo "all_changed<<ALLEOF"
-            echo "$ALL_CHANGED"
-            echo "ALLEOF"
-            echo "top_count=$TOP_COUNT"
-            echo "diff_dir=$DIFF_DIR"
+            echo "diff<<DIFFEOF"
+            echo "$DIFF"
+            echo "DIFFEOF"
+            echo "changed<<CHGEOF"
+            echo "$CHANGED"
+            echo "CHGEOF"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Stage per-file prompts
-        id: prompts
-        run: |
-          set -euo pipefail
-          D="${{ steps.prep.outputs.diff_dir }}"
-          for i in 1 2 3 4 5; do
-            if [ -f "$D/file_${i}.diff" ]; then
-              {
-                echo "Reviewing file: ${{ steps.prep.outputs.file_1 }}"
-                echo ""
-                echo "PR title: ${{ github.event.pull_request.title }}"
-                echo ""
-                echo "Diff for this file only:"
-                echo '```diff'
-                cat "$D/file_${i}.diff"
-                echo '```'
-              } > "$D/prompt_${i}.txt"
-            fi
-          done
-          # Replace placeholder filename per file
-          for i in 1 2 3 4 5; do
-            if [ -f "$D/prompt_${i}.txt" ]; then
-              case "$i" in
-                1) F="${{ steps.prep.outputs.file_1 }}" ;;
-                2) F="${{ steps.prep.outputs.file_2 }}" ;;
-                3) F="${{ steps.prep.outputs.file_3 }}" ;;
-                4) F="${{ steps.prep.outputs.file_4 }}" ;;
-                5) F="${{ steps.prep.outputs.file_5 }}" ;;
-              esac
-              sed -i "1s|.*|Reviewing file: $F|" "$D/prompt_${i}.txt"
-            fi
-          done
-
-      - name: Review file 1
-        id: r1
-        if: steps.prep.outputs.file_1 != ''
-        uses: actions/ai-inference@v2
-        with:
-          model: openai/gpt-4o-mini
-          max-completion-tokens: 800
-          system-prompt-file: .github/ai-review/per-file-system.md
-          prompt-file: ${{ steps.prep.outputs.diff_dir }}/prompt_1.txt
-
-      - name: Review file 2
-        id: r2
-        if: steps.prep.outputs.file_2 != ''
-        uses: actions/ai-inference@v2
-        with:
-          model: openai/gpt-4o-mini
-          max-completion-tokens: 800
-          system-prompt-file: .github/ai-review/per-file-system.md
-          prompt-file: ${{ steps.prep.outputs.diff_dir }}/prompt_2.txt
-
-      - name: Review file 3
-        id: r3
-        if: steps.prep.outputs.file_3 != ''
-        uses: actions/ai-inference@v2
-        with:
-          model: openai/gpt-4o-mini
-          max-completion-tokens: 800
-          system-prompt-file: .github/ai-review/per-file-system.md
-          prompt-file: ${{ steps.prep.outputs.diff_dir }}/prompt_3.txt
-
-      - name: Review file 4
-        id: r4
-        if: steps.prep.outputs.file_4 != ''
-        uses: actions/ai-inference@v2
-        with:
-          model: openai/gpt-4o-mini
-          max-completion-tokens: 800
-          system-prompt-file: .github/ai-review/per-file-system.md
-          prompt-file: ${{ steps.prep.outputs.diff_dir }}/prompt_4.txt
-
-      - name: Review file 5
-        id: r5
-        if: steps.prep.outputs.file_5 != ''
-        uses: actions/ai-inference@v2
-        with:
-          model: openai/gpt-4o-mini
-          max-completion-tokens: 800
-          system-prompt-file: .github/ai-review/per-file-system.md
-          prompt-file: ${{ steps.prep.outputs.diff_dir }}/prompt_5.txt
-
-      - name: Synthesize
-        id: synthesize
+      - name: Run AI review
+        id: ai
         uses: actions/ai-inference@v2
         with:
           model: openai/gpt-4o
           max-completion-tokens: 1500
-          system-prompt-file: .github/ai-review/synthesis-system.md
+          system-prompt: |
+            You are reviewing a pull request on the MoSPI MCP server: a
+            FastMCP 3.0 server exposing 23+ Indian govt statistical
+            datasets over the Model Context Protocol. Single-file server
+            design (mospi_server.py); swagger YAMLs are the source of
+            truth for parameter validation.
+
+            ## What is ALREADY verified deterministically (DO NOT duplicate)
+
+            tests/test_consistency.py mechanically checks all of:
+            - VALID_DATASETS, DATASET_SWAGGER, EXPECTED_DATASETS agree
+            - total_datasets count is correct
+            - Startup banner count and dataset names match
+            - README feature count and dataset table rows match
+            - CONTRIBUTING.md dataset count lines match
+            - Every dataset has a swagger_user_<name>.yaml file
+            - indicator_methods dict has every dataset
+            - dataset_map in get_data covers every dataset
+
+            If any of those drift, CI fails. You will see the failure
+            without needing to flag it. Do NOT mention these in your
+            review.
+
+            ## Your scope — focus only on these
+
+            1. **Code quality**: naming, structure, dead code, obvious
+               bugs in NEW code visible in the diff.
+            2. **Edge cases**: what inputs would break the new logic?
+            3. **Security**: secrets in code, injection vectors, unsafe
+               deserialization, overly permissive nginx/CSP changes.
+            4. **Documentation drift IN DOCSTRINGS** (not in counts —
+               those are tested).
+            5. **Test quality**: does a new test actually exercise what
+               it claims?
+
+            ## Project conventions (flag only when violated in the diff)
+
+            - Param renames in get_data: RBI uses sub_indicator_code;
+              MNRE uses type_of_renewable_energy_code; NSS80 derives
+              survey_code (1-20=CMST, 23-42=CMSE).
+            - FastMCP doesn't enforce type hints; numeric params go
+              through _safe_int().
+            - Don't replace LegacyRenegotiationAdapter (MoSPI needs
+              legacy TLS).
+            - --stateless in Dockerfile CMD is required for ChatGPT.
+
+            ## CRITICAL — anti-hallucination rules
+
+            - **Quote the exact text from the diff** you are flagging.
+              If you can't quote it, don't flag it.
+            - Don't reference line numbers that don't appear in the
+              diff. The diff hunks (@@ -X,Y +A,B @@) tell you the line
+              numbers; use those, not made-up ones.
+            - Don't claim items are "missing" — focus on what IS
+              visible in the diff.
+            - When unsure, prefer SUGGESTION over BLOCKING. Save
+              BLOCKING for clear, evidenced bugs.
+
+            ## Don't flag
+
+            - Dataset count / wiring / swagger registration — tested
+              automatically.
+            - Linter-style formatting.
+            - Splitting mospi_server.py (single-file is intentional).
+            - Adding type-hint enforcement.
+            - Removing 'unsafe-inline' from CSP (accepted in May 2026
+              KPMG VA).
+            - PR description vs implementation inconsistencies (PR
+              hygiene, not code).
+
+            ## Output (Markdown)
+
+            ## Summary
+            One sentence: what the PR does + overall verdict.
+
+            ## Findings
+            For each issue:
+            - **[BLOCKING/SUGGESTION/NIT]** `path:line` — issue
+              (quote the relevant line(s) from the diff). Why it
+              matters (1 sentence). Suggested fix (1 line).
+
+            ## Verdict
+            - Blocking: N
+            - Suggestion: N
+            - Nit: N
+            - Recommendation: Approve / Request Changes / Comment
+            - One-sentence rationale.
+
+            If you find nothing, write:
+
+            ## Findings
+            _None._
+
+            ## Verdict
+            - Blocking: 0
+            - Suggestion: 0
+            - Nit: 0
+            - Recommendation: Approve
+            - The change is clean and follows project conventions.
           prompt: |
             PR title: ${{ github.event.pull_request.title }}
 
             PR description:
             ${{ github.event.pull_request.body }}
 
-            ALL changed files in this PR (some may not have per-file findings
-            because only the top ${{ steps.prep.outputs.top_count }} ranked files were reviewed):
-            ${{ steps.prep.outputs.all_changed }}
+            Changed files:
+            ${{ steps.context.outputs.changed }}
 
-            ---
-            Per-file findings (each was reviewed in isolation by gpt-4o-mini):
-
-            ### ${{ steps.prep.outputs.file_1 }}
-            ${{ steps.r1.outputs.response }}
-
-            ### ${{ steps.prep.outputs.file_2 }}
-            ${{ steps.r2.outputs.response }}
-
-            ### ${{ steps.prep.outputs.file_3 }}
-            ${{ steps.r3.outputs.response }}
-
-            ### ${{ steps.prep.outputs.file_4 }}
-            ${{ steps.r4.outputs.response }}
-
-            ### ${{ steps.prep.outputs.file_5 }}
-            ${{ steps.r5.outputs.response }}
+            Diff (may be truncated; if so, judge only what you can see):
+            ```diff
+            ${{ steps.context.outputs.diff }}
+            ```
 
       - name: Post or update review comment
         uses: actions/github-script@v7
         env:
-          REVIEW: ${{ steps.synthesize.outputs.response }}
-          TOP_COUNT: ${{ steps.prep.outputs.top_count }}
+          REVIEW: ${{ steps.ai.outputs.response }}
         with:
           script: |
             const marker = '<!-- ai-pr-review -->';
-            const footer = `_Auto-generated. ${process.env.TOP_COUNT} file(s) reviewed in isolation by \`openai/gpt-4o-mini\`, then synthesized by \`openai/gpt-4o\` via [GitHub Models](https://docs.github.com/en/github-models). Workflow: \`.github/workflows/ai-review.yml\`. Add the \`skip-review\` label to suppress._`;
-            const body = `${marker}\n## 🤖 AI PR Review\n\n${process.env.REVIEW}\n\n---\n${footer}`;
+            const body = `${marker}\n## 🤖 AI PR Review\n\n${process.env.REVIEW}\n\n---\n_Auto-generated. Structural checks (dataset count, wiring) are handled deterministically by [\`tests/test_consistency.py\`](../blob/main/tests/test_consistency.py); this review focuses on code quality. Model: \`openai/gpt-4o\` via [GitHub Models](https://docs.github.com/en/github-models). Workflow: \`.github/workflows/ai-review.yml\`. Add the \`skip-review\` label to suppress._`;
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
