@@ -1,4 +1,4 @@
-"""MCP Server health-check tests — all 4 tools across all 22 datasets.
+"""MCP Server health-check tests — all 4 tools across all 23 datasets.
 
 Uses FastMCP Client (in-process by default, HTTP via MCP_SERVER_URL env var).
 Run:  pytest tests/ -v
@@ -174,6 +174,12 @@ DATASETS = [
         id="NSS79",
     ),
     pytest.param(
+        "NSS80",
+        {"indicator_code": 1},
+        {"indicator_code": "1", "limit": "1"},
+        id="NSS80",
+    ),
+    pytest.param(
         "UDISE",
         {"indicator_code": 1},
         {"indicator_code": "1", "limit": "1"},
@@ -197,7 +203,7 @@ EXPECTED_TOOLS = {
 EXPECTED_DATASETS = {
     "PLFS", "CPI", "IIP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE",
+    "NSS77", "NSS78", "NSS79", "NSS80", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE",
 }
 
 # Internal keys injected by the server (not dataset-specific content)
@@ -223,7 +229,7 @@ async def test_list_tools(mcp_target):
 
 
 async def test_list_datasets(mcp_target):
-    """list_datasets: API overview returns all 22 datasets and workflow instructions."""
+    """list_datasets: API overview returns all 23 datasets and workflow instructions."""
     data = await call(mcp_target, "list_datasets", {})
     assert isinstance(data, dict)
     assert "datasets" in data
