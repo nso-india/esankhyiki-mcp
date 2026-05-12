@@ -42,8 +42,14 @@ jobs:
         run: |
           set -euo pipefail
           git fetch --no-tags --depth=50 origin "$BASE_REF"
+          # Capture full diff to a temp file, then truncate.
+          # Piping `git diff | head -c N` causes SIGPIPE (exit 141) under
+          # pipefail when the diff exceeds N bytes.
+          TMPDIFF=$(mktemp)
+          trap "rm -f $TMPDIFF" EXIT
+          git diff "origin/${BASE_REF}...${HEAD_SHA}" > "$TMPDIFF"
           # Cap diff at 20 KB (~5000 tokens) to fit in gpt-4o's 8000-token input budget
-          DIFF=$(git diff "origin/${BASE_REF}...${HEAD_SHA}" | head -c 20000)
+          DIFF=$(head -c 20000 "$TMPDIFF")
           CHANGED=$(git diff --name-only "origin/${BASE_REF}...${HEAD_SHA}")
           {
             echo "diff<<DIFFEOF"
