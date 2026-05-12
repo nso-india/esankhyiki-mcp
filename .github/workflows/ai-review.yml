@@ -1,8 +1,13 @@
 name: AI PR Review
 
-# Uses GitHub Models (free in Actions) to auto-review every PR against main.
-# Flags blocking issues, suggestions, and nits. Posts a single summary
-# comment per PR and updates it on subsequent commits.
+# Multi-pass PR review using GitHub Models (free in Actions):
+# 1. Bash heuristic picks the top 5 most important changed files.
+# 2. openai/gpt-4o-mini reviews each picked file's full diff in isolation
+#    (per-file passes can't hallucinate "missing X in other file" because
+#    each pass sees one file at a time).
+# 3. openai/gpt-4o synthesizes per-file findings into the final review,
+#    handling cross-file checks (count drift, wiring consistency) and
+#    posting one Markdown comment to the PR.
 
 on:
   pull_request:
@@ -26,7 +31,7 @@ jobs:
       github.actor != 'dependabot[bot]' &&
       !contains(github.event.pull_request.labels.*.name, 'skip-review')
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -34,122 +39,197 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Gather diff
-        id: context
+      - name: Rank and split changed files
+        id: prep
         env:
           BASE_REF: ${{ github.event.pull_request.base.ref }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
           git fetch --no-tags --depth=50 origin "$BASE_REF"
-          # Capture full diff to a temp file, then truncate.
-          # Piping `git diff | head -c N` causes SIGPIPE (exit 141) under
-          # pipefail when the diff exceeds N bytes.
-          TMPDIFF=$(mktemp)
-          trap "rm -f $TMPDIFF" EXIT
-          git diff "origin/${BASE_REF}...${HEAD_SHA}" > "$TMPDIFF"
-          # Cap diff at 20 KB (~5000 tokens) to fit in gpt-4o's 8000-token input budget
-          DIFF=$(head -c 20000 "$TMPDIFF")
-          CHANGED=$(git diff --name-only "origin/${BASE_REF}...${HEAD_SHA}")
+
+          DIFF_DIR="$RUNNER_TEMP/diffs"
+          mkdir -p "$DIFF_DIR"
+
+          # All changed files
+          git diff --name-only "origin/${BASE_REF}...${HEAD_SHA}" > "$DIFF_DIR/all.txt" || true
+
+          # Path-priority ranking (lower = more important to review).
+          rank_path() {
+            case "$1" in
+              tests/*) echo 1 ;;
+              mospi_server.py) echo 2 ;;
+              mospi/client.py) echo 2 ;;
+              mospi/*) echo 3 ;;
+              swagger/*) echo 4 ;;
+              Dockerfile|docker-compose.yml|requirements*.txt|pyproject.toml) echo 4 ;;
+              .github/workflows/*) echo 5 ;;
+              definitions/*) echo 6 ;;
+              README.md|CHANGELOG.md|CONTRIBUTING.md|CLAUDE.md) echo 7 ;;
+              docs/*) echo 8 ;;
+              *) echo 9 ;;
+            esac
+          }
+
+          # Build ranked list, pick top 5
+          : > "$DIFF_DIR/ranked.txt"
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            printf '%d\t%s\n' "$(rank_path "$f")" "$f" >> "$DIFF_DIR/ranked.txt"
+          done < "$DIFF_DIR/all.txt"
+          sort -n "$DIFF_DIR/ranked.txt" | head -n 5 | cut -f2- > "$DIFF_DIR/top.txt"
+
+          # Save per-file diffs, capped at 12 KB each (~3000 tokens).
+          i=1
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            TMP=$(mktemp)
+            git diff "origin/${BASE_REF}...${HEAD_SHA}" -- "$f" > "$TMP" || true
+            head -c 12000 "$TMP" > "$DIFF_DIR/file_${i}.diff"
+            rm -f "$TMP"
+            echo "file_${i}=$f" >> "$GITHUB_OUTPUT"
+            i=$((i+1))
+          done < "$DIFF_DIR/top.txt"
+
+          # Emit aggregate outputs
+          ALL_CHANGED=$(cat "$DIFF_DIR/all.txt")
+          TOP_COUNT=$(wc -l < "$DIFF_DIR/top.txt" | tr -d ' ')
           {
-            echo "diff<<DIFFEOF"
-            echo "$DIFF"
-            echo "DIFFEOF"
-            echo "changed<<CHGEOF"
-            echo "$CHANGED"
-            echo "CHGEOF"
+            echo "all_changed<<ALLEOF"
+            echo "$ALL_CHANGED"
+            echo "ALLEOF"
+            echo "top_count=$TOP_COUNT"
+            echo "diff_dir=$DIFF_DIR"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Run AI review
-        id: ai
+      - name: Stage per-file prompts
+        id: prompts
+        run: |
+          set -euo pipefail
+          D="${{ steps.prep.outputs.diff_dir }}"
+          for i in 1 2 3 4 5; do
+            if [ -f "$D/file_${i}.diff" ]; then
+              {
+                echo "Reviewing file: ${{ steps.prep.outputs.file_1 }}"
+                echo ""
+                echo "PR title: ${{ github.event.pull_request.title }}"
+                echo ""
+                echo "Diff for this file only:"
+                echo '```diff'
+                cat "$D/file_${i}.diff"
+                echo '```'
+              } > "$D/prompt_${i}.txt"
+            fi
+          done
+          # Replace placeholder filename per file
+          for i in 1 2 3 4 5; do
+            if [ -f "$D/prompt_${i}.txt" ]; then
+              case "$i" in
+                1) F="${{ steps.prep.outputs.file_1 }}" ;;
+                2) F="${{ steps.prep.outputs.file_2 }}" ;;
+                3) F="${{ steps.prep.outputs.file_3 }}" ;;
+                4) F="${{ steps.prep.outputs.file_4 }}" ;;
+                5) F="${{ steps.prep.outputs.file_5 }}" ;;
+              esac
+              sed -i "1s|.*|Reviewing file: $F|" "$D/prompt_${i}.txt"
+            fi
+          done
+
+      - name: Review file 1
+        id: r1
+        if: steps.prep.outputs.file_1 != ''
         uses: actions/ai-inference@v2
         with:
-          # gpt-4o gives 8000 input tokens (vs 4000 for gpt-5/o3/o4-mini) on the
-          # GitHub Models free tier — best fit for PR review where context matters.
+          model: openai/gpt-4o-mini
+          max-completion-tokens: 800
+          system-prompt-file: .github/ai-review/per-file-system.md
+          prompt-file: ${{ steps.prep.outputs.diff_dir }}/prompt_1.txt
+
+      - name: Review file 2
+        id: r2
+        if: steps.prep.outputs.file_2 != ''
+        uses: actions/ai-inference@v2
+        with:
+          model: openai/gpt-4o-mini
+          max-completion-tokens: 800
+          system-prompt-file: .github/ai-review/per-file-system.md
+          prompt-file: ${{ steps.prep.outputs.diff_dir }}/prompt_2.txt
+
+      - name: Review file 3
+        id: r3
+        if: steps.prep.outputs.file_3 != ''
+        uses: actions/ai-inference@v2
+        with:
+          model: openai/gpt-4o-mini
+          max-completion-tokens: 800
+          system-prompt-file: .github/ai-review/per-file-system.md
+          prompt-file: ${{ steps.prep.outputs.diff_dir }}/prompt_3.txt
+
+      - name: Review file 4
+        id: r4
+        if: steps.prep.outputs.file_4 != ''
+        uses: actions/ai-inference@v2
+        with:
+          model: openai/gpt-4o-mini
+          max-completion-tokens: 800
+          system-prompt-file: .github/ai-review/per-file-system.md
+          prompt-file: ${{ steps.prep.outputs.diff_dir }}/prompt_4.txt
+
+      - name: Review file 5
+        id: r5
+        if: steps.prep.outputs.file_5 != ''
+        uses: actions/ai-inference@v2
+        with:
+          model: openai/gpt-4o-mini
+          max-completion-tokens: 800
+          system-prompt-file: .github/ai-review/per-file-system.md
+          prompt-file: ${{ steps.prep.outputs.diff_dir }}/prompt_5.txt
+
+      - name: Synthesize
+        id: synthesize
+        uses: actions/ai-inference@v2
+        with:
           model: openai/gpt-4o
-          max-completion-tokens: 2000
-          system-prompt: |
-            You are reviewing a PR on the MoSPI MCP server: a FastMCP 3.0
-            server exposing 23 Indian govt statistical datasets over the
-            Model Context Protocol. Single-file server (mospi_server.py).
-            Swagger YAMLs are the source of truth for parameter validation.
-
-            ## Project rules — flag any violation
-
-            **Dataset wiring** — adding a dataset requires updates in ALL of:
-            swagger/swagger_user_<name>.yaml; mospi/client.py (api_endpoints,
-            get_<n>_indicators, get_<n>_filters); mospi_server.py
-            (VALID_DATASETS, DATASET_SWAGGER, DATASETS_REQUIRING_INDICATOR,
-            indicator_methods dict, get_metadata branch, dataset_map in
-            get_data, list_datasets entry, total_datasets count, banner log,
-            docstrings); tests/test_mcp_server.py (DATASETS pytest.param,
-            EXPECTED_DATASETS); README.md, CONTRIBUTING.md, CHANGELOG.md
-            (dataset count + lists).
-
-            **Param renames** done in get_data (caller sends indicator_code):
-            RBI -> sub_indicator_code; MNRE -> type_of_renewable_energy_code;
-            NSS80 also needs survey_code auto-derived (1-20=CMST, 23-42=CMSE).
-
-            **Pitfalls**:
-            - Dataset count drift across files
-            - nginx CSP value MUST be one physical line (newline = HTTP corruption)
-            - nginx add_header in a child location silently drops server-level headers
-            - FastMCP doesn't enforce type hints; use _safe_int() for numeric params
-            - CPI tests pin base_year=2012 due to upstream 2024 regression
-            - Don't replace LegacyRenegotiationAdapter (MoSPI needs legacy TLS)
-            - --stateless flag in Dockerfile CMD is required for ChatGPT
-
-            ## Severity
-            - **BLOCKING** — correctness, broken wiring, missing critical
-              piece, security risk
-            - **SUGGESTION** — nice-to-have
-            - **NIT** — stylistic (use sparingly)
-
-            ## Don't flag
-            - Linter-style formatting
-            - Splitting mospi_server.py (single-file is intentional)
-            - Adding type-hint enforcement
-            - Removing 'unsafe-inline' from CSP (accepted in KPMG VA)
-
-            ## Output (Markdown)
-
-            ## Summary
-            One sentence: what the PR does + verdict.
-
-            ## Findings
-            - **[BLOCKING/SUGGESTION/NIT]** `path:line` — issue. Why it
-              matters (1 sentence). Suggested fix (1 line).
-
-            ## Verdict
-            - Blocking: N
-            - Suggestion: N
-            - Nit: N
-            - Recommendation: Approve / Request Changes / Comment
-            - One-sentence rationale.
-
-            If no findings, say so and recommend Approve.
+          max-completion-tokens: 1500
+          system-prompt-file: .github/ai-review/synthesis-system.md
           prompt: |
-            Title: ${{ github.event.pull_request.title }}
+            PR title: ${{ github.event.pull_request.title }}
 
-            Description:
+            PR description:
             ${{ github.event.pull_request.body }}
 
-            Changed files:
-            ${{ steps.context.outputs.changed }}
+            ALL changed files in this PR (some may not have per-file findings
+            because only the top ${{ steps.prep.outputs.top_count }} ranked files were reviewed):
+            ${{ steps.prep.outputs.all_changed }}
 
-            Diff:
-            ```diff
-            ${{ steps.context.outputs.diff }}
-            ```
+            ---
+            Per-file findings (each was reviewed in isolation by gpt-4o-mini):
+
+            ### ${{ steps.prep.outputs.file_1 }}
+            ${{ steps.r1.outputs.response }}
+
+            ### ${{ steps.prep.outputs.file_2 }}
+            ${{ steps.r2.outputs.response }}
+
+            ### ${{ steps.prep.outputs.file_3 }}
+            ${{ steps.r3.outputs.response }}
+
+            ### ${{ steps.prep.outputs.file_4 }}
+            ${{ steps.r4.outputs.response }}
+
+            ### ${{ steps.prep.outputs.file_5 }}
+            ${{ steps.r5.outputs.response }}
 
       - name: Post or update review comment
         uses: actions/github-script@v7
         env:
-          REVIEW: ${{ steps.ai.outputs.response }}
+          REVIEW: ${{ steps.synthesize.outputs.response }}
+          TOP_COUNT: ${{ steps.prep.outputs.top_count }}
         with:
           script: |
             const marker = '<!-- ai-pr-review -->';
-            const body = `${marker}\n## 🤖 AI PR Review\n\n${process.env.REVIEW}\n\n---\n_Auto-generated by [GitHub Models](https://docs.github.com/en/github-models) (openai/gpt-4o) via \`.github/workflows/ai-review.yml\`. Add the \`skip-review\` label to suppress._`;
+            const footer = `_Auto-generated. ${process.env.TOP_COUNT} file(s) reviewed in isolation by \`openai/gpt-4o-mini\`, then synthesized by \`openai/gpt-4o\` via [GitHub Models](https://docs.github.com/en/github-models). Workflow: \`.github/workflows/ai-review.yml\`. Add the \`skip-review\` label to suppress._`;
+            const body = `${marker}\n## 🤖 AI PR Review\n\n${process.env.REVIEW}\n\n---\n${footer}`;
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
