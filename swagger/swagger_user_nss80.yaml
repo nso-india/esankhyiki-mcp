@@ -22,7 +22,7 @@ paths:
           type: integer
           pattern: ^\d+$
         description: Indicator code(1-42). Indicators 1-20 = Telecom (CMST) module(Digital literacy, Cyber security, Online banking, Broadband, Internet access and usage, telecom infrastructure), indicators 23-42 = Education (CMSE) module (expenditure, Educational support, Private coaching, fees, Type of school).
-      - name: subindicator_code
+      - name: sub_indicator_code
         in: query
         schema:
           type: string

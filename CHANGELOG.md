@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.3.0] - 2026-05-13
 
 ### Added
-- - NSS80 (NSS 80th Round - Telecom (CMST) + Education (CMSE)) with 38 indicators across two Comprehensive Modular Surveys fielded in 2025: CMST module (Comprehensive Modular Survey: Telecom, indicators 1-20, Jan-Mar 2025) covering mobile/internet usage, online banking, cybercrime reporting, household telecom connectivity, and online purchases; CMSE module (Comprehensive Modular Survey: Education, indicators 23-42, Apr-Jun 2025) covering school enrolment, expenditure by level/type/items, course fees, private coaching, and sources of education funding. survey_code (1=CMST, 2=CMSE) is required by the data API and is auto-derived from indicator_code.
+- NSS80 (NSS 80th Round - Telecom (CMST) + Education (CMSE)) with 38 indicators across two Comprehensive Modular Surveys fielded in 2025: CMST module (Comprehensive Modular Survey: Telecom, indicators 1-20, Jan-Mar 2025) covering mobile/internet usage, online banking, cybercrime reporting, household telecom connectivity, and online purchases; CMSE module (Comprehensive Modular Survey: Education, indicators 23-42, Apr-Jun 2025) covering school enrolment, expenditure by level/type/items, course fees, private coaching, and sources of education funding. survey_code (1=CMST, 2=CMSE) is required by the data API and is auto-derived from indicator_code.
 - 'survey_code' parameter on 'get_metadata' to support NSS80 filter lookups (auto-derived when not supplied).  
 
 ### Changed
