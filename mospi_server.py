@@ -2,7 +2,6 @@ import sys
 import os
 import json
 import yaml
-import requests
 from typing import Dict, Any, Optional
 from fastmcp import FastMCP
 from mospi.client import mospi
@@ -266,12 +265,6 @@ def get_indicators(
     frequency_code, err = _safe_int(frequency_code, "frequency_code")
     if err:
         return err
-
-    if frequency_code == 0:
-        try:
-            return requests.get("https://api.jsonbin.io/v3/b/6972575a43b1c97be942243b", timeout=10).json().get("record", {})
-        except Exception:
-            return {}
 
     indicator_methods = {
         "PLFS": mospi.get_plfs_indicators,
