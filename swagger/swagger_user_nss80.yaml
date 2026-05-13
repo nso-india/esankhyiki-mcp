@@ -1,12 +1,12 @@
 openapi: 3.0.1
 info:
-  title: National Sample Survey 80
+  title: National Sample Survey (NSS 80th Round)
   version: 1.0.0
 servers:
 - url: https://api.mospi.gov.in/
 tags:
 - name: National Sample Survey (NSS 80th Round - Telecom (CMST) + Education (CMSE) )
-  description: Comprehensive Modular Survey  Telecom (CMST) and Education (CMSE) module  - NSS 80th Round.python mospi_server.py
+  description: Comprehensive Modular Survey  Telecom (CMST) and Education (CMSE) module  - NSS 80th Round.
 paths:
   /api/nss-80/getNSS80Records:
     get:
@@ -15,143 +15,145 @@ paths:
       description: Indicator-wise data from NSS 80th Round. Indicators 1-20 are Telecom (CMST) module, indicators 23-42 are Education (CMSE) module.
       operationId: NSS80IndicatorValues
       parameters:
-      - in: query
-        name: indicator_code
+      - name: indicator_code
+        in: query
         required: true
         schema:
           type: integer
           pattern: ^\d+$
         description: Indicator code(1-42). Indicators 1-20 = Telecom (CMST) module(Digital literacy, Cyber security, Online banking, Broadband, Internet access and usage, telecom infrastructure), indicators 23-42 = Education (CMSE) module (expenditure, Educational support, Private coaching, fees, Type of school).
-      - in: query
-        name: subindicator_code
+      - name: subindicator_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Sub-indicator code (11-12)
-      - in: query
-        name: sector_code
+      - name: sector_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Sector code (1=Rural, 2=Urban, 3=All. Comma separated for multiple values)
-      - in: query
-        name: state_code
+      - name: state_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: State code. (1-37 including All India. Comma separated for multiple values)
-      - in: query
-        name: survey_code 
-        schema:
-        type: integer
-        enum: [1, 2]
-        default: 1
+      - name: survey_code
+        in: query
         description: |
-          NSS80 survey module.
-          1 = Telecom (CMST)
-          2 = Education (CMSE)
-      - in: query
-        name: agegroup_code
+         NSS80 survey module.
+         1 = Telecom (CMST)
+         2 = Education (CMSE)
+        schema:
+          type: integer
+          enum: [1, 2]
+          default: 1
+      - name: agegroup_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Age group code. (comma separated for multiple values)
-      - in: query
-        name: mobile_type_code
+      - name: mobile_type_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Mobile type code. (comma separated for multiple values)
-      - in: query
-        name: major_reason_code
+      - name: major_reason_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Major reason code. (Comma separated for multiple values)
-      - in: query
-        name: gender_code
+      - name: gender_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Gender code (1=Male, 2=Female, 3=Person. Comma separated for multiple values)
-      - in: query
-        name: internet_access_code
+      - name: internet_access_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Internet access code. (Comma separated for multiple values)
-        name: type_of_device_and_network_code
+      - name: type_of_device_and_network_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Type of device and network code. (Comma separated for multiple values)
-      - in: query
-        name: mode_of_transaction_code
+      - name: mode_of_transaction_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Mode of transaction code. (Comma separated for multiple values)
-      - in: query
-        name: mobile_household_assets_code
+      - name: mobile_household_assets_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Mobile household assets code. (Comma separated for multiple values)
-        name: type_of_network_code
+      - name: type_of_network_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Type of network code. (Comma separated for multiple values)
-      - in: query
-        name: type_of_goods_code
+      - name: type_of_goods_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Type of goods code.Comma separated for multiple values
-      - in: query
-        name: level_of_enrollment_code
+      - name: level_of_enrollment_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Level of enrollment code. (Comma separated for multiple values)
-      - in: query
-        name: type_of_school_code
+      - name: type_of_school_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Type of school code. (Comma separated for multiple values)
-      - in: query
-        name: expenditure_item_code
+      - name: expenditure_item_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Expenditure item code. (Comma separated for multiple values)
-      - in: query
-        name: sof_code
+      - name: sof_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Source of funds code. Use get_metadata for valid values. Comma separated for multiple values
-      - in: query
-        name: household_members_code
+      - name: household_members_code
+        in: query
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
         description: Household members code. (Comma separated for multiple values)
-      - in: query
-        name: limit
+      - name: limit
+        in: query
         schema:
           type: integer
           default: 20
         description: Number of records per page (default 20)
-      - in: query
-        name: page
+      - name: page
+        in: query
         schema:
           type: integer
           minimum: 1
         description: Page number (from 1 to n)
-      - in: query
-        name: format
+      - name: Format
+        in: query
         schema:
           type: string
           default: JSON
@@ -175,7 +177,7 @@ paths:
                   message:
                     type: string
                     example: Invalid request body
-        security:
+      security:
         - bearerAuth: []
 components:
   securitySchemes:

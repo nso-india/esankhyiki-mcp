@@ -37,7 +37,7 @@ MCP (Model Context Protocol) server for accessing India's Ministry of Statistics
 This server provides AI-ready access to official Indian government statistics through the Model Context Protocol (MCP). It acts as a bridge between AI assistants (Claude, ChatGPT, Cursor, etc.) and MoSPI's open data APIs, enabling natural language queries for economic, demographic, and social indicators.
 
 **Key Features:**
-- 22 statistical datasets covering employment, inflation, industrial production, GDP, energy, renewable energy, higher education, school education, gender, health, environment, trade, agriculture, consumption, economic census, and digital literacy
+- 23 statistical datasets covering employment, inflation, industrial production, GDP, energy, renewable energy, higher education, school education, gender, health, environment, trade, agriculture, consumption, economic census, and digital literacy
 - Sequential 4-tool workflow designed for LLM consumption
 - Swagger-driven parameter validation
 - Full OpenTelemetry integration for observability
@@ -71,6 +71,7 @@ This server provides AI-ready access to official Indian government statistics th
 | **NSS79** | NSS 79th Round (CAMS + AYUSH) | Literacy, school enrolment, NEET youth, health expenditure, financial inclusion, digital skills, AYUSH awareness and usage |
 | **UDISE** | UDISE+ (Unified District Information System for Education) | Schools, enrolment, dropout rates, teachers, PTR, GER, NER, GPI, CWSN, school infrastructure, ICT labs, minority enrolment |
 | **MNRE** | Renewable Energy (Ministry of New and Renewable Energy) | State-wise monthly installed capacity (MW) for solar, wind, hydro, bio, and total renewable power |
+| **NSS80** | NSS 80th Round (Telecom (CMST) + Education (CMSE)) | Mobile phone ownership, internet usage, online banking, cybercrime, household telecom connectivity, school enrolment and expenditure course fees, private coaching | 
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 
 ---
@@ -253,7 +254,7 @@ mospi-mcp-api/
 │   └── swagger_user_*.yaml
 ├── observability/
 │   └── telemetry.py         # OpenTelemetry middleware for tracing
-├── tests/                   # Pytest suite (covering all 22 datasets)
+├── tests/                   # Pytest suite (covering all 23 datasets)
 ├── Dockerfile               # Production container with OTEL instrumentation
 ├── docker-compose.yml       # Full stack with Jaeger
 └── requirements.txt
@@ -277,7 +278,7 @@ pip install -r tests/requirements-test.txt
 pytest tests/ -v -p no:anyio
 ```
 
-Runs in-process against the MCP server (no running server needed). Covers all 22 datasets across all 4 tools. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
+Runs in-process against the MCP server (no running server needed). Covers all 23 datasets across all 4 tools. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
 
 ---
 

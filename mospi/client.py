@@ -928,18 +928,20 @@ class MoSPI:
     def get_nss80_indicators(self) -> Dict[str, Any]:
         """Fetch list of NSS80 indicators from MoSPI API.
 
-            Returns all 38 indicators from NSS 80th Round — two survey modules combined:
+        Returns all 38 indicators from NSS 80th Round — two survey modules combined:
         - survey_code=1 (Telecom (CMST)): 20 indicators on telecommunications, internet usage,
-          mobile phone ownership,  cybercrime reporting, household connectivity, and online purchases and digital connectivity.
-        - survey_code=2 (Education (CMSE)): 18 indicators on education, school infrastructure,
-          school education enrolment, expenditure by level/type/item, course fees,
-          private coaching, and sources of funding ,teacher availability, and student performance.
+          mobile phone ownership, cybercrime reporting, household connectivity,
+          online purchases, and digital connectivity.
+        - survey_code=2 (Education (CMSE)): 18 indicators on education,
+          school infrastructure, school education enrolment, expenditure by
+          level/type/item, course fees, private coaching, sources of funding,
+          teacher availability, and student performance.
         """
         try:
             resp1 = self.session.get(
                 f"{self.base_url}/api/nss-80/getIndicatorList",
                 params={"survey_code": 1},
-                timeout=30
+                timeout=30,
             )
             resp1.raise_for_status()
             result = resp1.json()
@@ -947,7 +949,7 @@ class MoSPI:
             resp2 = self.session.get(
                 f"{self.base_url}/api/nss-80/getIndicatorList",
                 params={"survey_code": 2},
-                timeout=30
+                timeout=30,
             )
             resp2.raise_for_status()
             education = resp2.json().get("data", [])
@@ -955,9 +957,10 @@ class MoSPI:
             result["data"] = result.get("data", []) + education
             result["count"] = len(result["data"])
             return result
+
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
-        
+
     def get_nss80_filters(self, indicator_code: int, survey_code: Optional[int] = None) -> Dict[str, Any]:
         """Fetch available NSS80 filters for given indicator.
 
@@ -969,15 +972,21 @@ class MoSPI:
         if survey_code is None:
             survey_code = self._nss80_survey_for(indicator_code)
             if survey_code is None:
-                return {"error": f"Invalid indicator_code {indicator_code}. Valid ranges: 1-20 Telecom(CMST), 23-42 Education(CMSE)", "statusCode": False}
+                return {
+                    "error": (
+                        f"Invalid indicator_code {indicator_code}. "
+                        "Valid ranges: 1-20 Telecom (CMST), 23-42 Education (CMSE)."
+                    ),
+                    "statusCode": False,
+                }
 
         params = {"indicator_code": indicator_code, "survey_code": survey_code}
-                        
+
         try:
             response = self.session.get(
                 f"{self.base_url}/api/nss-80/getFilterBySurveryAndIndicator",
                 params=params,
-                timeout=30
+                timeout=30,
             )
             response.raise_for_status()
             return response.json()

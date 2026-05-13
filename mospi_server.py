@@ -79,7 +79,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE","NSS80"
+    "NSS77", "NSS78", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80"
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -744,7 +744,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
             except (ValueError, AttributeError):
                 pass
 
- # Validate params against swagger spec
+    # Validate params against swagger spec
     validation = validate_filters(dataset, transformed_filters)
     if not validation["valid"]:
         return {"error": "Invalid parameters", **validation}
@@ -917,9 +917,9 @@ def list_datasets() -> dict:
             },
             "NSS80": {
                 "name": "NSS80 (80th Round - Telecom (CMST) + Education (CMSE))",
-                "description": "38 indicators from two modules of NSS 80th Round. Telecom (CMST) module (Comprehensive Modular Survey: Telecom, indicators 1-20): mobile phone ownership and usage in last 3 months, internet usage and frequency, type of portable device and network used, ability to send/receive email and attachments, ability to copy-paste, create electronic documents and presentations, online banking ability and modes of transaction, ability to report cybercrime, household possession of landline/mobile/optical fiber, household internet facility by service type, reasons for not having internet, and household online purchases by type of goods. Education (CMSE) module (Comprehensive Modular Survey: Education, indicators 23-42): Student enrolment in school education, Type of school and level of enrolment, Expenditure on school education, Course fees and education expenses, Private coaching participation and expenditure, School expenditure by type of school, Household expenditure on education, Sources of funding for educational expenses, Distribution of students across education categories, Household support for school education.",
-                "use_for": "Mobile phone usage, internet access, digital literacy, online banking, cybercrime awareness, e-commerce participation, school enrolment, education expenditure, private coaching,  household telecom connectivity, online shopping, school enrolment, school expenditure, course fees, books, uniforms, transport, private coaching, private tuition, education expenditure by household, CMST survey, CMSE survey, comprehensive modular survey, household support for education"
-            },
+                "description": "38 indicators from two modules of NSS 80th Round. Telecom (CMST) module (Comprehensive Modular Survey: Telecom, indicators 1-20): mobile phone ownership and usage in last 3 months, internet usage and frequency, type of portable device and network used, ability to send/receive email and attachments, ability to copy-paste, create electronic documents and presentations, online banking ability and modes of transaction, ability to report cybercrime, household possession of landline/mobile/optical fiber, household internet facility by service type, reasons for not having internet, and household online purchases by type of goods. Education (CMSE) module (Comprehensive Modular Survey: Education, indicators 23-42): covers student enrolment patterns, type of school and level of enrolment, expenditure on school education including course fees, books, uniforms, transport and other related expenses, participation in private coaching and associated expenditure, household spending on education, sources of funding for educational expenses, distribution of students across education categories, and household support for school education.",
+                "use_for": "Mobile phone usage, internet access, digital literacy, online banking, cybercrime awareness, e-commerce participation, school enrolment, education expenditure, private coaching, household telecom connectivity, online shopping, school expenditure, course fees, books, uniforms, transport, private tuition, education expenditure by household, CMST survey, CMSE survey, comprehensive modular survey, household support for education"
+},
         },
         "workflow": [
             "1. list_datasets() — identify the relevant dataset",
@@ -938,7 +938,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.0 with OpenTelemetry")
-    log("Datasets: 23 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80,)")
+    log("Datasets: 23 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")
