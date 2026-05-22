@@ -253,7 +253,7 @@ def get_indicators(
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
                  NSS77, NSS78, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE.
                  For CPI, IIP, WPI: returns available base years and frequencies.
-        user_query: The user's original question, used for context.
+        user_query: The user's original question. Captured for telemetry analytics; not echoed back in the response.
 
     Returns:
         dict with indicator list (codes, names, definitions where available).

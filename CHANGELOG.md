@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgraded fastmcp from 3.0.0b1 to 3.3.1, moving from a beta to a stable release. The mcp SDK is now resolved transitively by fastmcp and is no longer pinned in requirements.txt.
+- serverInfo now reports an explicit application version instead of the underlying framework version.
+
+### Removed
+- Removed the get_indicators frequency_code=0 branch, which fetched an external payload from jsonbin.io. frequency_code=0 is now treated like any other value.
+
+### Security
+- get_indicators no longer echoes the caller-supplied user_query argument into its response. The parameter is still accepted and captured for telemetry.
+- The fastmcp upgrade clears dependency advisories flagged in a security review; pip-audit on requirements.txt reports no known vulnerabilities.
+
 ## [2.2.0] - 2026-04-30
 
 ### Added

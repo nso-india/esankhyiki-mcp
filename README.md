@@ -5,7 +5,6 @@
     - Satvik Bajpai
     - Harsh Nisar
     - Mayank Kumawat
-    - Claude
 
   Welcome, traveler. You found the hidden credits. Status: Legendary.
 -->
