@@ -1,0 +1,189 @@
+openapi: 3.0.1
+info:
+  title: National Sample Survey (NSS 80th Round)
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: National Sample Survey (NSS 80th Round - Telecom (CMST) + Education (CMSE) )
+  description: Comprehensive Modular Survey  Telecom (CMST) and Education (CMSE) module  - NSS 80th Round.
+paths:
+  /api/nss-80/getNSS80Records:
+    get:
+      tags:
+      - National Sample Survey (NSS 80th Round - Telecom (CMST) + Education (CMSE))
+      description: Indicator-wise data from NSS 80th Round. Indicators 1-20 are Telecom (CMST) module, indicators 23-42 are Education (CMSE) module.
+      operationId: NSS80IndicatorValues
+      parameters:
+      - name: indicator_code
+        in: query
+        required: true
+        schema:
+          type: integer
+          pattern: ^\d+$
+        description: Indicator code(1-42). Indicators 1-20 = Telecom (CMST) module(Digital literacy, Cyber security, Online banking, Broadband, Internet access and usage, telecom infrastructure), indicators 23-42 = Education (CMSE) module (expenditure, Educational support, Private coaching, fees, Type of school).
+      - name: sub_indicator_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Sub-indicator code (11-12)
+      - name: sector_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Sector code (1=Rural, 2=Urban, 3=All. Comma separated for multiple values)
+      - name: state_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: State code. (1-37 including All India. Comma separated for multiple values)
+      - name: survey_code
+        in: query
+        description: |
+         NSS80 survey module.
+         1 = Telecom (CMST)
+         2 = Education (CMSE)
+        schema:
+          type: integer
+          enum: [1, 2]
+          default: 1
+      - name: agegroup_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Age group code. (comma separated for multiple values)
+      - name: mobile_type_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Mobile type code. (comma separated for multiple values)
+      - name: major_reason_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Major reason code. (Comma separated for multiple values)
+      - name: gender_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Gender code (1=Male, 2=Female, 3=Person. Comma separated for multiple values)
+      - name: internet_access_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Internet access code. (Comma separated for multiple values)
+      - name: type_of_device_and_network_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Type of device and network code. (Comma separated for multiple values)
+      - name: mode_of_transaction_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Mode of transaction code. (Comma separated for multiple values)
+      - name: mobile_household_assets_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Mobile household assets code. (Comma separated for multiple values)
+      - name: type_of_network_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Type of network code. (Comma separated for multiple values)
+      - name: type_of_goods_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Type of goods code.Comma separated for multiple values
+      - name: level_of_enrollment_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Level of enrollment code. (Comma separated for multiple values)
+      - name: type_of_school_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Type of school code. (Comma separated for multiple values)
+      - name: expenditure_item_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Expenditure item code. (Comma separated for multiple values)
+      - name: sof_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Source of funds code. Use get_metadata for valid values. Comma separated for multiple values
+      - name: household_members_code
+        in: query
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+        description: Household members code. (Comma separated for multiple values)
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 20
+        description: Number of records per page (default 20)
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+        description: Page number (from 1 to n)
+      - name: Format
+        in: query
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - xlsx
+        description: Output format (JSON or xlsx for Excel download)
+      responses:
+        '200':
+          description: A JSON array of NSS80 records
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'
