@@ -1,6 +1,6 @@
-# FastMCP 3.0 beta - annotations + structuredContent support, ChatGPT compatible
-fastmcp==3.0.0b1
-mcp==1.26.0
+# FastMCP 3.3 stable - annotations + structuredContent support, ChatGPT compatible
+# mcp SDK is pulled in transitively by fastmcp; do not pin it separately.
+fastmcp==3.3.1
 
 # Core dependencies
 requests>=2.31.0
