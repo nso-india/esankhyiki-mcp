@@ -1,0 +1,127 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Percentage of persons with disability for each State/ UT",
+    "description": "Percentage of persons with disability for each State/ UT"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Percentage of persons with broad type of disability for each State/ UT",
+    "description": "Percentage of persons with broad type of disability for each State/ UT"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Literacy rate (in per cent) of persons of age 7 years and above with disability for each State/ UT",
+    "description": "Literacy rate (in per cent) of persons of age 7 years and above with disability for each State/ UT"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Percentage of persons of age 15 years and above with disability having highest level of completed education secondary and above for each State/ UT",
+    "description": "Percentage of persons of age 15 years and above with disability having highest level of completed education secondary and above for each State/ UT"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Percentage of persons with disability having disability since birth for each State/UT",
+    "description": "Percentage of persons with disability having disability since birth for each State/UT"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Percentage of persons with disability having disability not since birth for each State/UT",
+    "description": "Percentage of persons with disability having disability not since birth for each State/UT"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Percentage of persons with disability by status of treatment taken for different broad type of disability for each State/UT",
+    "description": "Percentage of persons with disability by status of treatment taken for different broad type of disability for each State/UT"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Percentage of persons with locomotor disability who were advised aid/appliances and acquired aid/appliances for each State/UT",
+    "description": "Percentage of persons with locomotor disability who were advised aid/appliances and acquired aid/appliances for each State/UT"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Percentage of persons with visual disability who were advised aid/appliances and acquired aid/appliances for each State/UT",
+    "description": "Percentage of persons with visual disability who were advised aid/appliances and acquired aid/appliances for each State/UT"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Percentage of persons with hearing disability who were advised aid/appliances and acquired aid/appliances for each State/UT",
+    "description": "Percentage of persons with hearing disability who were advised aid/appliances and acquired aid/appliances for each State/UT"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Percentage distribution of persons with disability by arrangement of regular care giver for each State/UT",
+    "description": "Percentage distribution of persons with disability by arrangement of regular care giver for each State/UT"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Percentage of persons with disability who used/ accessed public transport during last 365 days, accessed public building during last 365 days and problems faced in accessing/using publictransport/public building for each State/UT",
+    "description": "Percentage of persons with disability who used/ accessed public transport during last 365 days, accessed public building during last 365 days and problems faced in accessing/using publictransport/public building for each State/UT"
+  },
+  {
+    "indicator_code": 13,
+    "name": "Percentage distribution of persons with disability by receipt of aid/help for each State/UT",
+    "description": "Percentage distribution of persons with disability by receipt of aid/help for each State/UT"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Percentage distribution of households not getting sufficient drinking water from the principal source by number of calendar months not getting sufficient drinking water, separately for households with different principal sources of drinking water",
+    "description": "Percentage distribution of households not getting sufficient drinking water from the principal source by number of calendar months not getting sufficient drinking water, separately for households with different principal sources of drinking water"
+  },
+  {
+    "indicator_code": 15,
+    "name": "Percentage distribution of households by supplementary sources of drinking water for different principal sources of drinking water",
+    "description": "Percentage distribution of households by supplementary sources of drinking water for different principal sources of drinking water"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Percentage of households having improved source of drinking water",
+    "description": "Percentage of households having improved source of drinking water"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Percentage of households which covered the main container used for storing drinking water",
+    "description": "Percentage of households which covered the main container used for storing drinking water"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Percentage distribution of households by method of treatment of drinking water for different principal sources of drinking water",
+    "description": "Percentage distribution of households by method of treatment of drinking water for different principal sources of drinking water"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Percentage of persons regularly used improved latrine",
+    "description": "Percentage of persons regularly used improved latrine"
+  },
+  {
+    "indicator_code": 21,
+    "name": "Percentage of households having bathroom and latrine within the household premises",
+    "description": "Percentage of households having bathroom and latrine within the household premises"
+  },
+  {
+    "indicator_code": 22,
+    "name": "Average plinth level of the house (0.00 mtr.)  for households living in houses",
+    "description": "Average plinth level of the house (0.00 mtr.)  for households living in houses"
+  },
+  {
+    "indicator_code": 23,
+    "name": "Average floor area (0.00 sq. mtr.) of the dwelling unit for households living in houses",
+    "description": "Average floor area (0.00 sq. mtr.) of the dwelling unit for households living in houses"
+  },
+  {
+    "indicator_code": 24,
+    "name": "Average number of living rooms of the households living in houses",
+    "description": "Average number of living rooms of the households living in houses"
+  },
+  {
+    "indicator_code": 25,
+    "name": "Percentage of households (living in a house) having separate kitchen with tap",
+    "description": "Percentage of households (living in a house) having separate kitchen with tap"
+  },
+  {
+    "indicator_code": 26,
+    "name": "Percentage distribution of households living in a house with direct opening to approach road / lane /constructed path",
+    "description": "Percentage distribution of households living in a house with direct opening to approach road / lane /constructed path"
+  }
+]

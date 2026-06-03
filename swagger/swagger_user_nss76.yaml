@@ -1,0 +1,186 @@
+openapi: 3.0.1
+info:
+  title: National Sample Survey (NSS 76th Round)
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: NSS76
+  description: National Sample Survey 76th Round.
+paths:
+  /api/nss-76/getNss76Records:
+    get:
+      tags:
+      - NSS76
+      operationId: NSS76IndicatorValues.
+      description: |
+        - **Required:** `indicator_code`
+        - **Required in practice:** `survey_code` (1=Disability indicators 1-13, 2=Housing & drinking water indicators 14-26)
+        - **Filters (optional):** sub_indicator_code, state_code (37=All India), gender_code, sector_code, type_of_structure_code, supplementary_source_of_drinking_water_code, social_group_code, dwelling_units_code, agency_emptied_code, distribution_by_plinth_level_code, distribution_by_experience_of_flood_code, tenurial_status_code, principal_source_of_drinking_water_code, households_percentage_code, month_code, percentage_houses_number_floors_house_code, percentage_houses_separate_kitchen_code, quintile_class_code, type_of_approach_road_code, types_of_latrine_uses_code, method_of_treatment_of_water_code, water_facility_code, dwshhc_street_light_facility_water_facility_code, status_of_receipt_of_aid_help_code
+        - **Metadata/filters API (not in this path):** `/api/nss-76/getNSS76FilterByIndicatorId`
+        - **Indicators API (not in this path):** `/api/nss-76/getIndicatorList?survey_code=1|2`
+
+      parameters:
+        - in: query
+          name: indicator_code
+          required: true
+          schema: { type: integer }
+          description: Enter the indicator code (1-13 Disability module, 14-26 Housing & water module; code 17 unused)
+        - in: query
+          name: survey_code
+          schema: { type: string }
+          description: Survey module code (1=Disability, 2=Housing & drinking water)
+        - in: query
+          name: sub_indicator_code
+          schema: { type: integer }
+          description: Enter the sub-indicator code (1-16)
+        - in: query
+          name: state_code
+          schema: { type: integer }
+          description: State / UT code (1-36 states/UTs, 37=All India)
+        - in: query
+          name: gender_code
+          schema: { type: integer }
+          description: Gender code (1-3)
+        - in: query
+          name: sector_code
+          schema: { type: integer }
+          description: Sector code (1-3)
+        - in: query
+          name: type_of_structure_code
+          schema: { type: integer }
+          description: Type of structure code (1-8)
+        - in: query
+          name: supplementary_source_of_drinking_water_code
+          schema: { type: integer }
+          description: Supplementary source of drinking water code (1-19)
+        - in: query
+          name: social_group_code
+          schema: { type: integer }
+          description: Social group code (1-5)
+        - in: query
+          name: dwelling_units_code
+          schema: { type: integer }
+          description: Dwelling units code (1-7)
+        - in: query
+          name: agency_emptied_code
+          schema: { type: integer }
+          description: Agency emptied code (1-7)
+        - in: query
+          name: distribution_by_plinth_level_code
+          schema: { type: integer }
+          description: Distribution by plinth level code (1-7)
+        - in: query
+          name: distribution_by_experience_of_flood_code
+          schema: { type: integer }
+          description: Distribution by experience of flood code (1-5)
+        - in: query
+          name: tenurial_status_code
+          schema: { type: integer }
+          description: Tenurial status code (1-4)
+        - in: query
+          name: principal_source_of_drinking_water_code
+          schema: { type: integer }
+          description: Principal source of drinking water code (1-20)
+        - in: query
+          name: households_percentage_code
+          schema: { type: integer }
+          description: Households percentage code (1-6)
+        - in: query
+          name: month_code
+          schema: { type: integer }
+          description: Month code (1-13)
+        - in: query
+          name: percentage_houses_number_floors_house_code
+          schema: { type: integer }
+          description: Percentage houses number floors house code (1-6)
+        - in: query
+          name: percentage_houses_separate_kitchen_code
+          schema: { type: integer }
+          description: Percentage houses separate kitchen code (1-3)
+        - in: query
+          name: quintile_class_code
+          schema: { type: integer }
+          description: Quintile class code (1-15)
+        - in: query
+          name: type_of_approach_road_code
+          schema: { type: integer }
+          description: Type of approach road code (1-5)
+        - in: query
+          name: types_of_latrine_uses_code
+          schema: { type: integer }
+          description: Types of latrine uses code (1-6)
+        - in: query
+          name: method_of_treatment_of_water_code
+          schema: { type: integer }
+          description: Method of treatment of water code (1-3)
+        - in: query
+          name: water_facility_code
+          schema: { type: integer }
+          description: Water facility code (1-3)
+        - in: query
+          name: dwshhc_street_light_facility_water_facility_code
+          schema: { type: integer }
+          description: Dwshhc street light facility water facility code (1-2)
+        - in: query
+          name: status_of_receipt_of_aid_help_code
+          schema: { type: integer }
+          description: Status of receipt of aid/help code (1-6)
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1 }
+        - in: query
+          name: format
+          schema:
+            type: string
+          description: Set to `xlsx` to download as Excel
+        - in: query
+          name: Format
+          schema:
+            type: string
+            default: JSON
+            enum:
+            - JSON
+            - CSV
+          description: Output format (JSON or CSV)
+
+      responses:
+        "200":
+          description: A JSON array of user information
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: "2.0"

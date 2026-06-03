@@ -82,6 +82,7 @@ class MoSPI:
             "NSS78": "/api/nss-78/getNss78Records",
             "NSS79": "/api/nss-79/getNSS79Records",
             "NSS80": "/api/nss-80/getNSS80Records",
+            "NSS76": "/api/nss-76/getNss76Records",
             "CPIALRL": "/api/cpialrl/getCpialrlRecords",
             "HCES": "/api/hces/getHcesRecords",
             "TUS": "/api/tus/getTusRecords",
@@ -900,6 +901,92 @@ class MoSPI:
                 f"{self.base_url}/api/nss-79/getNSS79FilterByIndicatorId",
                 params=params,
                 timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # NSS76 (NSS 76th Round - Disability + Housing / Drinking Water) Methods
+    # =========================================================================
+    @staticmethod
+    def _nss76_survey_for(indicator_code: int) -> Optional[int]:
+        """
+        Map NSS76 indicator_code to survey_code.
+
+        survey_code=1 -> Disability statistics (indicators 1-13)
+        survey_code=2 -> Housing, drinking water, sanitation (indicators 14-26)
+        """
+        if 1 <= indicator_code <= 13:
+            return 1
+        if 14 <= indicator_code <= 26:
+            return 2
+        return None
+
+    def get_nss76_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS76 indicators from MoSPI API.
+
+        Returns 25 indicators from NSS 76th Round — two survey modules combined:
+        - survey_code=1 (Disability): 13 indicators on disability prevalence,
+          literacy, education, employment, and aid for persons with disability.
+        - survey_code=2 (Housing & water): 12 indicators on drinking water,
+          housing characteristics, latrines, and household amenities.
+        """
+        try:
+            resp1 = self.session.get(
+                f"{self.base_url}/api/nss-76/getIndicatorList",
+                params={"survey_code": 1},
+                timeout=30,
+            )
+            resp1.raise_for_status()
+            result = resp1.json()
+
+            resp2 = self.session.get(
+                f"{self.base_url}/api/nss-76/getIndicatorList",
+                params={"survey_code": 2},
+                timeout=30,
+            )
+            resp2.raise_for_status()
+            housing = resp2.json().get("data", [])
+
+            result["data"] = result.get("data", []) + housing
+            result["count"] = len(result["data"])
+            result["_note"] = (
+                "survey_code=1 (Disability): indicators 1-13. "
+                "survey_code=2 (Housing & drinking water): indicators 14-26. "
+                "Pass survey_code in get_metadata/get_data or rely on auto-derivation from indicator_code."
+            )
+            return result
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss76_filters(self, indicator_code: int, survey_code: Optional[int] = None) -> Dict[str, Any]:
+        """Fetch available NSS76 filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-26; 17 is unused in the API list).
+            survey_code: 1=Disability module, 2=Housing & drinking water module.
+                         Auto-derived from indicator_code if not supplied.
+        """
+        if survey_code is None:
+            survey_code = self._nss76_survey_for(indicator_code)
+            if survey_code is None:
+                return {
+                    "error": (
+                        f"Invalid indicator_code {indicator_code}. "
+                        "Valid ranges: 1-13 (Disability), 14-26 (Housing & water)."
+                    ),
+                    "statusCode": False,
+                }
+
+        params = {"indicator_code": indicator_code, "survey_code": survey_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-76/getNSS76FilterByIndicatorId",
+                params=params,
+                timeout=30,
             )
             response.raise_for_status()
             return response.json()
