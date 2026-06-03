@@ -16,7 +16,10 @@ paths:
       description: |
         - **Required:** `indicator_code`
         - **Required in practice:** `survey_code` (1=Disability indicators 1-13, 2=Housing & drinking water indicators 14-26)
-        - **Filters (optional):** sub_indicator_code, state_code (37=All India), gender_code, sector_code, type_of_structure_code, supplementary_source_of_drinking_water_code, social_group_code, dwelling_units_code, agency_emptied_code, distribution_by_plinth_level_code, distribution_by_experience_of_flood_code, tenurial_status_code, principal_source_of_drinking_water_code, households_percentage_code, month_code, percentage_houses_number_floors_house_code, percentage_houses_separate_kitchen_code, quintile_class_code, type_of_approach_road_code, types_of_latrine_uses_code, method_of_treatment_of_water_code, water_facility_code, dwshhc_street_light_facility_water_facility_code, status_of_receipt_of_aid_help_code
+        - **Multi-value:** every filter `*_code` accepts comma-separated values (e.g. `state_code=1,2,3`)
+        - **Shared filters (optional):** sub_indicator_code, state_code (37=All India), sector_code, gender_code, quintile_class_code, month_code
+        - **Disability-module filters (survey_code=1):** disability_type_code, treatment_taken_code, arrangement_of_caregiver_code, use_of_public_transport_code, status_of_receipt_of_aid_help_code
+        - **Housing & water-module filters (survey_code=2):** principal_source_of_drinking_water_code, supplementary_source_of_drinking_water_code, method_of_treatment_of_water_code, households_percentage_code, number_of_days_code, type_of_structure_code, material_category_type_code, dwelling_units_code, tenurial_status_code, distribution_by_plinth_level_code, percentage_houses_number_floors_house_code, percentage_houses_separate_kitchen_code, type_of_approach_road_code, types_of_latrine_uses_code, agency_emptied_code, distribution_by_experience_of_flood_code
         - **Metadata/filters API (not in this path):** `/api/nss-76/getNSS76FilterByIndicatorId`
         - **Indicators API (not in this path):** `/api/nss-76/getIndicatorList?survey_code=1|2`
 
@@ -30,102 +33,175 @@ paths:
           name: survey_code
           schema: { type: string }
           description: Survey module code (1=Disability, 2=Housing & drinking water)
+
+        # --- Shared filters (apply across both modules) ---
         - in: query
           name: sub_indicator_code
-          schema: { type: integer }
-          description: Enter the sub-indicator code (1-16)
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Sub-indicator code (comma separated for multiple values)
         - in: query
           name: state_code
-          schema: { type: integer }
-          description: State / UT code (1-36 states/UTs, 37=All India)
-        - in: query
-          name: gender_code
-          schema: { type: integer }
-          description: Gender code (1-3)
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: State / UT code (1-36 states/UTs, 37=All India; comma separated for multiple values)
         - in: query
           name: sector_code
-          schema: { type: integer }
-          description: Sector code (1-3)
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Sector code (1-3; comma separated for multiple values)
         - in: query
-          name: type_of_structure_code
-          schema: { type: integer }
-          description: Type of structure code (1-8)
-        - in: query
-          name: supplementary_source_of_drinking_water_code
-          schema: { type: integer }
-          description: Supplementary source of drinking water code (1-19)
-        - in: query
-          name: social_group_code
-          schema: { type: integer }
-          description: Social group code (1-5)
-        - in: query
-          name: dwelling_units_code
-          schema: { type: integer }
-          description: Dwelling units code (1-7)
-        - in: query
-          name: agency_emptied_code
-          schema: { type: integer }
-          description: Agency emptied code (1-7)
-        - in: query
-          name: distribution_by_plinth_level_code
-          schema: { type: integer }
-          description: Distribution by plinth level code (1-7)
-        - in: query
-          name: distribution_by_experience_of_flood_code
-          schema: { type: integer }
-          description: Distribution by experience of flood code (1-5)
-        - in: query
-          name: tenurial_status_code
-          schema: { type: integer }
-          description: Tenurial status code (1-4)
-        - in: query
-          name: principal_source_of_drinking_water_code
-          schema: { type: integer }
-          description: Principal source of drinking water code (1-20)
-        - in: query
-          name: households_percentage_code
-          schema: { type: integer }
-          description: Households percentage code (1-6)
-        - in: query
-          name: month_code
-          schema: { type: integer }
-          description: Month code (1-13)
-        - in: query
-          name: percentage_houses_number_floors_house_code
-          schema: { type: integer }
-          description: Percentage houses number floors house code (1-6)
-        - in: query
-          name: percentage_houses_separate_kitchen_code
-          schema: { type: integer }
-          description: Percentage houses separate kitchen code (1-3)
+          name: gender_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Gender code (1-3; comma separated for multiple values)
         - in: query
           name: quintile_class_code
-          schema: { type: integer }
-          description: Quintile class code (1-15)
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Quintile class code (1-15; comma separated for multiple values)
         - in: query
-          name: type_of_approach_road_code
-          schema: { type: integer }
-          description: Type of approach road code (1-5)
+          name: month_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Month code (1-13; comma separated for multiple values)
+
+        # --- Disability module filters (survey_code=1) ---
         - in: query
-          name: types_of_latrine_uses_code
-          schema: { type: integer }
-          description: Types of latrine uses code (1-6)
+          name: disability_type_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Type of disability code (1-8; comma separated for multiple values)
         - in: query
-          name: method_of_treatment_of_water_code
-          schema: { type: integer }
-          description: Method of treatment of water code (1-3)
+          name: treatment_taken_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Treatment taken code (1-10; comma separated for multiple values)
         - in: query
-          name: water_facility_code
-          schema: { type: integer }
-          description: Water facility code (1-3)
+          name: arrangement_of_caregiver_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Arrangement of caregiver code (1-4; comma separated for multiple values)
         - in: query
-          name: dwshhc_street_light_facility_water_facility_code
-          schema: { type: integer }
-          description: Dwshhc street light facility water facility code (1-2)
+          name: use_of_public_transport_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Use of public transport code (1-4; comma separated for multiple values)
         - in: query
           name: status_of_receipt_of_aid_help_code
-          schema: { type: integer }
-          description: Status of receipt of aid/help code (1-6)
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Status of receipt of aid/help code (1-6; comma separated for multiple values)
+
+        # --- Housing & drinking water module filters (survey_code=2) ---
+        - in: query
+          name: principal_source_of_drinking_water_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Principal source of drinking water code (1-20; comma separated for multiple values)
+        - in: query
+          name: supplementary_source_of_drinking_water_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Supplementary source of drinking water code (1-19; comma separated for multiple values)
+        - in: query
+          name: method_of_treatment_of_water_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Method of treatment of water code (1-3; comma separated for multiple values)
+        - in: query
+          name: households_percentage_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Households percentage code (1-6; comma separated for multiple values)
+        - in: query
+          name: number_of_days_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Number of days code (1-4; comma separated for multiple values)
+        - in: query
+          name: type_of_structure_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Type of structure code (1-8; comma separated for multiple values)
+        - in: query
+          name: material_category_type_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Material category type code (1-9; comma separated for multiple values)
+        - in: query
+          name: dwelling_units_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Dwelling units code (1-7; comma separated for multiple values)
+        - in: query
+          name: tenurial_status_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Tenurial status code (1-4; comma separated for multiple values)
+        - in: query
+          name: distribution_by_plinth_level_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Distribution by plinth level code (1-7; comma separated for multiple values)
+        - in: query
+          name: percentage_houses_number_floors_house_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Percentage houses number floors house code (1-6; comma separated for multiple values)
+        - in: query
+          name: percentage_houses_separate_kitchen_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Percentage houses separate kitchen code (1-3; comma separated for multiple values)
+        - in: query
+          name: type_of_approach_road_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Type of approach road code (1-5; comma separated for multiple values)
+        - in: query
+          name: types_of_latrine_uses_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Types of latrine uses code (1-6; comma separated for multiple values)
+        - in: query
+          name: agency_emptied_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Agency emptied code (1-7; comma separated for multiple values)
+        - in: query
+          name: distribution_by_experience_of_flood_code
+          schema:
+            type: string
+            pattern: ^\d+(,\d+)*$
+          description: Distribution by experience of flood code (1-5; comma separated for multiple values)
+
         - in: query
           name: limit
           schema: { type: integer, default: 20 }
