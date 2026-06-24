@@ -1,13 +1,20 @@
 name: AI PR Review
 
-# Single-pass AI review focused on code quality.
+# Single-pass AI review focused on code quality, backed by MoSPI's
+# self-hosted Qwen model (OpenAI-compatible endpoint) instead of the
+# GitHub Models gpt-4o tier.
 #
 # Structural consistency (dataset count drift, missing wiring, broken
 # swagger registration, etc.) is verified deterministically by
-# tests/test_consistency.py — the LLM is told NOT to duplicate those
+# tests/test_consistency.py - the LLM is told NOT to duplicate those
 # checks. This keeps the LLM scoped to where it adds real value (code
 # smells, edge cases, security, naming) and away from where it
 # hallucinates (line numbers, structural claims).
+#
+# Runs on a self-hosted runner inside the MoSPI network because the
+# inference endpoint is an internal address not reachable from
+# GitHub-hosted runners. See README / PR for runner setup and the
+# required repository secrets/variables.
 
 on:
   pull_request:
@@ -18,7 +25,6 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
-  models: read
 
 concurrency:
   group: ai-review-${{ github.event.pull_request.number }}
@@ -26,12 +32,15 @@ concurrency:
 
 jobs:
   review:
+    # Self-hosted runners on a public repo must never execute untrusted
+    # fork code, so restrict to PRs whose head branch lives in this repo.
     if: |
       github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
       github.actor != 'dependabot[bot]' &&
       !contains(github.event.pull_request.labels.*.name, 'skip-review')
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    runs-on: [self-hosted, linux, mospi-ai-review]
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -50,10 +59,12 @@ jobs:
           TMPDIFF=$(mktemp)
           trap "rm -f $TMPDIFF" EXIT
           git diff "origin/${BASE_REF}...${HEAD_SHA}" > "$TMPDIFF"
-          # gpt-4o allows 8000 input tokens. ~1000 for system prompt, ~500
-          # for user prompt overhead, leaving ~6500 for the diff. Cap at
-          # 18KB to keep margin for PR description and changed-files list.
-          DIFF=$(head -c 18000 "$TMPDIFF")
+          # Qwen3 (35B-A3B) has a 32K-token context, far larger than the
+          # 8K gpt-4o tier this used to run on. Reserve ~1K for the system
+          # prompt and ~2K for the completion; cap the diff at 48KB to
+          # bound request size and latency while still covering large PRs
+          # that the old 18KB cap had to truncate.
+          DIFF=$(head -c 48000 "$TMPDIFF")
           CHANGED=$(git diff --name-only "origin/${BASE_REF}...${HEAD_SHA}")
           {
             echo "diff<<DIFFEOF"
@@ -66,87 +77,93 @@ jobs:
 
       - name: Run AI review
         id: ai
-        uses: actions/ai-inference@v2
-        with:
-          model: openai/gpt-4o
-          max-completion-tokens: 1500
-          system-prompt: |
-            You are reviewing a PR on the MoSPI MCP server (FastMCP 3.0,
-            single-file mospi_server.py, swagger-driven validation).
+        env:
+          # Internal OpenAI-compatible base URL, e.g. http://HOST:8000/v1
+          # Kept as a secret so the internal address stays out of this
+          # public repo and is masked in logs.
+          LLM_ENDPOINT: ${{ secrets.MOSPI_LLM_ENDPOINT }}
+          # Optional bearer token, empty if the server runs without auth.
+          LLM_API_KEY: ${{ secrets.MOSPI_LLM_API_KEY }}
+          # Served model name (no LiteLLM "openai/" prefix for a direct call).
+          LLM_MODEL: ${{ vars.MOSPI_LLM_MODEL || 'qwen3.6-35b-a3b-fp8' }}
+          # JSON forwarded to vLLM as chat_template_kwargs. Qwen3 reasoning
+          # is disabled so the PR comment is the answer, not chain-of-thought.
+          CHAT_TEMPLATE_KWARGS: ${{ vars.MOSPI_LLM_CHAT_TEMPLATE_KWARGS }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          CHANGED_FILES: ${{ steps.context.outputs.changed }}
+          DIFF: ${{ steps.context.outputs.diff }}
+        run: |
+          set -euo pipefail
 
-            ## Scope — focus only on these
+          if [ -z "${LLM_ENDPOINT:-}" ]; then
+            echo "::error::MOSPI_LLM_ENDPOINT secret is not set."
+            exit 1
+          fi
 
-            1. Code quality: naming, dead code, bugs visible in the diff.
-            2. Edge cases: inputs that would break the new logic.
-            3. Security: secrets in code, injection vectors, unsafe
-               nginx/CSP changes.
-            4. Test quality: does a new test exercise what it claims?
+          CTK_JSON="${CHAT_TEMPLATE_KWARGS:-{\"enable_thinking\":false}}"
 
-            ## Out of scope — DO NOT flag (already tested deterministically)
+          # Build the request entirely in jq so every value is a typed
+          # argument: no shell-escaping or prompt-injection surface.
+          REQ=$(jq -n \
+            --arg     model "$LLM_MODEL" \
+            --rawfile sys   .github/ai-review/system-prompt.md \
+            --arg     title "$PR_TITLE" \
+            --arg     body  "$PR_BODY" \
+            --arg     files "$CHANGED_FILES" \
+            --arg     diff  "$DIFF" \
+            --argjson ctk   "$CTK_JSON" \
+            '{
+               model: $model,
+               temperature: 0.2,
+               max_tokens: 2000,
+               chat_template_kwargs: $ctk,
+               messages: [
+                 { role: "system", content: $sys },
+                 { role: "user", content: (
+                     "PR title: " + $title
+                     + "\n\nPR description:\n" + $body
+                     + "\n\nChanged files:\n" + $files
+                     + "\n\nDiff (may be truncated; if so, judge only what you can see):\n```diff\n"
+                     + $diff + "\n```\n"
+                 ) }
+               ]
+             }')
 
-            Dataset count drift, wiring across files, missing swagger
-            files, dataset list mismatches, total_datasets value, banner
-            count, README table rows, CONTRIBUTING counts, indicator_methods
-            keys, dataset_map keys. All checked by tests/test_consistency.py.
+          CURL_ARGS=(-sS -o response.json -w '%{http_code}'
+                     --connect-timeout 10 --max-time 300
+                     -H 'Content-Type: application/json')
+          if [ -n "${LLM_API_KEY:-}" ]; then
+            CURL_ARGS+=(-H "Authorization: Bearer ${LLM_API_KEY}")
+          fi
 
-            ## Project conventions (flag only when violated in the diff)
+          HTTP_CODE=$(printf '%s' "$REQ" | curl "${CURL_ARGS[@]}" \
+            --data @- "${LLM_ENDPOINT%/}/chat/completions") || HTTP_CODE=000
 
-            - In get_data: RBI uses sub_indicator_code; MNRE uses
-              type_of_renewable_energy_code; NSS80 derives survey_code
-              (1-20=CMST, 23-42=CMSE).
-            - Numeric params go through _safe_int() (FastMCP doesn't
-              enforce type hints).
-            - Don't replace LegacyRenegotiationAdapter (MoSPI needs
-              legacy TLS).
-            - --stateless flag in Dockerfile CMD is required (ChatGPT).
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "::error::Qwen inference failed (HTTP $HTTP_CODE)"
+            cat response.json || true
+            exit 1
+          fi
 
-            ## Anti-hallucination rules (CRITICAL)
+          # Strip any <think>...</think> block defensively, then trim.
+          CONTENT=$(jq -r '
+            (.choices[0].message.content // "")
+            | gsub("(?s)<think>.*?</think>"; "")
+            | sub("^\\s+"; "")
+          ' response.json)
 
-            - Quote the exact text from the diff for every finding. No
-              quote = no finding.
-            - Use line numbers from the diff hunks (@@ -X,Y +A,B @@);
-              don't invent them.
-            - Don't claim "missing X" — focus on what IS in the diff.
-            - When unsure, SUGGESTION not BLOCKING.
+          if [ -z "$CONTENT" ]; then
+            echo "::error::Empty response from Qwen"
+            cat response.json || true
+            exit 1
+          fi
 
-            ## Don't flag
-
-            - Linter-style formatting
-            - Splitting mospi_server.py (intentional)
-            - Type-hint enforcement (FastMCP intentionally doesn't)
-            - Removing 'unsafe-inline' from CSP (accepted in KPMG VA)
-            - PR description vs implementation mismatches
-
-            ## Output format
-
-            ## Summary
-            One sentence: what the PR does + verdict.
-
-            ## Findings
-            - **[BLOCKING/SUGGESTION/NIT]** `path:line` — issue (quote
-              the relevant line). Why it matters. Suggested fix.
-
-            ## Verdict
-            - Blocking: N
-            - Suggestion: N
-            - Nit: N
-            - Recommendation: Approve / Request Changes / Comment
-            - One-sentence rationale.
-
-            If no findings, write `_None._` under Findings and recommend Approve.
-          prompt: |
-            PR title: ${{ github.event.pull_request.title }}
-
-            PR description:
-            ${{ github.event.pull_request.body }}
-
-            Changed files:
-            ${{ steps.context.outputs.changed }}
-
-            Diff (may be truncated; if so, judge only what you can see):
-            ```diff
-            ${{ steps.context.outputs.diff }}
-            ```
+          {
+            echo "response<<AI_REVIEW_RESP_EOF"
+            printf '%s\n' "$CONTENT"
+            echo "AI_REVIEW_RESP_EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Post or update review comment
         uses: actions/github-script@v7
@@ -155,7 +172,7 @@ jobs:
         with:
           script: |
             const marker = '<!-- ai-pr-review -->';
-            const body = `${marker}\n## 🤖 AI PR Review\n\n${process.env.REVIEW}\n\n---\n_Auto-generated. Structural checks (dataset count, wiring) are handled deterministically by [\`tests/test_consistency.py\`](../blob/main/tests/test_consistency.py); this review focuses on code quality. Model: \`openai/gpt-4o\` via [GitHub Models](https://docs.github.com/en/github-models). Workflow: \`.github/workflows/ai-review.yml\`. Add the \`skip-review\` label to suppress._`;
+            const body = `${marker}\n## 🤖 AI PR Review\n\n${process.env.REVIEW}\n\n---\n_Auto-generated. Structural checks (dataset count, wiring) are handled deterministically by [\`tests/test_consistency.py\`](../blob/main/tests/test_consistency.py); this review focuses on code quality. Model: self-hosted Qwen on MoSPI infrastructure. Workflow: \`.github/workflows/ai-review.yml\`. Add the \`skip-review\` label to suppress._`;
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
