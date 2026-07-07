@@ -489,7 +489,16 @@ class MoSPI:
                 timeout=30
             )
             response.raise_for_status()
-            return response.json()
+            result = response.json()
+            result["_note"] = (
+                "Two indicators: 1=Energy Balance (KToE), 2=Energy Balance (PetaJoules). "
+                "use_of_energy_balance_code: 1=Supply, 2=Consumption (get_data also accepts "
+                "'Supply'/'Consumption' strings). "
+                "get_data indicator_code accepts numeric codes or description strings. "
+                "year accepts YYYY-YY or YYYY formats (comma-separated). "
+                "Filter metadata API requires numeric indicator_code and use_of_energy_balance_code."
+            )
+            return result
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 

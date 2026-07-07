@@ -538,6 +538,14 @@ def get_metadata(
             energy_code = use_of_energy_balance_code or 1
             result = mospi.get_energy_filters(indicator_code=ind_code, use_of_energy_balance_code=energy_code)
             result["api_params"] = get_swagger_param_definitions("ENERGY")
+            result["parameter_notes"] = (
+                "indicator_code: 1=KToE, 2=PetaJoules (get_data also accepts description strings). "
+                "use_of_energy_balance_code: 1=Supply, 2=Consumption for filter metadata; "
+                "get_data also accepts 'Supply'/'Consumption'. "
+                "year format: YYYY-YY or YYYY (comma-separated). "
+                "Optional filters: energy_commodities_code (1-10), energy_sub_commodities_code (1-12), "
+                "end_use_sector_code (1-10), end_use_sub_sector_code (1-22)."
+            )
             result["next_step"] = _next
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code, use_of_energy_balance_code=use_of_energy_balance_code)
 
@@ -975,7 +983,7 @@ def list_datasets() -> dict:
             },
             "ENERGY": {
                 "name": "Energy Statistics",
-                "description": "2 indicators (KToE and PetaJoules) measuring energy balance across supply and consumption dimensions. Covers all energy commodities (coal, oil, gas, renewables, electricity) and tracks energy flows through production, transformation, and end-use sectors.",
+                "description": "2 indicators (KToE and PetaJoules) measuring energy balance across Supply and Consumption. Covers energy commodities (1-10), sub-commodities (1-12), end-use sectors (1-10), and sub-sectors (1-22). year accepts YYYY-YY or YYYY formats.",
                 "use_for": "Energy production, consumption patterns, fuel mix, sectoral energy use, climate analysis"
             },
             "AISHE": {
