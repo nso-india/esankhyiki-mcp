@@ -392,9 +392,10 @@ class MoSPI:
                 ]
             result["_note"] = (
                 "NAS requires base_year in get_metadata and get_data. "
-                "Available base years: '2022-23' (latest) and '2011-12'. "
-                "Latest base_year is '2022-23'. "
-                "Pass base_year along with series, frequency_code, and indicator_code."
+                "Available base years: '2022-23' (latest, Current series only) and '2011-12' (Current and Back series). "
+                "indicator_code accepts comma-separated values (1-22). "
+                "account_code (01-02) applies to indicators that expose account dimensions. "
+                "get_data frequency_code: 'Annually' or 'Quarterly' (filter API uses 1=Annually, 2=Quarterly)."
             )
             return result
         except requests.RequestException as e:
