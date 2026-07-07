@@ -1,21 +1,42 @@
-openapi: 3.0.1
+﻿openapi: 3.0.1
 info:
-  title: National Sample Survey (NSS)
-  version: 1.0.11
+  title: National Sample Survey (NSS 77th Round)
+  version: 1.0.12
+  description: |
+    NSS 77th Round ΓÇö two modules on the same API base `/api/nss-77/`:
+    - **land_livestock** (portal `nss77`): `getIndicatorList`, `getFilterByIndicatorId`, `getNss77Records`
+    - **aidis** (portal `nss77a`): see `swagger_user_nss77_aidis.yaml` ΓÇö `getNss77AidisRecords` (survey_code=1, limit 20ΓÇô100)
 servers:
 - url: https://api.mospi.gov.in/
 tags:
-- name: National Sample Survey (NSS 77 ROUND).
-  description: Indicator-wise National Sample Survey (NSS 77 ROUND).
+- name: NSS77
+  description: NSS 77th Round ΓÇö Land & Livestock + AIDIS (Debt & Investment).
 paths:
   /api/nss-77/getNss77Records:
     get:
       tags:
-      - National Sample Survey (NSS 77 ROUND).
-      description:
-      - Indicator-wise National Sample Survey (NSS 77 ROUND).
+      - NSS77
+      description: |
+        Data endpoint for NSS77. Routes by `module`:
+        - `land_livestock` ΓåÆ `/api/nss-77/getNss77Records`
+        - `aidis` ΓåÆ `/api/nss-77/getNss77AidisRecords` (requires `survey_code=1`, minimum `limit=20`)
+        Pass `module` when `indicator_code` is ambiguous (16-19, 24, 26, 29, 32, 34, 36).
       operationId: NSS77IndicatorValues.
       parameters:
+      - name: module
+        in: query
+        description: Survey module ΓÇö land_livestock (Land & Livestock) or aidis (AIDIS / nss77a). Required for overlapping indicator codes.
+        schema:
+          type: string
+          enum:
+          - land_livestock
+          - aidis
+      - name: survey_code
+        in: query
+        description: Required for AIDIS module (always 1). Auto-set when module=aidis.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
       - name: indicator_code
         required: true
         in: query
@@ -399,7 +420,7 @@ paths:
           pattern: ^\d+(,\d+)*$
       - name: sub_indicator_code
         in: query
-        description: Enter the Sub Indicator code
+        description: Enter the Sub Indicator code (Land & Livestock module)
         schema:
           type: string
           pattern: ^\d+(,\d+)*$

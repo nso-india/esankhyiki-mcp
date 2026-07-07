@@ -1,4 +1,4 @@
-"""MCP Server health-check tests — all 4 tools across all 25 datasets.
+﻿"""MCP Server health-check tests ΓÇö all 4 tools across all 25 datasets.
 
 Uses FastMCP Client (in-process by default, HTTP via MCP_SERVER_URL env var).
 Run:  pytest tests/ -v
@@ -48,8 +48,8 @@ async def call(mcp_target, tool_name: str, arguments: dict, retries: int = 2) ->
 # Dataset definitions: each tuple is
 #   (dataset, step3_kwargs, step4_filters)
 #
-# step3_kwargs  — extra keyword args for get_metadata (beyond 'dataset')
-# step4_filters — the 'filters' dict for get_data
+# step3_kwargs  ΓÇö extra keyword args for get_metadata (beyond 'dataset')
+# step4_filters ΓÇö the 'filters' dict for get_data
 # ---------------------------------------------------------------------------
 
 DATASETS = [
@@ -133,8 +133,8 @@ DATASETS = [
     ),
     pytest.param(
         "NSS77",
-        {"indicator_code": 16},
-        {"indicator_code": "16", "limit": "1"},
+        {"indicator_code": 21},
+        {"indicator_code": "21", "limit": "1"},
         id="NSS77",
     ),
     pytest.param(
@@ -223,7 +223,7 @@ _INTERNAL_KEYS = {"user_query", "next_step", "related_datasets"}
 
 
 # ---------------------------------------------------------------------------
-# Tool registration — verify the server exposes exactly 4 tools
+# Tool registration ΓÇö verify the server exposes exactly 4 tools
 # ---------------------------------------------------------------------------
 
 
@@ -251,7 +251,7 @@ async def test_list_datasets(mcp_target):
 
 
 # ---------------------------------------------------------------------------
-# get_indicators — one test per dataset
+# get_indicators ΓÇö one test per dataset
 # ---------------------------------------------------------------------------
 
 
@@ -288,7 +288,7 @@ async def test_get_indicators_does_not_reflect_user_query(mcp_target):
 
 
 # ---------------------------------------------------------------------------
-# get_metadata — one test per dataset
+# get_metadata ΓÇö one test per dataset
 # ---------------------------------------------------------------------------
 
 
@@ -309,7 +309,7 @@ async def test_get_metadata(mcp_target, dataset, step3_kwargs, step4_filters):
 
 
 # ---------------------------------------------------------------------------
-# get_data — one test per dataset
+# get_data ΓÇö one test per dataset
 # ---------------------------------------------------------------------------
 
 

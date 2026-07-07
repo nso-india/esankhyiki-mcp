@@ -1,4 +1,4 @@
-"""
+﻿"""
 MoSPI API Client
 Handles all API calls to the MoSPI data portal
 """
@@ -138,7 +138,7 @@ class MoSPI:
             return {
                 "indicators_by_frequency": result,
                 "_note": "frequency_code=1 (Annual) has 8 indicators including all wages. "
-                         "It already contains quarterly breakdowns — use quarter_code to filter. "
+                         "It already contains quarterly breakdowns ΓÇö use quarter_code to filter. "
                          "frequency_code=2 (Quarterly) has 4 indicators for quarterly bulletin tables. "
                          "frequency_code=3 (Monthly) has 3 indicators (2025+ data only). "
                          "Pick the frequency_code whose indicator set matches the query.",
@@ -355,10 +355,10 @@ class MoSPI:
                 "classification_years": ["2008", "2004", "1998", "1987"],
                 "_note": "classification_year is REQUIRED for ASI. It is the NIC classification version, NOT the data year. "
                          "Pick based on which data year you need: "
-                         "'1987' → 1992-93 to 1997-98 | "
-                         "'1998' → 1998-99 to 2003-04 | "
-                         "'2004' → 2004-05 to 2007-08 | "
-                         "'2008' → 2008-09 to 2023-24. "
+                         "'1987' ΓåÆ 1992-93 to 1997-98 | "
+                         "'1998' ΓåÆ 1998-99 to 2003-04 | "
+                         "'2004' ΓåÆ 2004-05 to 2007-08 | "
+                         "'2008' ΓåÆ 2008-09 to 2023-24. "
                          "Pass classification_year in get_metadata() and get_data().",
                 "statusCode": True,
             }
@@ -794,36 +794,180 @@ class MoSPI:
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 
+    # NSS77 module routing ΓÇö Land & Livestock (nss77) + AIDIS (nss77a)
+    NSS77_LL_ONLY = frozenset({
+        21, 22, 23, 25, 27, 28, 31, 33, 35, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,
+    })
+    NSS77_AIDIS_ONLY = frozenset({2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 30, 38})
+    NSS77_OVERLAP = frozenset({16, 17, 18, 19, 24, 26, 29, 32, 34, 36})
+    NSS77_AIDIS_SURVEY_CODE = 1
+
+    @classmethod
+    def _normalize_nss77_module(cls, module: Optional[str]) -> Optional[str]:
+        if module is None:
+            return None
+        m = str(module).strip().lower()
+        if m in ("land_livestock", "land", "ll", "nss77"):
+            return "land_livestock"
+        if m in ("aidis", "nss77a", "a"):
+            return "aidis"
+        return None
+
+    @classmethod
+    def _nss77_module_for(cls, indicator_code: int, module: Optional[str] = None) -> Optional[str]:
+        normalized = cls._normalize_nss77_module(module)
+        if normalized:
+            return normalized
+        if indicator_code in cls.NSS77_AIDIS_ONLY:
+            return "aidis"
+        if indicator_code in cls.NSS77_LL_ONLY:
+            return "land_livestock"
+        if indicator_code in cls.NSS77_OVERLAP:
+            return None
+        return None
+
     def get_nss77_indicators(self) -> Dict[str, Any]:
         """Fetch list of NSS77 indicators from MoSPI API.
 
-        Returns indicators from NSS 77th Round (Situation Assessment Survey of Agricultural Households).
+        Returns 55 indicators from NSS 77th Round ΓÇö two modules combined:
+        - module=land_livestock (portal product nss77): 33 indicators on agricultural
+          households, land ownership, livestock, farm income, and crop insurance.
+        - module=aidis (portal product nss77a): 22 indicators on household assets,
+          debt, borrowing, and cash loans outstanding (AIDIS, survey_code=1).
         """
         try:
-            response = self.session.get(
+            ll_resp = self.session.get(
                 f"{self.base_url}/api/nss-77/getIndicatorList",
-                timeout=30
+                timeout=30,
             )
-            response.raise_for_status()
-            return response.json()
+            ll_resp.raise_for_status()
+            result = ll_resp.json()
+
+            aidis_resp = self.session.get(
+                f"{self.base_url}/api/nss-77/getNss77AidisIndicatorList",
+                params={"survey_code": self.NSS77_AIDIS_SURVEY_CODE},
+                timeout=30,
+            )
+            aidis_resp.raise_for_status()
+
+            ll_data = [
+                {**item, "module": "land_livestock"}
+                for item in result.get("data", [])
+            ]
+            aidis_data = [
+                {
+                    **item,
+                    "module": "aidis",
+                    "survey_code": self.NSS77_AIDIS_SURVEY_CODE,
+                }
+                for item in aidis_resp.json().get("data", [])
+            ]
+
+            result["data"] = ll_data + aidis_data
+            result["count"] = len(result["data"])
+            result["_note"] = (
+                "Two modules share indicator_code values ΓÇö always pass module in "
+                "get_metadata/get_data when codes overlap (16-19, 24, 26, 29, 32, 34, 36). "
+                "module=land_livestock: Land & Livestock (codes 16-51, 23 unique). "
+                "module=aidis: All India Debt & Investment Survey (22 indicators, survey_code=1). "
+                "Module is auto-derived for codes unique to one module."
+            )
+            return result
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 
-    def get_nss77_filters(self, indicator_code: int) -> Dict[str, Any]:
+    def get_nss77_filters(
+        self,
+        indicator_code: int,
+        module: Optional[str] = None,
+    ) -> Dict[str, Any]:
         """Fetch available NSS77 filters for given indicator.
 
         Args:
-            indicator_code: Indicator code (16-51)
+            indicator_code: Indicator code (varies by module; see get_nss77_indicators).
+            module: land_livestock or aidis. Required when indicator_code is ambiguous.
         """
-        params = {"indicator_code": indicator_code}
+        resolved = self._nss77_module_for(indicator_code, module)
+        if resolved is None:
+            return {
+                "error": (
+                    f"indicator_code {indicator_code} exists in both NSS77 modules. "
+                    "Pass module='land_livestock' or module='aidis'."
+                ),
+                "statusCode": False,
+                "ambiguous_codes": sorted(self.NSS77_OVERLAP),
+            }
 
         try:
-            response = self.session.get(
-                f"{self.base_url}/api/nss-77/getFilterByIndicatorId",
-                params=params,
-                timeout=30
-            )
+            if resolved == "aidis":
+                response = self.session.get(
+                    f"{self.base_url}/api/nss-77/getNss77AidisFiltersByIndicatorCode",
+                    params={
+                        "indicator_code": indicator_code,
+                        "survey_code": self.NSS77_AIDIS_SURVEY_CODE,
+                    },
+                    timeout=30,
+                )
+            else:
+                response = self.session.get(
+                    f"{self.base_url}/api/nss-77/getFilterByIndicatorId",
+                    params={"indicator_code": indicator_code},
+                    timeout=30,
+                )
             response.raise_for_status()
+            payload = response.json()
+            payload["module"] = resolved
+            if resolved == "aidis":
+                payload["survey_code"] = self.NSS77_AIDIS_SURVEY_CODE
+            return payload
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss77_data(self, params: Optional[Dict] = None) -> Dict[str, Any]:
+        """Fetch NSS77 records, routing to Land & Livestock or AIDIS endpoint."""
+        if not params:
+            return {"error": "indicator_code is required for NSS77", "statusCode": False}
+
+        params = {k: v for k, v in params.items() if v is not None}
+        module_arg = params.pop("module", None)
+
+        try:
+            indicator_code = int(str(params["indicator_code"]).split(",")[0])
+        except (KeyError, ValueError, AttributeError):
+            return {"error": "indicator_code is required for NSS77", "statusCode": False}
+
+        resolved = self._nss77_module_for(indicator_code, module_arg)
+        if resolved is None:
+            return {
+                "error": (
+                    f"indicator_code {indicator_code} exists in both NSS77 modules. "
+                    "Pass module='land_livestock' or module='aidis' in filters."
+                ),
+                "statusCode": False,
+                "ambiguous_codes": sorted(self.NSS77_OVERLAP),
+            }
+
+        if resolved == "aidis":
+            params["survey_code"] = str(self.NSS77_AIDIS_SURVEY_CODE)
+            try:
+                limit = int(params.get("limit", 20))
+            except (ValueError, TypeError):
+                limit = 20
+            if limit < 20:
+                limit = 20
+            elif limit > 100:
+                limit = 100
+            params["limit"] = str(limit)
+            endpoint = f"{self.base_url}/api/nss-77/getNss77AidisRecords"
+        else:
+            endpoint = f"{self.base_url}/api/nss-77/getNss77Records"
+
+        format_param = params.get("Format", "JSON")
+        try:
+            response = self.session.get(endpoint, params=params, timeout=30)
+            response.raise_for_status()
+            if format_param == "CSV":
+                return {"data": response.text, "format": "CSV"}
             return response.json()
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
@@ -870,7 +1014,7 @@ class MoSPI:
     def get_nss79_indicators(self) -> Dict[str, Any]:
         """Fetch list of NSS79 indicators from MoSPI API.
 
-        Returns all 35 indicators from NSS 79th Round — two survey modules combined:
+        Returns all 35 indicators from NSS 79th Round ΓÇö two survey modules combined:
         - survey_code=1 (CAMS): 28 indicators on education, health expenditure,
           financial inclusion, digital literacy, and household living conditions.
         - survey_code=2 (AYUSH): 7 indicators on AYUSH awareness, usage,
@@ -938,7 +1082,7 @@ class MoSPI:
     def get_nss76_indicators(self) -> Dict[str, Any]:
         """Fetch list of NSS76 indicators from MoSPI API.
 
-        Returns 25 indicators from NSS 76th Round — two survey modules combined:
+        Returns 25 indicators from NSS 76th Round ΓÇö two survey modules combined:
         - survey_code=1 (Disability): 13 indicators on disability prevalence,
           literacy, education, employment, and aid for persons with disability.
         - survey_code=2 (Housing & water): 12 indicators on drinking water,
@@ -1095,7 +1239,7 @@ class MoSPI:
     def get_nss80_indicators(self) -> Dict[str, Any]:
         """Fetch list of NSS80 indicators from MoSPI API.
 
-        Returns all 38 indicators from NSS 80th Round — two survey modules combined:
+        Returns all 38 indicators from NSS 80th Round ΓÇö two survey modules combined:
         - survey_code=1 (Telecom (CMST)): 20 indicators on telecommunications, internet usage,
           mobile phone ownership, cybercrime reporting, household connectivity,
           online purchases, and digital connectivity.

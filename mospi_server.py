@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import os
 import json
 import yaml
@@ -40,6 +40,24 @@ def enrich_indicators(result: Dict[str, Any], dataset: str) -> Dict[str, Any]:
     - result["data"]["indicator"] = list  (NAS, ENERGY, CPIALRL)
     - result["indicator"] = list  (NSS78)
     """
+    if dataset == "NSS77":
+        ll_definitions = load_definitions(dataset)
+        aidis_filepath = os.path.join(DEFINITIONS_DIR, "nss77_aidis_definitions.json")
+        aidis_definitions: Dict[int, Dict[str, str]] = {}
+        if os.path.exists(aidis_filepath):
+            with open(aidis_filepath, "r") as f:
+                aidis_definitions = {d["indicator_code"]: d for d in json.load(f)}
+
+        for indicator in result.get("data", []):
+            code = indicator.get("indicator_code") or indicator.get("code")
+            module = indicator.get("module", "land_livestock")
+            definitions = aidis_definitions if module == "aidis" else ll_definitions
+            if code in definitions:
+                indicator["definition"] = definitions[code].get("description", "")
+            elif indicator.get("description"):
+                indicator["definition"] = indicator["description"]
+        return result
+
     definitions = load_definitions(dataset)
     if not definitions:
         return result
@@ -66,7 +84,7 @@ def log(msg: str):
 # Initialize FastMCP server
 mcp = FastMCP("MoSPI Data Server", version="2.3.0")
 
-# Disable listChanged notifications — ChatGPT opens a persistent GET SSE stream
+# Disable listChanged notifications ΓÇö ChatGPT opens a persistent GET SSE stream
 # when listChanged:true, waiting for notifications that never come in stateless mode,
 # causing 424 errors. Setting to false tells ChatGPT not to subscribe.
 mcp._mcp_server.notification_options.tools_changed = False
@@ -122,6 +140,40 @@ DATASETS_REQUIRING_INDICATOR = [
 ]
 
 
+def _resolve_swagger_parameters(spec: dict, endpoint_path: str) -> list:
+    """Load GET parameters for an endpoint, resolving component $ref entries."""
+    raw_params = (
+        spec.get("paths", {})
+        .get(endpoint_path, {})
+        .get("get", {})
+        .get("parameters", [])
+    )
+    components = spec.get("components", {}).get("parameters", {})
+    resolved = []
+    for param in raw_params:
+        if isinstance(param, dict) and "$ref" in param:
+            ref_key = param["$ref"].split("/")[-1]
+            component = components.get(ref_key)
+            if component:
+                resolved.append(component)
+        else:
+            resolved.append(param)
+    return resolved
+
+
+def _merge_param_definitions(*param_lists: list) -> list:
+    """Merge swagger parameter lists, keeping the first definition for each name."""
+    merged = []
+    seen = set()
+    for params in param_lists:
+        for param in params:
+            name = param.get("name")
+            if name and name not in seen:
+                merged.append(param)
+                seen.add(name)
+    return merged
+
+
 def get_swagger_param_definitions(dataset: str) -> list:
     """Load full param definitions from swagger spec for a dataset."""
     dataset_upper = dataset.upper()
@@ -131,9 +183,21 @@ def get_swagger_param_definitions(dataset: str) -> list:
     swagger_path = os.path.join(SWAGGER_DIR, yaml_file)
     if not os.path.exists(swagger_path):
         return []
-    with open(swagger_path, 'r') as f:
+    with open(swagger_path, "r") as f:
         spec = yaml.safe_load(f)
-    return spec.get("paths", {}).get(endpoint_path, {}).get("get", {}).get("parameters", [])
+    params = _resolve_swagger_parameters(spec, endpoint_path)
+
+    if dataset_upper == "NSS77":
+        aidis_path = os.path.join(SWAGGER_DIR, "swagger_user_nss77_aidis.yaml")
+        if os.path.exists(aidis_path):
+            with open(aidis_path, "r") as f:
+                aidis_spec = yaml.safe_load(f)
+            aidis_params = _resolve_swagger_parameters(
+                aidis_spec, "/api/nss-77/getNss77AidisRecords"
+            )
+            params = _merge_param_definitions(params, aidis_params)
+
+    return params
 
 
 def get_swagger_params(dataset: str) -> list:
@@ -162,7 +226,7 @@ def validate_filters(dataset: str, filters: Dict[str, Any]) -> Dict[str, Any]:
             "hint": f"Invalid params: {invalid}. Valid params: {valid_params}."
         }
 
-    # Check for missing required params (exclude Format — auto-handled by client)
+    # Check for missing required params (exclude Format ΓÇö auto-handled by client)
     missing = [
         p["name"] for p in param_defs
         if p.get("required") and p["name"] != "Format" and p["name"] not in filters
@@ -241,7 +305,7 @@ def get_indicators(
     """
     Returns the full list of available indicators for a given dataset.
 
-    Datasets often have broader coverage than expected — for example, ASI covers
+    Datasets often have broader coverage than expected ΓÇö for example, ASI covers
     57 indicators (capital structure, wages, employment, GVA, fuel consumption),
     and GENDER covers 147 indicators across health, education, labor, and crime.
 
@@ -251,10 +315,10 @@ def get_indicators(
       - PLFS frequency_code=3 (Monthly): indicators 1-3 only
       frequency_code selects the indicator set, not time granularity.
 
-    Step 2 of: list_datasets → get_indicators → get_metadata → get_data
+    Step 2 of: list_datasets ΓåÆ get_indicators ΓåÆ get_metadata ΓåÆ get_data
 
     Args:
-        dataset: Dataset name — one of: PLFS, CPI, IIP, ASI, NAS, WPI,
+        dataset: Dataset name ΓÇö one of: PLFS, CPI, IIP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
                  NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80.
                  For CPI, IIP, WPI: returns available base years and frequencies.
@@ -328,6 +392,7 @@ def get_metadata(
     use_of_energy_balance_code: Optional[int] = None,
     sub_indicator_code: Optional[int] = None,
     survey_code: Optional[int] = None,
+    module: Optional[str] = None,
     Format: Optional[str] = None,
     type: Optional[str] = None
 ) -> dict:
@@ -335,14 +400,14 @@ def get_metadata(
     Returns the valid filter values (states, years, quarters, etc.) for a
     given dataset and indicator.
 
-    Filter codes are arbitrary and dataset-specific — for example, PLFS
+    Filter codes are arbitrary and dataset-specific ΓÇö for example, PLFS
     state_code 99 means "All India", and NAS frequency_code 1 means "Annual".
     These values cannot be inferred or guessed from parameter names alone.
 
     The returned filter_values and api_params should be used as-is when
     calling get_data.
 
-    Step 3 of: list_datasets → get_indicators → get_metadata → get_data
+    Step 3 of: list_datasets ΓåÆ get_indicators ΓåÆ get_metadata ΓåÆ get_data
 
     Args:
         dataset: Dataset name (same values as get_indicators).
@@ -364,7 +429,11 @@ def get_metadata(
         series: For CPI and NAS only ("Current"/"Back").
         use_of_energy_balance_code: For ENERGY only (1=Supply, 2=Consumption).
         survey_code: For NSS76 (1=Disability, 2=Housing & drinking water), NSS75E
-                     (2=Education, indicators 43-55), and NSS80 (1=Telecom (CMST), 2=Education (CMSE)).
+                     (2=Education, indicators 43-55), NSS80 (1=Telecom (CMST), 2=Education (CMSE)),
+                     and NSS77 AIDIS module (always 1).
+        module: For NSS77 only ΓÇö land_livestock (portal nss77) or aidis (portal nss77a).
+                Required when indicator_code overlaps both modules (16-19, 24, 26, 29, 32, 34, 36).
+                Auto-derived for codes unique to one module.
 
     Returns:
         dict with 'filter_values' (valid codes for each parameter),
@@ -373,7 +442,7 @@ def get_metadata(
     """
     dataset = dataset.upper()
 
-    # Validate numeric params — FastMCP doesn't enforce type hints
+    # Validate numeric params ΓÇö FastMCP doesn't enforce type hints
     indicator_code, err = _safe_int(indicator_code, "indicator_code")
     if err: return err
     frequency_code, err = _safe_int(frequency_code, "frequency_code")
@@ -547,10 +616,20 @@ def get_metadata(
         elif dataset == "NSS77":
             if indicator_code is None:
                 return {"error": "indicator_code is required for NSS77"}
-            result = mospi.get_nss77_filters(indicator_code=indicator_code)
+            result = mospi.get_nss77_filters(indicator_code=indicator_code, module=module)
+            if "error" in result and result.get("statusCode") is False:
+                return result
             result["api_params"] = get_swagger_param_definitions("NSS77")
+            result["parameter_notes"] = (
+                "NSS77 has two modules: module=land_livestock (33 indicators, Land & Livestock) "
+                "and module=aidis (22 indicators, AIDIS / nss77a, survey_code=1). "
+                "Pass module when indicator_code is ambiguous (16-19, 24, 26, 29, 32, 34, 36). "
+                "AIDIS filter/data params follow swagger_user_nss77_aidis.yaml "
+                "(e.g. tenure_agency_code, size_class_code, nature_of_interest_code, survey_year_code). "
+                "AIDIS data API: limit 20ΓÇô100 (default 20). state_code=37 is All-India."
+            )
             result["next_step"] = _next
-            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, module=module)
 
         elif dataset == "NSS78":
             if indicator_code is None:
@@ -695,13 +774,13 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Fetches statistical data from a MoSPI dataset.
 
     This is the final step of the workflow. It requires filter values from
-    get_metadata — filter codes are arbitrary (e.g., indicator_code=3 means
+    get_metadata ΓÇö filter codes are arbitrary (e.g., indicator_code=3 means
     "Unemployment Rate" in PLFS but something different in other datasets).
 
     All filter parameters including limit and page go inside the filters dict,
     not as top-level arguments.
 
-    Step 4 of: list_datasets → get_indicators → get_metadata → get_data
+    Step 4 of: list_datasets ΓåÆ get_indicators ΓåÆ get_metadata ΓåÆ get_data
 
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY,
@@ -820,7 +899,10 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     if not validation["valid"]:
         return {"error": "Invalid parameters", **validation}
 
-    result = mospi.get_data(api_dataset, transformed_filters)
+    if dataset == "NSS77":
+        result = mospi.get_nss77_data(transformed_filters)
+    else:
+        result = mospi.get_data(api_dataset, transformed_filters)
 
     # Upstream error (500s, timeouts, etc.)
     if isinstance(result, dict) and "error" in result and "msg" not in result:
@@ -839,11 +921,11 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         result["troubleshooting"] = (
             f"No data found for dataset '{dataset}' with the given filters. "
             "Most common causes: "
-            "1) Out-of-range codes — verify indicator_code and other numeric codes "
+            "1) Out-of-range codes ΓÇö verify indicator_code and other numeric codes "
             "match values from get_metadata(). "
-            "2) Incompatible filter combination — some filters are mutually exclusive. "
+            "2) Incompatible filter combination ΓÇö some filters are mutually exclusive. "
             "3) Comma-separated values where only single values are accepted. "
-            "4) Optional filters narrowing results too much — try removing optional params."
+            "4) Optional filters narrowing results too much ΓÇö try removing optional params."
         )
         result["suggestion"] = f"Call get_metadata(dataset='{dataset}') to verify valid filter values."
 
@@ -856,18 +938,18 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
 def list_datasets() -> dict:
     """
     Returns an overview of all MoSPI statistical datasets with descriptions and coverage.
-    This is the starting point — call this first to identify the right dataset.
+    This is the starting point ΓÇö call this first to identify the right dataset.
 
     The API covers 500+ indicators across employment, prices, industry, national
     accounts, health, education, disability, housing, environment, trade, and more. Each dataset has
-    its own indicator codes, filter parameters, and valid values — these are not
+    its own indicator codes, filter parameters, and valid values ΓÇö these are not
     standardized and cannot be inferred or guessed from parameter names alone.
 
     Four-step workflow (each step depends on the previous):
-      1. list_datasets() — identify the dataset
-      2. get_indicators(dataset) — list available indicators
-      3. get_metadata(dataset, indicator_code) — retrieve valid filter values
-      4. get_data(dataset, filters) — fetch the data
+      1. list_datasets() ΓÇö identify the dataset
+      2. get_indicators(dataset) ΓÇö list available indicators
+      3. get_metadata(dataset, indicator_code) ΓÇö retrieve valid filter values
+      4. get_data(dataset, filters) ΓÇö fetch the data
 
     Returns:
         dict with 'datasets' (name, description, use_for for each dataset)
@@ -878,7 +960,7 @@ def list_datasets() -> dict:
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
-                "description": "8 indicators covering labor market dynamics: Labour Force Participation Rate (LFPR), Worker Population Ratio (WPR), Unemployment Rate (UR), worker distribution by sector/industry, employment conditions for regular wage employees, and earnings data across three employment types—regular wages, casual labor, and self-employment.",
+                "description": "8 indicators covering labor market dynamics: Labour Force Participation Rate (LFPR), Worker Population Ratio (WPR), Unemployment Rate (UR), worker distribution by sector/industry, employment conditions for regular wage employees, and earnings data across three employment typesΓÇöregular wages, casual labor, and self-employment.",
                 "use_for": "Jobs, unemployment, wages, workforce participation, employment conditions"
             },
             "CPI": {
@@ -903,7 +985,7 @@ def list_datasets() -> dict:
             },
             "WPI": {
                 "name": "Wholesale Price Index",
-                "description": "Hierarchical commodity structure with 1000+ items across 5 levels: Major Groups (Primary articles, Fuel & power, Manufactured products, Food index) → Groups (22) → Sub-groups (90+) → Sub-sub-groups → Items. Tracks wholesale/producer price inflation monthly. Three base years available: 2011-12 (latest, default), 2004-05, and 1993-94.",
+                "description": "Hierarchical commodity structure with 1000+ items across 5 levels: Major Groups (Primary articles, Fuel & power, Manufactured products, Food index) ΓåÆ Groups (22) ΓåÆ Sub-groups (90+) ΓåÆ Sub-sub-groups ΓåÆ Items. Tracks wholesale/producer price inflation monthly. Three base years available: 2011-12 (latest, default), 2004-05, and 1993-94.",
                 "use_for": "Wholesale inflation, producer prices, commodity price trends"
             },
             "ENERGY": {
@@ -933,18 +1015,18 @@ def list_datasets() -> dict:
             },
             "ENVSTATS": {
                 "name": "Environment Statistics",
-                "description": "124 indicators covering: climate (temperature, rainfall, heat/cold waves, cyclones), water resources (wetlands, watersheds, rivers, groundwater, reservoirs, water quality), land (soil types, degradation, land use/cover), forests (area, cover, fire, carbon stock, tree cover), biodiversity (faunal diversity including global species counts by phylum—mammals, birds, reptiles, fish, etc., plant status), minerals, energy (coal/lignite reserves, power generation), agriculture (crops, fertilizers, pesticides, organic farming, livestock), pollution (air quality, noise, industrial clusters), waste (municipal, hazardous, biomedical, sewage), natural disasters (earthquakes, extreme events, deaths, government expenditure), water/sanitation access, transport, disease outbreaks, and environmental expenditure (government + corporate CSR).",
+                "description": "124 indicators covering: climate (temperature, rainfall, heat/cold waves, cyclones), water resources (wetlands, watersheds, rivers, groundwater, reservoirs, water quality), land (soil types, degradation, land use/cover), forests (area, cover, fire, carbon stock, tree cover), biodiversity (faunal diversity including global species counts by phylumΓÇömammals, birds, reptiles, fish, etc., plant status), minerals, energy (coal/lignite reserves, power generation), agriculture (crops, fertilizers, pesticides, organic farming, livestock), pollution (air quality, noise, industrial clusters), waste (municipal, hazardous, biomedical, sewage), natural disasters (earthquakes, extreme events, deaths, government expenditure), water/sanitation access, transport, disease outbreaks, and environmental expenditure (government + corporate CSR).",
                 "use_for": "Climate, biodiversity, species counts, water resources, forests, land use, pollution, waste, natural disasters, environmental health"
             },
             "RBI": {
                 "name": "RBI Statistics",
-                "description": "39 indicators on external sector: foreign trade (direction by country, commodity exports/imports in USD/INR), balance of payments (overall BoP, invisibles, key components—quarterly and annual), external debt, forex reserves, NRI deposits, and exchange rates (155 currencies, SDR, monthly averages, highs/lows, forward premia). Comprehensive for trade and currency analysis.",
+                "description": "39 indicators on external sector: foreign trade (direction by country, commodity exports/imports in USD/INR), balance of payments (overall BoP, invisibles, key componentsΓÇöquarterly and annual), external debt, forex reserves, NRI deposits, and exchange rates (155 currencies, SDR, monthly averages, highs/lows, forward premia). Comprehensive for trade and currency analysis.",
                 "use_for": "Foreign trade, exports, imports, balance of payments, forex reserves, exchange rates, external debt, NRI deposits"
             },
             "NSS77": {
-                "name": "NSS77 (77th Round - Land & Livestock)",
-                "description": "33 indicators on agricultural households: land ownership and possession (by size class, leasing patterns), livestock holdings, farm economics (income, expenses, crop production, GVA), crop marketing (disposal agencies, MSP awareness, satisfaction levels), input usage (seeds, farming resources), agricultural loans and insurance (coverage, crop loss, claim status). Comprehensive rural livelihoods data.",
-                "use_for": "Agricultural households, land ownership, livestock, farm income, crop production, agricultural loans, crop insurance, MSP awareness"
+                "name": "NSS77 (77th Round - Land & Livestock + AIDIS)",
+                "description": "55 indicators from two modules of NSS 77th Round. Land & Livestock module (module=land_livestock, portal nss77, 33 indicators, codes 16-51): agricultural households, land ownership and possession, livestock holdings, farm income and expenses, crop marketing, MSP awareness, and crop insurance. AIDIS module (module=aidis, portal nss77a, 22 indicators, survey_code=1): household assets, fixed capital expenditure, borrowing, cash loans outstanding by credit agency, purpose, tenure, and size class. Pass module when indicator_code overlaps (16-19, 24, 26, 29, 32, 34, 36).",
+                "use_for": "Agricultural households, land ownership, livestock, farm income, crop insurance, household debt, assets, borrowing, cash loans, AIDIS, investment survey"
             },
             "NSS78": {
                 "name": "NSS78 (78th Round - Living Conditions)",
@@ -958,7 +1040,7 @@ def list_datasets() -> dict:
             },
             "CPIALRL": {
                 "name": "CPI for Agricultural/Rural Labourers",
-                "description": "2 indicators: General Index and Group Index for two worker categories—Agricultural Labourers (AL) and Rural Labourers (RL). Separate inflation series measuring cost of living for India's most vulnerable rural workforce segments.",
+                "description": "2 indicators: General Index and Group Index for two worker categoriesΓÇöAgricultural Labourers (AL) and Rural Labourers (RL). Separate inflation series measuring cost of living for India's most vulnerable rural workforce segments.",
                 "use_for": "Rural inflation, agricultural labourer cost of living, rural wage indexing"
             },
             "HCES": {
@@ -1003,10 +1085,10 @@ def list_datasets() -> dict:
 },
         },
         "workflow": [
-            "1. list_datasets() — identify the relevant dataset",
-            "2. get_indicators(dataset) — list available indicators",
-            "3. get_metadata(dataset, indicator_code) — retrieve valid filter values",
-            "4. get_data(dataset, filters) — fetch the data using filter values from step 3"
+            "1. list_datasets() ΓÇö identify the relevant dataset",
+            "2. get_indicators(dataset) ΓÇö list available indicators",
+            "3. get_metadata(dataset, indicator_code) ΓÇö retrieve valid filter values",
+            "4. get_data(dataset, filters) ΓÇö fetch the data using filter values from step 3"
         ],
         "next_step": "get_indicators(dataset) to list available indicators for the chosen dataset."
     }

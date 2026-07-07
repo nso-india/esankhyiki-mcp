@@ -1,0 +1,560 @@
+openapi: 3.0.1
+
+info:
+  title: API for NSS-77 AIDIS (All India Debt and Investment Survey)
+  description: >
+    NSS-77 AIDIS module APIs — survey list, indicators, filters, paginated
+    records, and Excel download. All endpoints return a JSON envelope with a
+    boolean `statusCode` flag and a human-readable `msg`.
+  version: 1.0.0
+
+servers:
+  - url: https://api.mospi.gov.in
+    description: Production server
+
+tags:
+  - name: All India Debt & Investment Survey (NSS 77 Round)
+    description: All India Debt and Investment Survey (AIDIS) APIs
+
+paths:
+  /api/nss-77/getNss77AidisSurveyList:
+    get:
+      tags:
+        - NSS-77 AIDIS
+      summary: Get survey list
+      description: Returns the list of available AIDIS surveys (survey_code + description).
+      responses:
+        "200":
+          description: Survey list fetched successfully (data may be an empty array).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Survey"
+                  count:
+                    type: integer
+                    example: 2
+                  msg:
+                    type: string
+                    example: Survey list fetched successfully
+                  statusCode:
+                    type: boolean
+                    example: true
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/nss-77/getNss77AidisIndicatorList:
+    get:
+      tags:
+        - NSS-77 AIDIS
+      summary: Get indicator list (survey-wise)
+      description: >
+        Returns indicators available for a given survey. Optionally filtered by
+        visualization status (`viz_status`).
+      parameters:
+        - $ref: "#/components/parameters/SurveyCodeRequired"
+        - in: query
+          name: viz_status
+          required: false
+          description: Optional visualization-status filter (must exist in indicator table).
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Indicator list fetched (data may be empty with msg "No Data Found").
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Indicator"
+                  count:
+                    type: integer
+                    example: 12
+                  msg:
+                    type: string
+                    example: Data fetched successfully
+                  statusCode:
+                    type: boolean
+                    example: true
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/nss-77/getNss77AidisFiltersByIndicatorCode:
+    get:
+      tags:
+        - NSS-77 AIDIS
+      summary: Get filters by indicator code
+      description: >
+        Returns the available dimension filter lists (state, sector, gender,
+        social_group, etc.) plus the sub-indicator list for the given
+        indicator + survey. Only dimensions that have data are present in the
+        `data` object.
+      parameters:
+        - $ref: "#/components/parameters/IndicatorCodeRequired"
+        - $ref: "#/components/parameters/SurveyCodeRequired"
+        - $ref: "#/components/parameters/SubIndicatorCode"
+      responses:
+        "200":
+          description: Filters fetched successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    description: >
+                      Map of dimension name -> list of { code, description }.
+                      Keys are present only when that dimension has data.
+                      Always includes the `sub_indicator` array.
+                    properties:
+                      sub_indicator:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/SubIndicator"
+                    additionalProperties:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/FilterOption"
+                  msg:
+                    type: string
+                    example: Filters fetched successfully
+                  statusCode:
+                    type: boolean
+                    example: true
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/nss-77/getNss77AidisRecords:
+    get:
+      tags:
+        - NSS-77 AIDIS
+      summary: Get paginated AIDIS records
+      description: >
+        Returns paginated AIDIS data rows for the given indicator + survey,
+        optionally narrowed by sub-indicator and any of the dimension filters.
+        Dimension filters accept comma-separated integer codes.
+      parameters:
+        - $ref: "#/components/parameters/IndicatorCodeRequired"
+        - $ref: "#/components/parameters/SurveyCodeRequired"
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/SubIndicatorCode"
+        - $ref: "#/components/parameters/StateCode"
+        - $ref: "#/components/parameters/SectorCode"
+        - $ref: "#/components/parameters/GenderCode"
+        - $ref: "#/components/parameters/SocialGroupCode"
+        - $ref: "#/components/parameters/OccupationalCategoryCode"
+        - $ref: "#/components/parameters/HouseholdTypeCode"
+        - $ref: "#/components/parameters/QuintileClassCode"
+        - $ref: "#/components/parameters/AssetHoldingClassCode"
+        - $ref: "#/components/parameters/CreditAgencyCode"
+        - $ref: "#/components/parameters/NatureOfInterestCode"
+        - $ref: "#/components/parameters/RateOfInterestCode"
+        - $ref: "#/components/parameters/PurposeOfLoanCode"
+        - $ref: "#/components/parameters/TenureAgencyCode"
+        - $ref: "#/components/parameters/SizeClassCode"
+        - $ref: "#/components/parameters/SurveyYearCode"
+      responses:
+        "200":
+          description: >
+            Data fetched successfully. When no rows match, `data` is an empty
+            array, `msg` is "No Data Found", and `meta_data` is omitted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AidisRecord"
+                  meta_data:
+                    $ref: "#/components/schemas/MetaData"
+                  msg:
+                    type: string
+                    example: Data fetched successfully
+                  statusCode:
+                    type: boolean
+                    example: true
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/nss-77/getNss77AidisDownload:
+    get:
+      tags:
+        - NSS-77 AIDIS
+      summary: Generate AIDIS Excel download
+      description: >
+        Builds an XLSX file of the full (un-paginated) result set for the given
+        indicator + survey and optional filters, then returns its relative
+        path. Fails with 400 if the result set exceeds 50,000 rows.
+      parameters:
+        - $ref: "#/components/parameters/IndicatorCodeRequired"
+        - $ref: "#/components/parameters/SurveyCodeRequired"
+        - $ref: "#/components/parameters/SubIndicatorCode"
+        - $ref: "#/components/parameters/StateCode"
+        - $ref: "#/components/parameters/SectorCode"
+        - $ref: "#/components/parameters/GenderCode"
+        - $ref: "#/components/parameters/SocialGroupCode"
+        - $ref: "#/components/parameters/OccupationalCategoryCode"
+        - $ref: "#/components/parameters/HouseholdTypeCode"
+        - $ref: "#/components/parameters/QuintileClassCode"
+        - $ref: "#/components/parameters/AssetHoldingClassCode"
+        - $ref: "#/components/parameters/CreditAgencyCode"
+        - $ref: "#/components/parameters/NatureOfInterestCode"
+        - $ref: "#/components/parameters/RateOfInterestCode"
+        - $ref: "#/components/parameters/PurposeOfLoanCode"
+        - $ref: "#/components/parameters/TenureAgencyCode"
+        - $ref: "#/components/parameters/SizeClassCode"
+        - $ref: "#/components/parameters/SurveyYearCode"
+      responses:
+        "200":
+          description: >
+            File ready for download. When no rows match, `data` is an empty
+            array and `msg` is "No Data Found" (no file_path).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file_path:
+                    type: string
+                    description: Relative path to the generated XLSX file.
+                    example: nss77Aidis/nss77Aidis_indicator_1_1717400000000_abc123.xlsx
+                  msg:
+                    type: string
+                    example: File ready for download
+                  statusCode:
+                    type: boolean
+                    example: true
+        "400":
+          description: >
+            Bad request — missing/invalid params, or result set exceeds the
+            50,000-row download limit.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  parameters:
+    SurveyCodeRequired:
+      in: query
+      name: survey_code
+      required: true
+      description: Survey code (must exist in survey table).
+      schema:
+        type: integer
+        example: 1
+
+    IndicatorCodeRequired:
+      in: query
+      name: indicator_code
+      required: true
+      description: Indicator code (must exist in indicator table).
+      schema:
+        type: integer
+        example: 8
+
+    SubIndicatorCode:
+      in: query
+      name: sub_indicator_code
+      required: false
+      description: Optional sub-indicator code (validated against the indicator_code).
+      schema:
+        type: integer
+
+    Page:
+      in: query
+      name: page
+      required: false
+      description: Page number (1-based). Defaults to 1.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+
+    Limit:
+      in: query
+      name: limit
+      required: false
+      description: Records per page. Min 20, max 100. Defaults to 20.
+      schema:
+        type: integer
+        minimum: 20
+        maximum: 100
+        default: 20
+
+    StateCode:
+      in: query
+      name: state_code
+      required: false
+      description: Comma-separated state codes.
+      schema:
+        type: string
+        example: "1,2"
+
+    SectorCode:
+      in: query
+      name: sector_code
+      required: false
+      description: Comma-separated sector codes.
+      schema:
+        type: string
+
+    GenderCode:
+      in: query
+      name: gender_code
+      required: false
+      description: Comma-separated gender codes.
+      schema:
+        type: string
+
+    SocialGroupCode:
+      in: query
+      name: social_group_code
+      required: false
+      description: Comma-separated social group codes.
+      schema:
+        type: string
+
+    OccupationalCategoryCode:
+      in: query
+      name: occupational_category_code
+      required: false
+      description: Comma-separated occupational category codes.
+      schema:
+        type: string
+
+    HouseholdTypeCode:
+      in: query
+      name: household_type_code
+      required: false
+      description: Comma-separated household type codes.
+      schema:
+        type: string
+
+    QuintileClassCode:
+      in: query
+      name: quintile_class_code
+      required: false
+      description: Comma-separated quintile class codes.
+      schema:
+        type: string
+
+    AssetHoldingClassCode:
+      in: query
+      name: asset_holding_class_code
+      required: false
+      description: Comma-separated asset holding class codes.
+      schema:
+        type: string
+
+    CreditAgencyCode:
+      in: query
+      name: credit_agency_code
+      required: false
+      description: Comma-separated credit agency codes.
+      schema:
+        type: string
+
+    NatureOfInterestCode:
+      in: query
+      name: nature_of_interest_code
+      required: false
+      description: Comma-separated nature-of-interest codes.
+      schema:
+        type: string
+
+    RateOfInterestCode:
+      in: query
+      name: rate_of_interest_code
+      required: false
+      description: Comma-separated rate-of-interest codes.
+      schema:
+        type: string
+
+    PurposeOfLoanCode:
+      in: query
+      name: purpose_of_loan_code
+      required: false
+      description: Comma-separated purpose-of-loan codes.
+      schema:
+        type: string
+
+    TenureAgencyCode:
+      in: query
+      name: tenure_agency_code
+      required: false
+      description: Comma-separated tenure-agency codes.
+      schema:
+        type: string
+
+    SizeClassCode:
+      in: query
+      name: size_class_code
+      required: false
+      description: Comma-separated size-class codes.
+      schema:
+        type: string
+
+    SurveyYearCode:
+      in: query
+      name: survey_year_code
+      required: false
+      description: Comma-separated survey-year codes.
+      schema:
+        type: string
+
+  responses:
+    BadRequest:
+      description: Missing required parameter or invalid value.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            missingSurvey:
+              value:
+                error: "Missing required parameter: survey_code"
+                statusCode: false
+            invalidCode:
+              value:
+                error: "Invalid indicator_code"
+                statusCode: false
+
+    InternalServerError:
+      description: Unexpected server error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            error: Internal server error
+            statusCode: false
+
+  schemas:
+    Survey:
+      type: object
+      properties:
+        survey_code:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: AIDIS NSS 77th round
+
+    Indicator:
+      type: object
+      properties:
+        indicator_code:
+          type: integer
+          example: 8
+        description:
+          type: string
+          example: Average amount of debt
+        viz:
+          type: string
+          nullable: true
+
+    SubIndicator:
+      type: object
+      properties:
+        sub_indicator_code:
+          type: integer
+        description:
+          type: string
+
+    FilterOption:
+      type: object
+      description: A single dimension option. Some dimensions add extra keys (e.g. sector_code).
+      properties:
+        description:
+          type: string
+      additionalProperties: true
+
+    MetaData:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        totalRecords:
+          type: integer
+          example: 240
+        totalPages:
+          type: integer
+          example: 12
+        recordPerPage:
+          type: integer
+          example: 20
+
+    AidisRecord:
+      type: object
+      description: >
+        A data row. Dimension columns are nullable; when any filter is applied,
+        null-valued keys are stripped from the row.
+      properties:
+        indicator:
+          type: string
+        sub_indicator:
+          type: string
+        state:
+          type: string
+        sector:
+          type: string
+        gender:
+          type: string
+        social_group:
+          type: string
+        occupational_category:
+          type: string
+        household_type:
+          type: string
+        quintile_class:
+          type: string
+        asset_holding_class:
+          type: string
+        credit_agency:
+          type: string
+        nature_of_interest:
+          type: string
+        rate_of_interest:
+          type: string
+        purpose_of_loan:
+          type: string
+        tenure_agency:
+          type: string
+        size_class:
+          type: string
+        survey_year:
+          type: string
+        value:
+          type: number
+          nullable: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        statusCode:
+          type: boolean
+          example: false
