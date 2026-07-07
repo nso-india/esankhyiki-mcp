@@ -461,6 +461,13 @@ def get_metadata(
                 return {"error": "indicator_code is required for NAS"}
             result = mospi.get_nas_filters(series=series or "Current", frequency_code=frequency_code or 1, indicator_code=indicator_code, base_year=base_year or "2022-23")
             result["api_params"] = get_swagger_param_definitions("NAS")
+            result["parameter_notes"] = (
+                "base_year='2011-12' supports series Current and Back; base_year='2022-23' supports Current only. "
+                "indicator_code accepts comma-separated values in get_data (1-22). "
+                "New filter: account_code (01-02) for applicable indicators. "
+                "Filter metadata API uses frequency_code 1=Annually, 2=Quarterly; "
+                "get_data accepts 'Annually'/'Quarterly' (or 1/2)."
+            )
             result["next_step"] = _next
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code, base_year=base_year, frequency_code=frequency_code)
 
@@ -883,7 +890,7 @@ def list_datasets() -> dict:
             },
             "NAS": {
                 "name": "National Accounts Statistics",
-                "description": "22 annual + 11 quarterly indicators covering macroeconomic aggregates: GDP and GVA (production approach), consumption (private/government), capital formation (fixed, change in stock, valuables), trade (exports/imports), national income (GNI, disposable income), savings, and growth rates. Both Current and Back series available. Requires base_year ('2022-23' latest, or '2011-12').",
+                "description": "22 annual + 11 quarterly indicators covering macroeconomic aggregates: GDP and GVA (production approach), consumption (private/government), capital formation (fixed, change in stock, valuables), trade (exports/imports), national income (GNI, disposable income), savings, and growth rates. base_year='2011-12' supports Current and Back series; base_year='2022-23' supports Current only. indicator_code accepts comma-separated values. account_code (01-02) filter added for applicable indicators.",
                 "use_for": "GDP, economic growth, national income, sectoral contribution, macro analysis"
             },
             "WPI": {

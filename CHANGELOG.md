@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - NSS76 (NSS 76th Round - Disability + Housing & Drinking Water) with 25 indicators across two modules: survey_code=1 (Disability, indicators 1-13) covering disability prevalence, literacy, education, employment, care arrangements, and receipt of aid/help; survey_code=2 (Housing & drinking water, indicators 14-26) covering drinking water sources, sufficiency, treatment, housing characteristics, latrines, and flood experience. survey_code is auto-derived from indicator_code when omitted. Filter metadata uses `/api/nss-76/getNSS76FilterByIndicatorId` (swagger documents data endpoint only).
 
 ### Changed
+- NAS swagger updated from portal (v1.0.11): `account_code` filter (01-02), comma-separated `indicator_code`, clarified base_year/series rules (2011-12 → Current+Back; 2022-23 → Current only).
 - Total datasets: 23 → 25 (NSS76, NSS75E)
 - list_datasets, get_indicators, and get_metadata updated to include NSS76 and NSS75E
 - Upgraded fastmcp from 3.0.0b1 to 3.3.1, moving from a beta to a stable release. The mcp SDK is now resolved transitively by fastmcp and is no longer pinned in requirements.txt.
