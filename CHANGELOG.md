@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - ENERGY swagger updated from portal (v1.0.11): relaxed filter param patterns; year accepts YYYY-YY and YYYY; documented Supply/Consumption and indicator description strings for get_data.
+- NAS swagger updated from portal (v1.0.11): `account_code` filter (01-02), comma-separated `indicator_code`, clarified base_year/series rules (2011-12 → Current+Back; 2022-23 → Current only).
 - Total datasets: 23 → 25 (NSS76, NSS75E)
 - list_datasets, get_indicators, and get_metadata updated to include NSS76 and NSS75E
 - Upgraded fastmcp from 3.0.0b1 to 3.3.1, moving from a beta to a stable release. The mcp SDK is now resolved transitively by fastmcp and is no longer pinned in requirements.txt.
