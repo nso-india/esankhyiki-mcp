@@ -1,0 +1,112 @@
+[
+  {
+    "indicator_code": 2,
+    "name": "Average value of assets and cash loan per household by occupational category",
+    "description": "Average value of assets and amount of cash loan per household by occupational category of the households"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Average value of assets and cash loan per household by household type",
+    "description": "Average value of assets and amount of cash loan per household by household type"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Average value of assets and cash loan by household asset holding class",
+    "description": "Average value of assets and amount of cash loan per household by household asset holding class"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Average value of assets and cash loan by quintile class of expenditure",
+    "description": "Average value of assets and amount of cash loan per household by quintile class of household expenditure"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Average value of assets and cash loan by social group",
+    "description": "Average value of assets and amount of cash loan per household by social group"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Households reporting fixed/financial assets and cash loan by occupational category",
+    "description": "Per 1000 number of households reporting fixed asset, financial asset and valuables and cash loan outstanding by occupational category"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Average value of fixed and financial assets by occupational category",
+    "description": "Average value of fixed assets, financial assets by occupational category of the households"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Households reporting assets and cash loan by occupational category",
+    "description": "Per 1000 number of households reporting assets of specified categories and cash loan outstanding as on 30.6.18 by occupational category"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Average value of assets and cash loan by asset category",
+    "description": "Average value of assets by asset category and average value of cash loan outstanding by occupational category"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Households with bullion and ornaments",
+    "description": "Per 1000 number of households reported having bullion and ornaments and average amount of bullion and ornaments per household"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Fixed capital expenditure by occupational category and asset class (AIDIS)",
+    "description": "Number of households reporting fixed capital expenditure and expenditure on purchase of land and fixed capital formation by occupational category and household asset holding class"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Fixed capital expenditure by household type (AIDIS)",
+    "description": "Number of households reporting fixed capital expenditure and expenditure on purchase of land and fixed capital formation by household type"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Fixed capital expenditure by asset holding class (AIDIS)",
+    "description": "Number of households reporting fixed capital expenditure and expenditure on purchase of land and fixed capital formation by household asset holding class"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Fixed capital expenditure on broad item categories (AIDIS)",
+    "description": "Per 1000 number of households reporting fixed capital expenditure on broad item categories and average value of expenditure by broad item categories"
+  },
+  {
+    "indicator_code": 24,
+    "name": "Household borrowing for capital expenditure (AIDIS)",
+    "description": "Proportion per 1000 of household reporting borrowing and average amount of borrowing per household for capital expenditure by major head of borrowing"
+  },
+  {
+    "indicator_code": 26,
+    "name": "Cash loans outstanding by occupational category (AIDIS)",
+    "description": "Number of households reporting cash loans outstanding and per Rs.1000 break-up of outstanding amount of cash loans by occupational category"
+  },
+  {
+    "indicator_code": 29,
+    "name": "Cash loans outstanding by credit agency (AIDIS)",
+    "description": "Number of households reporting cash loans outstanding as on 30.06.18 per thousand households and per Rs.1000 break-up by credit agency"
+  },
+  {
+    "indicator_code": 30,
+    "name": "Cash loans outstanding by credit agency and interest rate (AIDIS)",
+    "description": "Number of households reporting cash loans outstanding as on 30.06.18 by credit agency and rate of interest"
+  },
+  {
+    "indicator_code": 32,
+    "name": "Cash loans outstanding by asset class and credit agency (AIDIS)",
+    "description": "Number of households reporting cash loans outstanding as on 30.06.18 by household asset holding class and credit agency"
+  },
+  {
+    "indicator_code": 34,
+    "name": "Cash loans outstanding by purpose and credit agency (AIDIS)",
+    "description": "No. of hhs reporting cash loans outstanding as on 30.06.18 per thousand households and per Rs.1000 break-up by purpose of loan and credit agency"
+  },
+  {
+    "indicator_code": 36,
+    "name": "Cash loans outstanding by tenure of loan (AIDIS)",
+    "description": "Number of households reporting cash loans outstanding as on 30.06.2018 by tenure of loan"
+  },
+  {
+    "indicator_code": 38,
+    "name": "Cash loans outstanding by size class (AIDIS)",
+    "description": "Number of households per 1000 reporting cash loans outstanding as on 30.06.18 by size class of cash loan outstanding"
+  }
+]

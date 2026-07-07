@@ -1,4 +1,4 @@
-<!--
+﻿<!--
   Easter egg: hidden developer credits for the MoSPI eSankhyiki MCP Server.
 
   Made with love by:
@@ -72,7 +72,7 @@ This server provides AI-ready access to official Indian government statistics th
 | **NFHS** | National Family Health Survey | Fertility, infant mortality, maternal care, nutrition |
 | **ENVSTATS** | Environment Statistics | Climate, biodiversity, pollution, water resources, forests |
 | **RBI** | RBI Statistics | Foreign trade, forex reserves, exchange rates, balance of payments |
-| **NSS77** | NSS 77th Round (Land & Livestock) | Agricultural households, land ownership, farm income, crop insurance |
+| **NSS77** | NSS 77th Round (Land & Livestock + AIDIS) | Agricultural households, land & livestock, farm income; household assets, debt & borrowing (module=land_livestock or aidis) |
 | **NSS78** | NSS 78th Round (Living Conditions) | Drinking water, sanitation, digital connectivity, migration |
 | **CPIALRL** | CPI for Agricultural/Rural Labourers | Rural inflation, agricultural labourer cost of living |
 | **HCES** | Household Consumption Expenditure Survey | Consumer spending, poverty analysis, inequality (Gini) |
@@ -93,7 +93,7 @@ This server provides AI-ready access to official Indian government statistics th
 The server exposes 4 tools that follow a sequential workflow:
 
 ```
-list_datasets  →  get_indicators  →  get_metadata  →  get_data
+list_datasets  ΓåÆ  get_indicators  ΓåÆ  get_metadata  ΓåÆ  get_data
 ```
 
 | Step | Tool | Description |
@@ -259,17 +259,17 @@ Services:
 
 ```
 mospi-mcp-api/
-├── mospi_server.py          # FastMCP server - tools, validation, routing
-├── mospi/
-│   └── client.py            # MoSPI API client - HTTP requests to api.mospi.gov.in
-├── swagger/                 # Swagger YAML specs per dataset (source of truth for params)
-│   └── swagger_user_*.yaml
-├── observability/
-│   └── telemetry.py         # OpenTelemetry middleware for tracing
-├── tests/                   # Pytest suite (covering all 25 datasets)
-├── Dockerfile               # Production container with OTEL instrumentation
-├── docker-compose.yml       # Full stack with Jaeger
-└── requirements.txt
+Γö£ΓöÇΓöÇ mospi_server.py          # FastMCP server - tools, validation, routing
+Γö£ΓöÇΓöÇ mospi/
+Γöé   ΓööΓöÇΓöÇ client.py            # MoSPI API client - HTTP requests to api.mospi.gov.in
+Γö£ΓöÇΓöÇ swagger/                 # Swagger YAML specs per dataset (source of truth for params)
+Γöé   ΓööΓöÇΓöÇ swagger_user_*.yaml
+Γö£ΓöÇΓöÇ observability/
+Γöé   ΓööΓöÇΓöÇ telemetry.py         # OpenTelemetry middleware for tracing
+Γö£ΓöÇΓöÇ tests/                   # Pytest suite (covering all 25 datasets)
+Γö£ΓöÇΓöÇ Dockerfile               # Production container with OTEL instrumentation
+Γö£ΓöÇΓöÇ docker-compose.yml       # Full stack with Jaeger
+ΓööΓöÇΓöÇ requirements.txt
 ```
 
 ### Design Principles
