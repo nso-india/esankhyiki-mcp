@@ -1,4 +1,4 @@
-﻿"""MCP Server health-check tests ΓÇö all 4 tools across all 25 datasets.
+"""MCP Server health-check tests ΓÇö all 4 tools across all 25 datasets.
 
 Uses FastMCP Client (in-process by default, HTTP via MCP_SERVER_URL env var).
 Run:  pytest tests/ -v

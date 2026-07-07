@@ -1,4 +1,4 @@
-﻿"""
+"""
 MoSPI API Client
 Handles all API calls to the MoSPI data portal
 """

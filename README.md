@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   Easter egg: hidden developer credits for the MoSPI eSankhyiki MCP Server.
 
   Made with love by:

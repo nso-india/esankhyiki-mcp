@@ -1,4 +1,4 @@
-﻿openapi: 3.0.1
+openapi: 3.0.1
 info:
   title: National Sample Survey (NSS 77th Round)
   version: 1.0.12
