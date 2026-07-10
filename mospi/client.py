@@ -3,6 +3,7 @@ MoSPI API Client
 Handles all API calls to the MoSPI data portal
 """
 
+import json
 import ssl
 import requests
 import yaml, os
@@ -374,6 +375,44 @@ class MoSPI:
     # NAS Metadata Methods
     # =========================================================================
 
+    def _nas_indicators_fallback(self, upstream_error: str = "") -> Dict[str, Any]:
+        """Serve NAS indicator list from bundled definitions when upstream list API fails."""
+        filepath = os.path.join(
+            os.path.dirname(__file__), "..", "definitions", "nas_definitions.json"
+        )
+        with open(filepath, "r", encoding="utf-8") as f:
+            definitions = json.load(f)
+        indicators = [
+            {
+                "indicator_code": d["indicator_code"],
+                "name": d["name"],
+                "description": d.get("description", d["name"]),
+            }
+            for d in definitions
+        ]
+        result: Dict[str, Any] = {
+            "data": {
+                "indicator": indicators,
+                "base_year": [
+                    {"base_year": "2022-23"},
+                    {"base_year": "2011-12"},
+                ],
+            },
+            "statusCode": True,
+            "_source": "local_definitions_fallback",
+        }
+        if upstream_error:
+            result["_upstream_error"] = upstream_error
+        result["_note"] = (
+            "NAS requires base_year in get_metadata and get_data. "
+            "Available base years: '2022-23' (latest, Current series only) and '2011-12' (Current and Back series). "
+            "indicator_code accepts comma-separated values (1-22). "
+            "account_code (01-02) applies to indicators that expose account dimensions. "
+            "get_data frequency_code: 'Annually' or 'Quarterly' (filter API uses 1=Annually, 2=Quarterly). "
+            "Indicator list served from bundled definitions because getNasIndicatorList was unavailable."
+        )
+        return result
+
     def get_nas_indicators(self) -> Dict[str, Any]:
         """Fetch list of all NAS indicators from MoSPI API."""
         try:
@@ -399,7 +438,7 @@ class MoSPI:
             )
             return result
         except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
+            return self._nas_indicators_fallback(str(e))
 
     def get_nas_filters(
         self,

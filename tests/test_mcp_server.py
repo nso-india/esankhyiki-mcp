@@ -14,7 +14,11 @@ from fastmcp import Client
 # The MoSPI backend rate-limits rapid requests. In-process tests hit the real
 # API with zero MCP overhead, so calls arrive much faster than via HTTP.
 # A small delay between calls prevents transient 500s.
-THROTTLE = float(os.environ.get("MCP_TEST_THROTTLE", "0.5"))
+_REMOTE = bool(os.environ.get("MCP_SERVER_URL"))
+THROTTLE = float(
+    os.environ.get("MCP_TEST_THROTTLE", "1.0" if _REMOTE else "0.5")
+)
+_DEFAULT_RETRIES = 4 if _REMOTE else 2
 
 
 def parse_tool_result(result) -> dict:
@@ -27,11 +31,13 @@ def parse_tool_result(result) -> dict:
         return {"raw": text}
 
 
-async def call(mcp_target, tool_name: str, arguments: dict, retries: int = 2) -> dict:
+async def call(mcp_target, tool_name: str, arguments: dict, retries: int | None = None) -> dict:
     """Open a Client, call a tool, parse and return the result dict.
 
     Retries on transient backend errors (MoSPI 500s from rate-limiting).
     """
+    if retries is None:
+        retries = _DEFAULT_RETRIES
     for attempt in range(1, retries + 2):
         await asyncio.sleep(THROTTLE)
         async with Client(mcp_target) as c:
@@ -133,8 +139,8 @@ DATASETS = [
     ),
     pytest.param(
         "NSS77",
-        {"indicator_code": 21},
-        {"indicator_code": "21", "limit": "1"},
+        {"indicator_code": 21, "module": "land_livestock"},
+        {"indicator_code": "21", "module": "land_livestock", "limit": "1"},
         id="NSS77",
     ),
     pytest.param(
@@ -258,10 +264,13 @@ async def test_list_datasets(mcp_target):
 @pytest.mark.parametrize("dataset,step3_kwargs,step4_filters", DATASETS)
 async def test_get_indicators(mcp_target, dataset, step3_kwargs, step4_filters):
     """get_indicators: returns non-empty indicator data for each dataset."""
+    # NAS upstream list endpoint is occasionally flaky under load.
+    retries = 6 if dataset == "NAS" and _REMOTE else None
     data = await call(
         mcp_target,
         "get_indicators",
         {"dataset": dataset, "user_query": "health check"},
+        retries=retries,
     )
     assert isinstance(data, dict)
     assert "error" not in data
