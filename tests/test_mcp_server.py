@@ -78,6 +78,12 @@ DATASETS = [
         id="IIP",
     ),
     pytest.param(
+        "ISP",
+        {"base_year": "2024-25", "frequency_code": 2},
+        {"base_year": "2024-25", "frequency_code": "2", "limit": "1"},
+        id="ISP",
+    ),
+    pytest.param(
         "ASI",
         {"classification_year": "2008"},
         {"classification_year": "2008", "sector_code": "Combined", "nic_type": "All", "limit": "1"},
@@ -219,7 +225,7 @@ EXPECTED_TOOLS = {
 }
 
 EXPECTED_DATASETS = {
-    "PLFS", "CPI", "IIP", "ASI", "NAS", "WPI", "ENERGY",
+    "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
     "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80",
 }

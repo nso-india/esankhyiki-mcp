@@ -69,6 +69,7 @@ class MoSPI:
             "CPI_Group": "/api/cpi/getCPIIndex",
             "CPI_Item": "/api/cpi/getItemIndex",
             "IIP": "/api/iip/getIipData",
+            "ISP": "/api/isp/getISPRecords",
             "ASI": "/api/asi/getASIData",
             "NAS": "/api/nas/getNASData",
             "WPI": "/api/wpi/getWpiRecords",
@@ -467,6 +468,90 @@ class MoSPI:
                 f"{self.base_url}/api/nas/getNasFilterByIndicatorId",
                 params=params,
                 timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # ISP Metadata Methods
+    # =========================================================================
+
+    def get_isp_indicators(self) -> Dict[str, Any]:
+        """Return ISP dataset overview and frequency options."""
+        return {
+            "data": [
+                {
+                    "name": "Index of Service Production (ISP)",
+                    "description": (
+                        "Monthly index measuring short-term changes in formal services "
+                        "sector output. Counterpart to IIP for services. Base year 2024-25. "
+                        "Covers 19 sub-sectors (~60% of services GVA) including wholesale "
+                        "and retail trade, transport, telecommunications, real estate, "
+                        "professional services, and more."
+                    ),
+                }
+            ],
+            "base_years": [{"code": "2024-25", "name": "2024-25 (current)"}],
+            "frequency": [
+                {"code": 1, "name": "Yearly"},
+                {"code": 2, "name": "Monthly"},
+            ],
+            "_note": (
+                "ISP is released monthly with ~60-day lag. "
+                "frequency_code: 1=Yearly, 2=Monthly (default). "
+                "year uses financial year format YYYY-YY (e.g. 2025-26). "
+                "month_code follows Indian FY: 1=April ... 12=March. "
+                "Use get_metadata(dataset='ISP') for valid filter values."
+            ),
+            "statusCode": True,
+        }
+
+    def get_isp_filters(
+        self,
+        frequency_code: int = 2,
+        base_year: str = "2024-25",
+    ) -> Dict[str, Any]:
+        """Fetch available ISP filters for a given frequency and base year.
+
+        Args:
+            frequency_code: 1=Yearly, 2=Monthly (default)
+            base_year: Index base year (default "2024-25")
+        """
+        params = {
+            "frequency_code": frequency_code,
+            "base_year": base_year,
+        }
+        filter_endpoints = (
+            "/api/isp/getISPFilter",
+            "/api/isp/getIspFilter",
+        )
+        for endpoint in filter_endpoints:
+            try:
+                response = self.session.get(
+                    f"{self.base_url}{endpoint}",
+                    params=params,
+                    timeout=30,
+                )
+                if response.status_code == 404:
+                    continue
+                response.raise_for_status()
+                result = response.json()
+                if result.get("data") or result.get("statusCode"):
+                    return result
+            except requests.RequestException:
+                continue
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/isp/getISPRecords",
+                params={
+                    "base_year": base_year,
+                    "frequency_code": frequency_code,
+                    "limit": 1,
+                },
+                timeout=30,
             )
             response.raise_for_status()
             return response.json()

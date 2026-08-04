@@ -96,7 +96,7 @@ mcp.add_middleware(TelemetryMiddleware())
 
 
 VALID_DATASETS = [
-    "PLFS", "CPI", "IIP", "ASI", "NAS", "WPI", "ENERGY",
+    "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
     "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80"
 ]
@@ -109,6 +109,7 @@ DATASET_SWAGGER = {
     "CPI_GROUP": ("swagger_user_cpi.yaml", "/api/cpi/getCPIIndex"),
     "CPI_ITEM": ("swagger_user_cpi.yaml", "/api/cpi/getItemIndex"),
     "IIP": ("swagger_user_iip.yaml", "/api/iip/getIipData"),
+    "ISP": ("swagger_user_isp.yaml", "/api/isp/getISPRecords"),
     "ASI": ("swagger_user_asi.yaml", "/api/asi/getASIData"),
     "NAS": ("swagger_user_nas.yaml", "/api/nas/getNASData"),
     "WPI": ("swagger_user_wpi.yaml", "/api/wpi/getWpiRecords"),
@@ -318,10 +319,10 @@ def get_indicators(
     Step 2 of: list_datasets ΓåÆ get_indicators ΓåÆ get_metadata ΓåÆ get_data
 
     Args:
-        dataset: Dataset name ΓÇö one of: PLFS, CPI, IIP, ASI, NAS, WPI,
+        dataset: Dataset name ΓÇö one of: PLFS, CPI, IIP, ISP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
                  NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80.
-                 For CPI, IIP, WPI: returns available base years and frequencies.
+                 For CPI, IIP, ISP, WPI: returns available base years and frequencies.
         user_query: The user's original question. Captured for telemetry analytics; not echoed back in the response.
 
     Returns:
@@ -360,6 +361,7 @@ def get_indicators(
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
         "IIP": mospi.get_iip_base_years,
+        "ISP": mospi.get_isp_indicators,
         "WPI": mospi.get_wpi_base_years,
         "ASI": mospi.get_asi_indicators,
     }
@@ -374,6 +376,7 @@ def get_indicators(
     result["related_datasets"] = (
         "Datasets with overlapping coverage: "
         "IIP (production index, growth rates) vs ASI (factory financials: capital, wages, GVA). "
+        "IIP (industrial production) vs ISP (services production). "
         "CPI (consumer inflation) vs WPI (wholesale inflation)."
     )
     return result
@@ -413,7 +416,7 @@ def get_metadata(
         dataset: Dataset name (same values as get_indicators).
         indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
                         NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80.
-                        Not applicable for: CPI, IIP, ASI, WPI.
+                        Not applicable for: CPI, IIP, ISP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
         frequency_code: Required for PLFS and ASUSE.
                         PLFS: 1=Annual, 2=Quarterly bulletin, 3=Monthly.
@@ -482,6 +485,28 @@ def get_metadata(
                 "frequency='Monthly': use year (YYYY) and month_code params."
             )
             return _check_empty_metadata(result, dataset, base_year=base_year, frequency=frequency)
+
+        elif dataset == "ISP":
+            fc = frequency_code if frequency_code is not None else 2
+            by = base_year or "2024-25"
+            result = mospi.get_isp_filters(frequency_code=fc, base_year=by)
+            result["api_params"] = get_swagger_param_definitions("ISP")
+            result["next_step"] = _next
+            result["parameter_notes"] = (
+                "Index of Service Production (ISP) measures output in India's formal "
+                "services sector. base_year='2024-25' (current). "
+                "frequency_code: 1=Yearly, 2=Monthly (default). "
+                "year uses financial year format YYYY-YY (e.g. 2025-26, 2026-27). "
+                "month_code (Indian FY): 1=April ... 12=March; use only when frequency_code=2. "
+                "type_code: 1=General, 2=Broad Sub Sector. "
+                "broad_sub_sector_code: 1-19 sub-sectors. "
+                "Optional: broad_sub_sector_category_code, nic_2_digit_code."
+            )
+            result["base_year_coverage"] = (
+                f"Current base_year='{by}', frequency_code={fc}. "
+                "Only base_year='2024-25' is available at present."
+            )
+            return _check_empty_metadata(result, dataset, frequency_code=fc, base_year=by)
 
         elif dataset == "ASI":
             result = mospi.get_asi_filters(classification_year=classification_year or "2008")
@@ -783,7 +808,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Step 4 of: list_datasets ΓåÆ get_indicators ΓåÆ get_metadata ΓåÆ get_data
 
     Args:
-        dataset: Dataset name (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY,
+        dataset: Dataset name (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY,
                  AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
                  NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80).
                  CPI auto-routes to Group or Item endpoint based on
@@ -821,6 +846,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         "CPI_GROUP": "CPI_Group",
         "CPI_ITEM": "CPI_Item",
         "IIP": "IIP",
+        "ISP": "ISP",
         "PLFS": "PLFS",
         "ASI": "ASI",
         "NAS": "NAS",
@@ -956,7 +982,7 @@ def list_datasets() -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 25,
+        "total_datasets": 26,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -972,6 +998,11 @@ def list_datasets() -> dict:
                 "name": "Index of Industrial Production",
                 "description": "Category-based structure with base years (1993-94, 2004-05, 2011-12) and frequency options (monthly/annual). Measures industrial output across manufacturing, mining, and electricity sectors using use-based classification (basic goods, capital goods, intermediate goods, consumer durables/non-durables).",
                 "use_for": "IIP index, industrial production index, manufacturing index, mining/electricity index, growth rates, textiles, metals, vehicles, consumer durables, capital goods"
+            },
+            "ISP": {
+                "name": "Index of Service Production",
+                "description": "Index measuring short-term changes in formal services sector output. Base year 2024-25. frequency_code: 1=Yearly, 2=Monthly. year in YYYY-YY financial year format. month_code uses Indian FY (1=April ... 12=March). Covers 19 broad sub-sectors (~60% of services GVA). Optional filters: type_code, broad_sub_sector_category_code, nic_2_digit_code. Counterpart to IIP for the services sector.",
+                "use_for": "Services production index, services sector growth, monthly services output, trade/transport/telecom/real estate sub-sector indices, formal services sector activity"
             },
             "ASI": {
                 "name": "Annual Survey of Industries",
@@ -1101,7 +1132,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.3 with OpenTelemetry")
-    log("Datasets: 25 (PLFS, CPI, IIP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80)")
+    log("Datasets: 26 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")

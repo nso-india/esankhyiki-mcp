@@ -1,0 +1,156 @@
+openapi: 3.0.1
+
+info:
+  title: API for Index of Service Production (ISP)
+  version: 1.0.0
+
+servers:
+  - url: https://api.mospi.gov.in/
+
+tags:
+  - name: Index of Service Production
+    description: ISP API for Index of Service Production statistics
+
+paths:
+  /api/isp/getISPRecords:
+    get:
+      tags:
+        - Index of Service Production
+
+      summary: Get ISP Data
+
+      description: >
+        API to fetch Index of Service Production (ISP) data measuring short-term
+        changes in formal services sector output. Base year 2024-25.
+
+        Optional filters:
+        base_year, frequency_code, year, month_code, type_code,
+        broad_sub_sector_code, broad_sub_sector_category_code, nic_2_digit_code,
+        limit, page
+
+        Response fields include base_year, year, index, growth_rate, and dimension labels.
+
+      parameters:
+        - in: query
+          name: base_year
+          schema:
+            type: string
+            default: "2024-25"
+            enum:
+              - "2024-25"
+          description: Base year for the index (default and current value is "2024-25").
+
+        - in: query
+          name: frequency_code
+          schema:
+            type: integer
+            default: 2
+            enum:
+              - 1
+              - 2
+          description: "1=Yearly, 2=Monthly. Default to 2 (Monthly) for recent sub-sector indices."
+
+        - in: query
+          name: year
+          schema:
+            type: string
+            pattern: ^\d{4}-\d{2}(,\d{4}-\d{2})*$
+          description: >
+            Financial year in YYYY-YY format (e.g. "2025-26", "2026-27").
+            Comma separated for multiple values.
+
+        - in: query
+          name: month_code
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+              - 6
+              - 7
+              - 8
+              - 9
+              - 10
+              - 11
+              - 12
+          description: >
+            Indian financial year month code. Use only when frequency_code=2 (Monthly).
+            1=April, 2=May, 3=June, 4=July, 5=August, 6=September,
+            7=October, 8=November, 9=December, 10=January, 11=February, 12=March.
+
+        - in: query
+          name: type_code
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+          description: "1=General, 2=Broad Sub Sector."
+
+        - in: query
+          name: broad_sub_sector_code
+          schema:
+            type: integer
+          description: >
+            Broad sub-sector code (1-19). Covers wholesale/retail trade, transport,
+            telecom, banking, insurance, real estate, IT, professional services, etc.
+
+        - in: query
+          name: broad_sub_sector_category_code
+          schema:
+            type: integer
+          description: Broad sub-sector category code (refer metadata sheet).
+
+        - in: query
+          name: nic_2_digit_code
+          schema:
+            type: integer
+          description: NIC 2-digit sub-sector code (refer metadata sheet).
+
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+          description: Number of records per page (default 10).
+
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+          description: Page number (from 1 to n).
+
+        - in: query
+          name: Format
+          schema:
+            type: string
+            default: JSON
+            enum:
+              - JSON
+              - CSV
+          description: Output format (JSON or CSV).
+
+      responses:
+        "200":
+          description: Successful response with ISP index and growth_rate values.
+
+        "400":
+          description: Invalid parameters
+
+        "409":
+          description: No data found
+
+      security:
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Bearer token to access the API

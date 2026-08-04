@@ -47,7 +47,7 @@ MCP (Model Context Protocol) server for accessing India's Ministry of Statistics
 This server provides AI-ready access to official Indian government statistics through the Model Context Protocol (MCP). It acts as a bridge between AI assistants (Claude, ChatGPT, Cursor, etc.) and MoSPI's open data APIs, enabling natural language queries for economic, demographic, and social indicators.
 
 **Key Features:**
-- 25 statistical datasets covering employment, inflation, industrial production, GDP, energy, renewable energy, higher education, school education, gender, health, disability, housing, NSS education consumption, environment, trade, agriculture, consumption, economic census, and digital literacy
+- 26 statistical datasets covering employment, inflation, industrial production, services production, GDP, energy, renewable energy, higher education, school education, gender, health, disability, housing, NSS education consumption, environment, trade, agriculture, consumption, economic census, and digital literacy
 - Sequential 4-tool workflow designed for LLM consumption
 - Swagger-driven parameter validation
 - Full OpenTelemetry integration for observability
@@ -62,6 +62,7 @@ This server provides AI-ready access to official Indian government statistics th
 | **PLFS** | Periodic Labour Force Survey | Jobs, unemployment, wages, workforce participation |
 | **CPI** | Consumer Price Index | Retail inflation, cost of living, commodity prices |
 | **IIP** | Index of Industrial Production | Industrial growth, manufacturing output |
+| **ISP** | Index of Service Production | Services sector growth, monthly services output, sub-sector indices |
 | **ASI** | Annual Survey of Industries | Factory performance, industrial employment |
 | **NAS** | National Accounts Statistics | GDP, economic growth, national income |
 | **WPI** | Wholesale Price Index | Wholesale inflation, producer prices |
