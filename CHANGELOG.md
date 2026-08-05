@@ -7,13 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-- Total datasets: 26 → 27
-- list_datasets, get_indicators, and get_metadata updated to include NSS73
-
-## Added
--NSS73 (- NSS73 (NSS 73rd Round - Unincorporated Non-Agricultural Enterprises) with indicators covering enterprise characteristics, economic activity, manufacturing, trade and other services (excluding construction), ownership, location, employment, worker categories, gross value added, assets, loans, ICT usage, and other operational and financial characteristics of unincorporated non-agricultural enterprises. Filter metadata uses `/api/nss-73/getNss73FiltersByIndicatorCode'.)
-
 ### Added
 - ISP (Index of Service Production) with services sector output indices. Base year 2024-25. frequency_code: 1=Yearly, 2=Monthly (default). year in YYYY-YY financial year format; month_code uses Indian FY (1=April ... 12=March). Covers 19 broad sub-sectors (~60% of services GVA). Filters: base_year, frequency_code, year, month_code, type_code, broad_sub_sector_code, broad_sub_sector_category_code, nic_2_digit_code. Data endpoint: `/api/isp/getISPRecords`. Filter metadata via `/api/isp/getISPFilter` with fallback to data endpoint probe.
 - NSS75E (NSS 75th Round - Education / Social Consumption on Education) with 13 indicators (survey_code=2, codes 43-55): literacy rate, educational attainment, mean years of schooling, GAR/NAR, student attendance and course-type distribution, average student expenditure by course and expenditure item, and household computer/internet access. survey_code is auto-derived from indicator_code when omitted. Filter metadata uses `/api/nss-75/getNSS75FilterByIndicatorId`.
@@ -118,7 +111,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
-| 2.7.0 | 2026-08-05 | NSS73 Unincorporated Non-Agricultural Enterprises in India |
 | 2.3.0 | 2026-05-13 | NSS80 Telecom (CMST) + Education (CMSE) dataset (23 total) |
 | 2.2.0 | 2026-04-30 | MNRE renewable energy dataset (22 total) |
 | 2.1.0 | 2026-04-09 | UDISE+ and NSS79 datasets (21 total) |

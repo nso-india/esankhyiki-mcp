@@ -86,7 +86,6 @@ class MoSPI:
             "NSS80": "/api/nss-80/getNSS80Records",
             "NSS76": "/api/nss-76/getNss76Records",
             "NSS75E": "/api/nss-75/getNSS75Records",
-            "NSS73": "/api/nss-73/getNss73Records",
             "CPIALRL": "/api/cpialrl/getCpialrlRecords",
             "HCES": "/api/hces/getHcesRecords",
             "TUS": "/api/tus/getTusRecords",
@@ -1186,48 +1185,6 @@ class MoSPI:
             return response.json()
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
-    # =========================================================================
-    # NSS73 (NSS 73rd Round - Unincorporated Non-Agricultural Enterprises in India ) Methods
-    # =========================================================================
-        
-    def get_nss73_indicators(self) -> Dict[str, Any]:
-        """Fetch list of NSS73 indicators from MoSPI API.
-
-        Returns NSS 73rd Round indicators covering enterprise activity,
-        sector, location, employment, and worker type breakdowns.
-        """
-        try:
-            response = self.session.get(
-                f"{self.base_url}/api/nss-73/getNss73IndicatorList",
-                timeout=30
-            )
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
-
-    def get_nss73_filters(self, indicator_code: int) -> Dict[str, Any]:
-        """Fetch available NSS73 filters for given indicator.
-
-        Args:
-            indicator_code: Indicator code
-        """
-        params = {"indicator_code": indicator_code}
-
-        try:
-            response = self.session.get(
-                f"{self.base_url}/api/nss-73/getNss73FiltersByIndicatorCode",
-                params=params,
-                timeout=30
-            )
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as e:
-            return {"error": str(e), "statusCode": False}
-
-    def get_nss73_data(self, params: Optional[Dict] = None) -> Dict[str, Any]:
-        """Fetch NSS73 records from MoSPI API."""
-        return self.get_data("NSS73", params)
 
     # =========================================================================
     # NSS76 (NSS 76th Round - Disability + Housing / Drinking Water) Methods

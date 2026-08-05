@@ -47,7 +47,7 @@ MCP (Model Context Protocol) server for accessing India's Ministry of Statistics
 This server provides AI-ready access to official Indian government statistics through the Model Context Protocol (MCP). It acts as a bridge between AI assistants (Claude, ChatGPT, Cursor, etc.) and MoSPI's open data APIs, enabling natural language queries for economic, demographic, and social indicators.
 
 **Key Features:**
-- 27 statistical datasets covering employment, inflation, industrial production, services production, GDP, energy, renewable energy, higher education, school education, gender, health, disability, housing, NSS education consumption, environment, trade, agriculture, consumption, economic census, and digital literacy
+- 26 statistical datasets covering employment, inflation, industrial production, services production, GDP, energy, renewable energy, higher education, school education, gender, health, disability, housing, NSS education consumption, environment, trade, agriculture, consumption, economic census, and digital literacy
 - Sequential 4-tool workflow designed for LLM consumption
 - Swagger-driven parameter validation
 - Full OpenTelemetry integration for observability
@@ -85,7 +85,6 @@ This server provides AI-ready access to official Indian government statistics th
 | **NSS76** | NSS 76th Round (Disability + Housing & Drinking Water) | Disability prevalence, literacy and education among PwD, care arrangements, aid/help, drinking water sources, water treatment, housing characteristics, latrines, flood experience |
 | **NSS75E** | NSS 75th Round (Education / Social Consumption on Education) | Literacy rate, educational attainment, GAR/NAR, student attendance, course-type distribution, education expenditure, household computer and internet access |
 | **NSS80** | NSS 80th Round (Telecom (CMST) + Education (CMSE)) | Mobile phone ownership, internet usage, online banking, cybercrime, household telecom connectivity, school enrolment and expenditure course fees, private coaching | 
-| **NSS73** | NSS 73rd Round (Unincorporated Non-Agricultural Enterprises)|Enterprise type, enterprise ownership, hired workers, annual emoluments, GVA per worker, employment type, working hours, activity category, sector-wise and state-wise enterprise statistics|
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 
 ---
