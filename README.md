@@ -47,7 +47,7 @@ MCP (Model Context Protocol) server for accessing India's Ministry of Statistics
 This server provides AI-ready access to official Indian government statistics through the Model Context Protocol (MCP). It acts as a bridge between AI assistants (Claude, ChatGPT, Cursor, etc.) and MoSPI's open data APIs, enabling natural language queries for economic, demographic, and social indicators.
 
 **Key Features:**
-- 27 statistical datasets covering employment, inflation, industrial production, services production, GDP, energy, renewable energy, higher education, school education, gender, health, disability, housing, NSS education consumption, environment, trade, agriculture, consumption, economic census, and digital literacy
+- Following statistical datasets covering employment, inflation, industrial production, services production, GDP, energy, renewable energy, higher education, school education, gender, health, disability, housing, NSS education consumption, environment, trade, agriculture, consumption, economic census, and digital literacy
 - Sequential 4-tool workflow designed for LLM consumption
 - Swagger-driven parameter validation
 - Full OpenTelemetry integration for observability
@@ -57,35 +57,41 @@ This server provides AI-ready access to official Indian government statistics th
 
 ## Datasets
 
-| Dataset | Full Name | Use For |
-|---------|-----------|---------|
-| **PLFS** | Periodic Labour Force Survey | Jobs, unemployment, wages, workforce participation |
-| **CPI** | Consumer Price Index | Retail inflation, cost of living, commodity prices |
-| **IIP** | Index of Industrial Production | Industrial growth, manufacturing output |
-| **ISP** | Index of Service Production | Services sector growth, monthly services output, sub-sector indices |
-| **ASI** | Annual Survey of Industries | Factory performance, industrial employment |
-| **NAS** | National Accounts Statistics | GDP, economic growth, national income |
-| **WPI** | Wholesale Price Index | Wholesale inflation, producer prices |
-| **ENERGY** | Energy Statistics | Energy production, consumption, fuel mix |
-| **AISHE** | All India Survey on Higher Education | Universities, colleges, student enrolment, GER, GPI |
-| **ASUSE** | Annual Survey of Unincorporated Enterprises | Informal sector, small businesses, MSME statistics |
-| **GENDER** | Gender Statistics | Gender indicators, women empowerment, sex ratio, crimes against women |
-| **NFHS** | National Family Health Survey | Fertility, infant mortality, maternal care, nutrition |
-| **ENVSTATS** | Environment Statistics | Climate, biodiversity, pollution, water resources, forests |
-| **RBI** | RBI Statistics | Foreign trade, forex reserves, exchange rates, balance of payments |
-| **NSS77** | NSS 77th Round (Land & Livestock + AIDIS) | Agricultural households, land & livestock, farm income; household assets, debt & borrowing (module=land_livestock or aidis) |
-| **NSS78** | NSS 78th Round (Living Conditions) | Drinking water, sanitation, digital connectivity, migration |
-| **CPIALRL** | CPI for Agricultural/Rural Labourers | Rural inflation, agricultural labourer cost of living |
-| **HCES** | Household Consumption Expenditure Survey | Consumer spending, poverty analysis, inequality (Gini) |
-| **TUS** | Time Use Survey | Time allocation, unpaid work, gender time gaps |
-| **EC** | Economic Census | Establishments, enterprises, district-wise business count, workers |
-| **NSS79** | NSS 79th Round (CAMS + AYUSH) | Literacy, school enrolment, NEET youth, health expenditure, financial inclusion, digital skills, AYUSH awareness and usage |
-| **UDISE** | UDISE+ (Unified District Information System for Education) | Schools, enrolment, dropout rates, teachers, PTR, GER, NER, GPI, CWSN, school infrastructure, ICT labs, minority enrolment |
-| **MNRE** | Renewable Energy (Ministry of New and Renewable Energy) | State-wise monthly installed capacity (MW) for solar, wind, hydro, bio, and total renewable power |
-| **NSS76** | NSS 76th Round (Disability + Housing & Drinking Water) | Disability prevalence, literacy and education among PwD, care arrangements, aid/help, drinking water sources, water treatment, housing characteristics, latrines, flood experience |
-| **NSS75E** | NSS 75th Round (Education / Social Consumption on Education) | Literacy rate, educational attainment, GAR/NAR, student attendance, course-type distribution, education expenditure, household computer and internet access |
-| **NSS80** | NSS 80th Round (Telecom (CMST) + Education (CMSE)) | Mobile phone ownership, internet usage, online banking, cybercrime, household telecom connectivity, school enrolment and expenditure course fees, private coaching | 
-| **NSS73** | NSS 73rd Round (Unincorporated Non-Agricultural Enterprises)|Enterprise type, enterprise ownership, hired workers, annual emoluments, GVA per worker, employment type, working hours, activity category, sector-wise and state-wise enterprise statistics|
+## Dataset Reference
+
+| Sr. No. |    Dataset   | Full Name                                                                   | Use For                                                                                                                              |
+| ------: | :----------: | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+|       1 |   **PLFS**   | Periodic Labour Force Survey                                                | Employment, unemployment, labour force participation, worker population ratio, wages, employment by industry and occupation          |
+|       2 |    **CPI**   | Consumer Price Index                                                        | Retail inflation, cost of living, inflation by commodity group, state-wise and rural/urban price indices                             |
+|       3 |    **IIP**   | Index of Industrial Production                                              | Industrial growth, manufacturing output, mining, electricity generation, sector-wise production indices                              |
+|       4 |    **ASI**   | Annual Survey of Industries                                                 | Factory performance, industrial employment, wages, fixed capital, output, value added, productivity                                  |
+|       5 |    **NAS**   | National Accounts Statistics                                                | GDP, GVA, national income, sector-wise economic growth, savings, capital formation                                                   |
+|       6 |    **WPI**   | Wholesale Price Index                                                       | Wholesale inflation, producer prices, commodity price indices, inflation trends                                                      |
+|       7 |  **ENERGY**  | Energy Statistics                                                           | Energy production, consumption, installed capacity, fuel mix, energy intensity, renewable energy statistics                          |
+|       8 |   **AISHE**  | All India Survey on Higher Education                                        | Universities, colleges, enrolment, teachers, Gross Enrolment Ratio (GER), Gender Parity Index (GPI), higher education infrastructure |
+|       9 |   **ASUSE**  | Annual Survey of Unincorporated Sector Enterprises                          | Unincorporated enterprises, MSMEs, employment, output, value added, informal sector statistics                                       |
+|      10 |  **GENDER**  | Gender Statistics                                                           | Gender indicators, women empowerment, sex ratio, labour participation, education, health, crimes against women                       |
+|      11 |   **NFHS**   | National Family Health Survey                                               | Fertility, family planning, maternal and child health, nutrition, infant mortality, health indicators                                |
+|      12 | **ENVSTATS** | Environment Statistics                                                      | Climate, biodiversity, forests, air and water quality, environmental resources, pollution indicators                                 |
+|      13 |    **RBI**   | RBI Statistics                                                              | Banking, money supply, foreign exchange reserves, exchange rates, balance of payments, external sector, financial indicators         |
+|      14 |   **NSS77**  | NSS 77th Round – Land and Livestock Holdings                                | Agricultural households, land holdings, livestock ownership, crop insurance, farming assets                                          |
+|      15 |  **NSS77A**  | All India Debt and Investment Survey (AIDIS) – NSS 77th Round               | Household assets, liabilities, debt, investment, borrowing patterns, wealth distribution                                             |
+|      16 |   **NSS78**  | NSS 78th Round – Multiple Indicator Survey                                  | Drinking water, sanitation, housing amenities, migration, digital connectivity, household living conditions                          |
+|      17 |  **CPIALRL** | Consumer Price Index for Agricultural and Rural Labourers                   | Rural inflation, agricultural labourer cost of living, rural wage index, inflation trends                                            |
+|      18 |   **HCES**   | Household Consumption Expenditure Survey                                    | Household consumption, expenditure patterns, poverty estimation, inequality, consumer behaviour                                      |
+|      19 |    **TUS**   | Time Use Survey                                                             | Time allocation, unpaid care work, paid work, household activities, gender time-use patterns                                         |
+|      20 |    **EC**    | Economic Census                                                             | Establishments, enterprises, employment, ownership, economic activity, district-wise business statistics                             |
+|      21 |   **NSS79**  | NSS 79th Round – Survey on AYUSH                                            | AYUSH awareness, AYUSH utilisation, treatment preferences, expenditure on AYUSH services                                             |
+|      22 |  **NSS79C**  | Comprehensive Annual Modular Survey (CAMS) – NSS 79th Round                 | Education, health expenditure, financial inclusion, digital literacy, household living conditions                                    |
+|      23 |   **UDISE**  | UDISE+ (Unified District Information System for Education Plus)             | Schools, enrolment, dropout, teachers, PTR, GER, NER, GPI, CWSN, ICT facilities, school infrastructure                               |
+|      24 |   **MNRE**   | Renewable Energy Statistics (Ministry of New and Renewable Energy)          | Installed renewable energy capacity, solar, wind, hydro, bioenergy, state-wise renewable energy generation                           |
+|      25 |   **NSS76**  | NSS 76th Round – Drinking Water, Sanitation, Hygiene and Housing Conditions | Drinking water sources, water treatment, sanitation, housing characteristics, toilets, flood experience                              |
+|      26 |  **NSS76C**  | Persons with Disabilities in India – NSS 76th Round                         | Disability prevalence, education, employment, accessibility, assistive devices, care arrangements                                    |
+|      27 |  **NSS75E**  | NSS 75th Round – Social Consumption on Education                            | Literacy, educational attainment, school attendance, education expenditure, internet and computer access, GER/NAR                    |
+|      28 |   **NSS80**  | NSS 80th Round – Comprehensive Modular Survey: Telecom (CMST)               | Mobile phone ownership, internet usage, telecom access, digital services, online banking, cyber security awareness                   |
+|      29 |  **NSS80E**  | NSS 80th Round – Comprehensive Modular Survey: Education (CMSE)             | School enrolment, education expenditure, tuition fees, private coaching, scholarships, sources of education funding                  |
+|      30 |  **NSS73**   | NSS 73rd Round – Unincorporated Non-Agricultural Enterprises                |  Enterprise type, enterprise ownership, hired workers, annual emoluments, GVA per worker, employment type, working hours, activity category, sector-wise and state-wise enterprise statistics                                                                        |  
+|      31 |  **ISP**     | Index of Service Production                                                  | Services sector growth, monthly services output, sub-sector indices                                                                            |
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 
 ---
