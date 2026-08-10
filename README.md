@@ -47,7 +47,7 @@ MCP (Model Context Protocol) server for accessing India's Ministry of Statistics
 This server provides AI-ready access to official Indian government statistics through the Model Context Protocol (MCP). It acts as a bridge between AI assistants (Claude, ChatGPT, Cursor, etc.) and MoSPI's open data APIs, enabling natural language queries for economic, demographic, and social indicators.
 
 **Key Features:**
-- Following statistical datasets covering employment, inflation, industrial production, services production, GDP, energy, renewable energy, higher education, school education, gender, health, disability, housing, NSS education consumption, environment, trade, agriculture, consumption, economic census, and digital literacy
+- Following statistical datasets covering employment, unemployment, inflation, industrial and services production, GDP and national accounts, energy and renewable energy, higher and school education, gender, health and nutrition, disability, housing and sanitation, household consumption and expenditure, time use, agriculture and livestock, land holdings, debt and investment, AYUSH, environment and climate, banking and financial statistics, economic census, unincorporated enterprises, telecom and digital connectivity,
 - Sequential 4-tool workflow designed for LLM consumption
 - Swagger-driven parameter validation
 - Full OpenTelemetry integration for observability
@@ -274,7 +274,7 @@ mospi-mcp-api/
 Γöé   ΓööΓöÇΓöÇ swagger_user_*.yaml
 Γö£ΓöÇΓöÇ observability/
 Γöé   ΓööΓöÇΓöÇ telemetry.py         # OpenTelemetry middleware for tracing
-Γö£ΓöÇΓöÇ tests/                   # Pytest suite (covering all 25 datasets)
+Γö£ΓöÇΓöÇ tests/                   # Pytest suite (covering all 31 datasets)
 Γö£ΓöÇΓöÇ Dockerfile               # Production container with OTEL instrumentation
 Γö£ΓöÇΓöÇ docker-compose.yml       # Full stack with Jaeger
 ΓööΓöÇΓöÇ requirements.txt
@@ -298,7 +298,7 @@ pip install -r tests/requirements-test.txt
 pytest tests/ -v -p no:anyio
 ```
 
-Runs in-process against the MCP server (no running server needed). Covers all 25 datasets across all 4 tools. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
+Runs in-process against the MCP server (no running server needed). Covers all 31 datasets across all 4 tools. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
 
 ---
 

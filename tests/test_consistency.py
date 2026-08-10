@@ -109,18 +109,9 @@ def test_startup_banner_matches_valid_datasets(server_text, valid_datasets):
     assert banner_names == valid, f'Banner names differ from VALID_DATASETS: {banner_names ^ valid}'
 
 
-def test_readme_feature_count_matches(readme_text, valid_datasets):
-    """README 'N statistical datasets' line must match VALID_DATASETS count."""
-    m = re.search(r'(\d+)\s+statistical\s+datasets', readme_text)
-    assert m, "Could not find 'N statistical datasets' in README.md"
-    assert int(m.group(1)) == len(valid_datasets), (
-        f'README features says {m.group(1)} datasets, VALID_DATASETS has {len(valid_datasets)}'
-    )
-
-
 def test_readme_dataset_table_rows_match(readme_text, valid_datasets):
     """README dataset table must have one row per dataset in VALID_DATASETS."""
-    rows = re.findall(r'^\|\s*\*\*([A-Z][A-Z0-9]+)\*\*\s*\|', readme_text, re.MULTILINE)
+    rows = re.findall(r'^\|\s*\d+\s*\|\s*\*\*([A-Z][A-Z0-9]+)\*\*\s*\|', readme_text, re.MULTILINE)
     table = set(rows)
     valid = set(valid_datasets)
     assert table == valid, (

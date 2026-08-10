@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- Total datasets: 26 → 27
+- Total datasets: 29 → 31
 - list_datasets, get_indicators, and get_metadata updated to include NSS73
 
 ## Added

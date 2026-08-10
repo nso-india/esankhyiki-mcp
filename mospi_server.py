@@ -98,7 +98,8 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73"
+    "NSS77", "NSS77A", "NSS78", "NSS76", "NSS76C", "NSS75E", "NSS79", "NSS79C", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", 
+    "NSS80",  "NSS80E", "NSS73"
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -1148,7 +1149,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.3 with OpenTelemetry")
-    log("Datasets: 27 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73)")
+    log("Datasets: 31 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")
