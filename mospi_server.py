@@ -468,18 +468,50 @@ def get_metadata(
 
         if dataset == "CPI":
             swagger_key = "CPI_ITEM" if (level or "Group") == "Item" else "CPI_GROUP"
+
+            cpi_base_year = base_year or "2024"
+            cpi_series = series or "Current"
+
             result = mospi.get_cpi_filters(
-                base_year=base_year or "2024",
+                base_year=cpi_base_year,
                 level=level or "Group",
-                series_code=series or "Current"
+                series_code=cpi_series
             )
+
+            # CPI base year 2012 has different time coverage by series.
+            # Current series starts from January 2013.
+            # Back series includes 2011 and 2012.
+            if cpi_base_year == "2012":
+                filter_values = result.get("filter_values", result.get("data", {}))
+
+                if isinstance(filter_values, dict):
+                    year_container = filter_values.get("data", filter_values)
+
+                    if isinstance(year_container, dict) and "year" in year_container:
+                        years = year_container.get("year", [])
+
+                        if cpi_series == "Current":
+                            year_container["year"] = [
+                                item for item in years
+                                if int(item.get("year", 0)) >= 2013
+                            ]
+
+                        elif cpi_series == "Back":
+                            year_container["year"] = [
+                                item for item in years
+                                if 2011 <= int(item.get("year", 0)) <= 2012
+                            ]
+
             result["api_params"] = get_swagger_param_definitions(swagger_key)
+
             result["next_step"] = _next
+
             result["base_year_coverage"] = (
-                f"Current base_year='{base_year or '2024'}'. "
-                "Other available base years: '2024', '2012', '2010'. "
-                "Each base year has different item structures and time coverage."
+                f"base_year='{cpi_base_year}', series='{cpi_series}'. "
+                "For CPI base_year='2012', the Current series starts from "
+                "January 2013, while the Back series includes 2011 and 2012."
             )
+
             return _check_empty_metadata(result, dataset, base_year=base_year, level=level, series=series)
 
         elif dataset == "IIP":
@@ -843,6 +875,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         if parameters are invalid.
     """
     dataset = dataset.upper()
+    original_dataset = dataset
 
     # EC uses a completely different API (POST to esankhyiki.mospi.gov.in)
     if dataset == "EC":
@@ -891,7 +924,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
 
     api_dataset = dataset_map.get(dataset)
     if not api_dataset:
-        return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
+        return {"error": f"Unknown dataset: {original_dataset}", "valid_datasets": VALID_DATASETS}
 
     # Transform filters: skip None values and convert to strings
     transformed_filters = transform_filters(filters)
@@ -952,26 +985,51 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     if isinstance(result, dict) and "error" in result and "msg" not in result:
         filter_str = ", ".join(f"{k}={v}" for k, v in transformed_filters.items() if k not in ("Format", "limit", "page"))
         result["troubleshooting"] = (
-            f"The upstream API returned an error for dataset '{dataset}' "
+            f"The upstream API returned an error for dataset '{original_dataset}' "
             f"with filters: {filter_str}. "
             "Common causes: 1) indicator_code or other numeric codes are out of range. "
             "2) Non-integer values like '1.0', 'abc', or empty strings in numeric fields. "
             "3) Comma-separated values where only single values are accepted (e.g. PLFS indicator_code)."
         )
-        result["suggestion"] = f"Call get_indicators(dataset='{dataset}') to check valid codes, then get_metadata() for filter values."
+        result["suggestion"] = f"Call get_indicators(dataset='{original_dataset}') to check valid codes, then get_metadata() for filter values."
 
-    # If no data found, hint to retry with different filters
+    # If no data found, hint to retry with different filters.
     if isinstance(result, dict) and result.get("msg") == "No Data Found":
-        result["troubleshooting"] = (
-            f"No data found for dataset '{dataset}' with the given filters. "
-            "Most common causes: "
-            "1) Out-of-range codes ΓÇö verify indicator_code and other numeric codes "
-            "match values from get_metadata(). "
-            "2) Incompatible filter combination ΓÇö some filters are mutually exclusive. "
-            "3) Comma-separated values where only single values are accepted. "
-            "4) Optional filters narrowing results too much ΓÇö try removing optional params."
-        )
-        result["suggestion"] = f"Call get_metadata(dataset='{dataset}') to verify valid filter values."
+
+        if (
+            original_dataset == "CPI"
+            and str(transformed_filters.get("base_year", "")) == "2012"
+            and str(transformed_filters.get("series", "Current")) == "Current"
+        ):
+            year_value = transformed_filters.get("year")
+
+            result["troubleshooting"] = (
+                f"No data found for CPI with series='Current', "
+                f"base_year='2012' and year='{year_value}'. "
+                "The CPI Current series for base year 2012 starts from January 2013. "
+                "Years 2011 and 2012 are available under the Back series."
+            )
+
+            result["suggestion"] = (
+                "Use year >= 2013 for series='Current', "
+                "or use series='Back' for 2011 and 2012."
+            )
+
+        else:
+            result["troubleshooting"] = (
+                f"No data found for dataset '{original_dataset}' with the given filters. "
+                "Most common causes: "
+                "1) Out-of-range codes — verify indicator_code and other numeric codes "
+                "match values from get_metadata(). "
+                "2) Incompatible filter combination — some filters are mutually exclusive. "
+                "3) Comma-separated values where only single values are accepted. "
+                "4) Optional filters narrowing results too much — try removing optional params."
+            )
+
+            result["suggestion"] = (
+                f"Call get_metadata(dataset='{original_dataset}') "
+                "to verify valid filter values."
+            )
 
     return result
 
