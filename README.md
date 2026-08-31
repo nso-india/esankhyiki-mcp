@@ -52,7 +52,7 @@ This server provides AI-ready access to official Indian government statistics th
 - Swagger-driven parameter validation
 - Full OpenTelemetry integration for observability
 - Production-ready Docker deployment
-
+- Note: Some NSS rounds include sub-parts (NSS77A, NSS79C, NSS76C, NSS80E), which are shown as separate entries in the README for user understanding. On the server, however, these sub-parts are accessible through their respective parent NSS round   dataset (NSS77, NSS79, NSS76, NSS80) itself, rather than as independent datasets.
 ---
 
 ## Dataset Reference
