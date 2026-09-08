@@ -670,6 +670,17 @@ def get_metadata(
                 return {"error": "indicator_code is required for NSS78"}
             result = mospi.get_nss78_filters(indicator_code=indicator_code)
             result["api_params"] = get_swagger_param_definitions("NSS78")
+            indicator_name = mospi.get_nss78_indicator_name(indicator_code)
+            if indicator_name:
+                result["Indicator"] = indicator_name
+            result["parameter_notes"] = (
+                "NSS78 get_data requires the full Indicator name from get_indicators() — "
+                "short labels in older docs cause upstream 500 errors. "
+                "Pass indicator_code in get_data and it is auto-mapped to Indicator, "
+                "or pass Indicator exactly as returned in this response. "
+                "Optional filters: State_code, Sector_code, Subindicator_code, Gender_code, "
+                "AgeGroup_code, InternetAccess_code, and others from api_params."
+            )
             result["next_step"] = _next
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
@@ -937,6 +948,28 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
                     transformed_filters["survey_code"] = str(derived)
             except (ValueError, AttributeError):
                 pass
+
+    if dataset == "NSS78":
+        ic = transformed_filters.get("indicator_code")
+        if ic is not None:
+            try:
+                ic_int = int(str(ic).split(",")[0])
+                indicator_name = mospi.get_nss78_indicator_name(ic_int)
+                if indicator_name:
+                    transformed_filters["Indicator"] = indicator_name
+                elif "Indicator" not in transformed_filters:
+                    return {
+                        "error": f"Unknown NSS78 indicator_code: {ic_int}",
+                        "suggestion": "Call get_indicators(dataset='NSS78') for valid codes (2-15).",
+                    }
+            except (ValueError, AttributeError):
+                pass
+        elif "Indicator" not in transformed_filters:
+            return {
+                "error": "indicator_code or Indicator is required for NSS78",
+                "suggestion": "Call get_metadata(dataset='NSS78', indicator_code=N) for the full Indicator string.",
+            }
+        transformed_filters.pop("indicator_code", None)
 
     # Validate params against swagger spec
     validation = validate_filters(dataset, transformed_filters)

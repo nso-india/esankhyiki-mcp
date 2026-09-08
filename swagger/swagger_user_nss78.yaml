@@ -19,23 +19,24 @@ paths:
       - name: Indicator
         required: true
         in: query
+        description: Full indicator name from getIndicatorList (codes 2-15). Short labels cause upstream 500 errors; MCP accepts indicator_code and auto-maps to this value.
         schema:
-          default: Usage of Mobile Phone
+          default: Percentage of Persons Who Used Mobile Telephone with Active Sim Card at Least Once During Last Three Months Preceding the Date of the Survey
           enum:
-          - Usage of Mobile Phone
-          - Access to Mass Media and Broadband
-          - Main Reason for Leaving Last Usual Place of Residence
-          - Improved Latrine and Hand Washing Facilities Within Household
-          - Exclusive Access to Improved Latrine
-          - Income Change Due to Migration
-          - Household Assets
-          - Improved Source of Drinking Water Within Household
-          - Availability of Basic Transport and Public Facility
-          - Different Sources of Finance
-          - Usual Place of Residence Different From Current Place
-          - Possession of Air Conditioner and Air Cooler
-          - Main Reason for Migration
-          - Access to Improved Source of Drinking Water
+          - Percentage of Persons Reported to Have Access to Piped Water into Dwelling or Yard/plot and Reported to Have Access to Improved Source of Drinking Water
+          - Percentage of Persons Reported Access to Drinking Water, Exclusive Access to Drinking Water, Access to Improved Source of Drinking Water and Sufficiency of Drinking Water
+          - Percentage of Persons Reported Access to Improved Latrine and Exclusive Access to Improved Latrine for Each State, Among Persons Reported to Have Access to Latrine
+          - Percentage Distribution of Persons by Availability of Hand Washing Facility Within the Premises
+          - Percentage of Persons Who Used Mobile Telephone with Active Sim Card at Least Once During Last Three Months Preceding the Date of the Survey
+          - Percentage of Households Reported Access to Broadband Within the Premises and Mass Media (any of Internet, Newspaper, Magazine, Radio, Television Etc)
+          - Percentage Distribution of Households by the Availabilty of Basic Transport and Public Facility
+          - Percentage of Households Which Have Purchased/ Constructed New House/flat for Residential Purpose After 31.03.2014, Purchased for the First Time and Owned that House/flat as on Date of Survey
+          - Percentage Distribution of Different Sources of Finance From Which Maximum Amount was Financed by the Household for New House/flat
+          - Percentage of Persons* Whose Current Place of Residence is Different From the Last Usual Place of Residence
+          - Percentage Distribution of Persons by Main Reason for Leaving Last Usual Place of Residence
+          - Percentage Distribution of Persons Reporting as Earner in the Last Usual Place of Residence by Change in Income Due to Migration
+          - Percentage of Persons Willing to Move Out From the Present Place of Residence and Percentage Distribution of such Persons by Main Reason# for Leaving Present Place of Residence
+          - Percentage of Households Reporting Possession of Air Conditioner and Air Cooler
       - name: State_code
         in: query
         description: Enter the State code (from 1 to 39. Comma separated for multiple

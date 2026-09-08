@@ -1133,6 +1133,18 @@ class MoSPI:
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 
+    def get_nss78_indicator_name(self, indicator_code: int) -> Optional[str]:
+        """Resolve NSS78 indicator_code to the full Indicator string required by getNss78Records."""
+        if not hasattr(self, "_nss78_indicator_names"):
+            self._nss78_indicator_names: Dict[int, str] = {}
+            result = self.get_nss78_indicators()
+            for item in result.get("indicator", []):
+                code = item.get("code")
+                name = item.get("name")
+                if code is not None and name:
+                    self._nss78_indicator_names[int(code)] = name
+        return self._nss78_indicator_names.get(indicator_code)
+
     def get_nss78_filters(self, indicator_code: int) -> Dict[str, Any]:
         """Fetch available NSS78 filters for given indicator.
 
