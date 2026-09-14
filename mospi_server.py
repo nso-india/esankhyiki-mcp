@@ -98,7 +98,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73", "NSS74"
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -132,13 +132,14 @@ DATASET_SWAGGER = {
     "NSS80": ("swagger_user_nss80.yaml", "/api/nss-80/getNSS80Records"),
     "NSS76": ("swagger_user_nss76.yaml", "/api/nss-76/getNss76Records"),
     "NSS75E": ("swagger_user_nss75e.yaml", "/api/nss-75/getNSS75Records"),
-    "NSS73": ("swagger_user_nss73.yaml", "/api/nss-73/getNss73Records")
+    "NSS73": ("swagger_user_nss73.yaml", "/api/nss-73/getNss73Records"),
+    "NSS74": ("swagger_user_nss74.yaml", "/api/nss-74/getNss74Records")
 }
 
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74"
 ]
 
 
@@ -322,7 +323,7 @@ def get_indicators(
     Args:
         dataset: Dataset name ΓÇö one of: PLFS, CPI, IIP, ISP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
-                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73.
+                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74.
                  For CPI, IIP, ISP, WPI: returns available base years and frequencies.
         user_query: The user's original question. Captured for telemetry analytics; not echoed back in the response.
 
@@ -360,6 +361,7 @@ def get_indicators(
         "NSS75E": mospi.get_nss75e_indicators,
         "NSS80": mospi.get_nss80_indicators,
         "NSS73": mospi.get_nss73_indicators,
+        "NSS74": mospi.get_nss74_indicators,
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
         "IIP": mospi.get_iip_base_years,
@@ -418,7 +420,7 @@ def get_metadata(
     Args:
         dataset: Dataset name (same values as get_indicators).
         indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
-                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73.
+                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74.
                         Not applicable for: CPI, IIP, ISP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
         state_code: For NAS only — required when indicator_code is 23-34
@@ -813,6 +815,14 @@ def get_metadata(
             result["api_params"] = get_swagger_param_definitions("NSS73")
             result["next_step"] = _next
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
+        
+        elif dataset == "NSS74":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for NSS74"}
+            result = mospi.get_nss74_filters(indicator_code=indicator_code)
+            result["api_params"] = get_swagger_param_definitions("NSS74")
+            result["next_step"] = _next
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
         else:
             return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
@@ -838,7 +848,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY,
                  AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
-                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73).
+                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74).
                  CPI auto-routes to Group or Item endpoint based on
                  whether filters contain item_code.
                  IIP uses a single endpoint; pass frequency="Annually" or
@@ -898,6 +908,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         "NSS75E": "NSS75E",
         "NSS80": "NSS80",
         "NSS73": "NSS73",
+        "NSS74": "NSS74",
     }
 
     api_dataset = dataset_map.get(dataset)
@@ -1033,7 +1044,7 @@ def list_datasets() -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 27,
+        "total_datasets": 28,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -1169,7 +1180,12 @@ def list_datasets() -> dict:
                 "name": "NSS73 (73rd Round - Unincorporated Non-Agricultural Enterprises in India)",
                 "description": "6 indicators from the NSS 73rd Round (2015-16) survey covering Unincorporated Non-Agricultural Enterprises in India, with statistics broken down by state/UT, sector (rural/urban), broad activity category (Manufacturing, Trade, Other services, Non-captive electricity), enterprise type (Own Account Enterprises vs Establishment), and — depending on the indicator — further dimensions such as detailed activity category, ownership type, gender, employment type, worker category, or normal working hours per day.",
                 "use_for": "Querying enterprise counts, ownership patterns, workforce composition (gender, employment type, worker category), hired-worker emoluments, and Gross Value Added (GVA) per worker or per enterprise across India's informal non-agricultural sector. Note: each indicator supports only a specific subset of filters (e.g., activity_category_code applies to indicator 1 only; enterprises_by_ownership_code applies to indicator 2 only; gva_per_worker_code applies to indicators 5-6 only) — combining filters across indicators returns no data, since the underlying survey tables were never cross-tabulated together."
-            }
+            },
+            "NSS74": {
+                "name": "NSS74 (74th Round - Services Sector Enterprises in India)",
+                "description": "22 indicators from the NSS 74th Round survey covering unincorporated services sector enterprises in India, with statistics broken down by state/UT, Broad Activity Code (BAC — trade, transport, education, health, etc.), frame (enterprise list vs GST/MCA), registration status, and enterprise type (Own Account Enterprises vs Establishment). Depending on the indicator, further dimensions include number of months operated, number of establishments per enterprise, NIC industry code / NIC 2008 section, compilation category, range of workers, decile class of GVA, and type of production.",
+                "use_for": "Measuring the size, structure, output, employment, and productivity of India's services sector enterprises — covering enterprise counts and registration, operating patterns and digital adoption, financial output, employment (including unpaid family labor), productivity ratios, and digital-reporting readiness."
+            },
         },
         "workflow": [
             "1. list_datasets() ΓÇö identify the relevant dataset",
@@ -1188,7 +1204,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.3 with OpenTelemetry")
-    log("Datasets: 27 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73)")
+    log("Datasets: 28 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")

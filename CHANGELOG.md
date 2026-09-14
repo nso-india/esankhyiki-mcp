@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Total datasets: 27 → 28
+- list_datasets, get_indicators, and get_metadata updated to include NSS74
+## Added
+-NSS74 (- NSS74 (NSS 74rd Round - Services Sector Enterprises in India) with indicators covering Measuring the size, structure, output, employment, and productivity of India's services sector enterprises — covering enterprise counts and registration, operating patterns and digital adoption, financial output, employment (including unpaid family labor), productivity ratios, and digital-reporting readiness.
+
 
 ### Changed
 - Total datasets: 26 → 27
@@ -118,6 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 2.8.0 | 2026-09-14 | NSS74 Services Sector Enterprises in India |
 | 2.7.0 | 2026-08-05 | NSS73 Unincorporated Non-Agricultural Enterprises in India |
 | 2.3.0 | 2026-05-13 | NSS80 Telecom (CMST) + Education (CMSE) dataset (23 total) |
 | 2.2.0 | 2026-04-30 | MNRE renewable energy dataset (22 total) |

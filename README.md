@@ -89,7 +89,8 @@ This server provides AI-ready access to official Indian government statistics th
 |      28 |   **NSS80**  | NSS 80th Round – Comprehensive Modular Survey: Telecom (CMST)               | Mobile phone ownership, internet usage, telecom access, digital services, online banking, cyber security awareness                   |
 |      29 |  **NSS80E**  | NSS 80th Round – Comprehensive Modular Survey: Education (CMSE)             | School enrolment, education expenditure, tuition fees, private coaching, scholarships, sources of education funding                  |
 |      30 |  **NSS73**   | NSS 73rd Round – Unincorporated Non-Agricultural Enterprises                |  Enterprise type, enterprise ownership, hired workers, annual emoluments, GVA per worker, employment type, working hours, activity category, sector-wise and state-wise enterprise statistics                                                                        |  
-|      31 |  **ISP**     | Index of Service Production                                                  | Services sector growth, monthly services output, sub-sector indices                                                                            |
+|      31 |  **NSS74**   | NSS 74th Round – Services Sector Enterprises in India                    | Services sector enterprises, enterprise characteristics, registration status, enterprise type, workers, GVA, activity breakdowns, and state-wise/NIC-wise enterprise statistics |
+|      32 |  **ISP**     | Index of Service Production                                                  | Services sector growth, monthly services output, sub-sector indices                                                                            |
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 
 ---

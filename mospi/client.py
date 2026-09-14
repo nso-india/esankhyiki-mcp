@@ -92,6 +92,7 @@ class MoSPI:
             "TUS": "/api/tus/getTusRecords",
             "UDISE": "/api/udise/getUdiseRecords",
             "MNRE": "/api/mnre/getDataByEnergy",
+            "NSS74": "/api/nss-74/getNSS74Records"
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -123,6 +124,62 @@ class MoSPI:
                 return response.json()
         except Exception as e:
             return {"error": f"An error occurred: {e}"}
+
+    # =========================================================================
+    # NSS74 (NSS 74th Round - Unincorporated Services Sector Enterprises) Methods
+    # =========================================================================
+
+    def get_nss74_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS74 indicators from MoSPI API.
+
+        Returns NSS 74th Round indicators covering unincorporated services
+        sector enterprises: registration status, enterprise type, workers,
+        GVA, and characteristics breakdowns (indicator_code 1-22).
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-74/getIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss74_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available NSS74 filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-22)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-74/getNSS74FilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss74_data(self, params: Optional[Dict] = None) -> Dict[str, Any]:
+        """Fetch NSS74 records from MoSPI API.
+
+        Args:
+            params: Query params matching /api/nss-74/getNSS74Records —
+                indicator_code (required, 1-22), plus optional filters:
+                sub_indicator_code, state_code, bac_code, frame_code,
+                registration_status_code, enterprises_reporting_mixed_activity_type_code,
+                enterprises_type_code, number_of_months_operated_in_the_period_code,
+                enterprises_by_number_of_establishments_code, proportion_of_enterprises_code,
+                characteristics_code, nic_code, compilation_category_code,
+                range_of_workers_code, decile_class_of_gva_code, nic_2008_section_code,
+                type_of_production_code, limit, page, format.
+        """
+        return self.get_data("NSS74", params)
 
     # =========================================================================
     # PLFS Metadata Methods

@@ -1,0 +1,143 @@
+openapi: 3.0.1
+info:
+  title: All India Survey on Services Sector Enterprises in India (NSS 74th Round)
+  version: 1.1.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: NSS74
+  description: National Sample Survey 74th Round.
+paths:
+  /api/nss-74/getNSS74Records:
+    get:
+      tags:
+      - NSS74
+      operationId: NSS74IndicatorValues.
+      description: |
+        - **Required:** `indicator_code`
+        - **Filters (optional):** sub_indicator_code, state_code, bac_code, frame_code, registration_status_code, enterprises_reporting_mixed_activity_type_code, enterprises_type_code, number_of_months_operated_in_the_period_code, enterprises_by_number_of_establishments_code, proportion_of_enterprises_code, characteristics_code, nic_code, compilation_category_code, range_of_workers_code, decile_class_of_gva_code, nic_2008_section_code, type_of_production_code
+        
+      parameters:
+        - in: query
+          name: indicator_code
+          required: true
+          schema: { type: integer }
+          description: Enter the indicator code (1-22)
+        - in: query
+          name: sub_indicator_code
+          schema: { type: integer }
+          description: Enter the sub indicator code (1-4)
+        - in: query
+          name: state_code
+          schema: { type: integer }
+          description: Enter the State / UT code (1-37)
+        - in: query
+          name: bac_code
+          schema: { type: integer }
+          description: Enter the BAC code (1-14)
+        - in: query
+          name: frame_code
+          schema: { type: integer }
+          description: Enter the frame code (1-3)
+        - in: query
+          name: registration_status_code
+          schema: { type: integer }
+          description: Enter the registration status code (1-4)
+        - in: query
+          name: enterprises_reporting_mixed_activity_type_code
+          schema: { type: integer }
+          description: Enter the enterprises reporting mixed activity code (1-4)
+        - in: query
+          name: enterprises_type_code
+          schema: { type: integer }
+          description: Enter the enterprises type code (1-2)
+        - in: query
+          name: number_of_months_operated_in_the_period_code
+          schema: { type: integer }
+          description: Enter the number of months operated in the period code (1-8)
+        - in: query
+          name: enterprises_by_number_of_establishments_code
+          schema: { type: integer }
+          description: Enter the enterprises by number of establishments code (1-9)
+        - in: query
+          name: proportion_of_enterprises_code
+          schema: { type: integer }
+          description: Enter the proportion of enterprises code (1-15)
+        - in: query
+          name: characteristics_code
+          schema: { type: integer }
+          description: Enter the characteristics code (1-83)
+        - in: query
+          name: nic_code
+          schema: { type: integer }
+          description: Enter the NIC code (1-41)
+        - in: query
+          name: compilation_category_code
+          schema: { type: integer }
+          description: Enter the compilation category code (1-34)
+        - in: query
+          name: range_of_workers_code
+          schema: { type: integer }
+          description: Enter the range of workers code (1-15)
+        - in: query
+          name: decile_class_of_gva_code
+          schema: { type: integer }
+          description: Enter the decile class of GVA code (1-11)
+        - in: query
+          name: nic_2008_section_code
+          schema: { type: integer }
+          description: Enter the NIC 2008 section code (1-8)
+        - in: query
+          name: type_of_production_code
+          schema: { type: integer }
+          description: Enter the type of production code (1-5)
+
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1 }
+        - in: query
+          name: format
+          schema:
+            type: string
+          description: Set to `xlsx` to download as Excel
+
+      responses:
+        "200":
+          description: A JSON array of NSS74 records
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: "2.0"
