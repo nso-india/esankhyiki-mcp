@@ -8,7 +8,7 @@ tags:
 - name: NSS74
   description: National Sample Survey 74th Round.
 paths:
-  /api/nss-74/getNSS74Records:
+  /api/nss-74/getNss74Records:
     get:
       tags:
       - NSS74
@@ -64,7 +64,7 @@ paths:
           schema: { type: integer }
           description: Enter the proportion of enterprises code (1-15)
         - in: query
-          name: characteristics_code
+          name: characteristics_code  
           schema: { type: integer }
           description: Enter the characteristics code (1-83)
         - in: query

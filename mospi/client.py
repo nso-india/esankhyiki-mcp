@@ -156,7 +156,7 @@ class MoSPI:
 
         try:
             response = self.session.get(
-                f"{self.base_url}/api/nss-74/getNSS74FilterByIndicatorId",
+                f"{self.base_url}/api/nss-74/getNss74FilterByIndicatorId",
                 params=params,
                 timeout=30
             )
@@ -169,7 +169,7 @@ class MoSPI:
         """Fetch NSS74 records from MoSPI API.
 
         Args:
-            params: Query params matching /api/nss-74/getNSS74Records —
+            params: Query params matching /api/nss-74/getNss74Records —
                 indicator_code (required, 1-22), plus optional filters:
                 sub_indicator_code, state_code, bac_code, frame_code,
                 registration_status_code, enterprises_reporting_mixed_activity_type_code,

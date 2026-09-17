@@ -1183,7 +1183,7 @@ def list_datasets() -> dict:
             },
             "NSS74": {
                 "name": "NSS74 (74th Round - Services Sector Enterprises in India)",
-                "description": "22 indicators from the NSS 74th Round survey covering unincorporated services sector enterprises in India, with statistics broken down by state/UT, Broad Activity Code (BAC — trade, transport, education, health, etc.), frame (enterprise list vs GST/MCA), registration status, and enterprise type (Own Account Enterprises vs Establishment). Depending on the indicator, further dimensions include number of months operated, number of establishments per enterprise, NIC industry code / NIC 2008 section, compilation category, range of workers, decile class of GVA, and type of production.",
+                "description": "21 indicators from the NSS 74th Round survey covering unincorporated services sector enterprises in India, with statistics broken down by state/UT, Broad Activity Code (BAC — trade, transport, education, health, etc.), frame (enterprise list vs GST/MCA), registration status, and enterprise type (Own Account Enterprises vs Establishment). Depending on the indicator, further dimensions include number of months operated, number of establishments per enterprise, NIC industry code / NIC 2008 section, compilation category, range of workers, decile class of GVA, and type of production.",
                 "use_for": "Measuring the size, structure, output, employment, and productivity of India's services sector enterprises — covering enterprise counts and registration, operating patterns and digital adoption, financial output, employment (including unpaid family labor), productivity ratios, and digital-reporting readiness."
             },
         },
