@@ -245,8 +245,13 @@ def validate_filters(dataset: str, filters: Dict[str, Any]) -> Dict[str, Any]:
 
 def _check_empty_metadata(result, dataset, **params):
     """Annotate metadata result if upstream returned empty filter values."""
-    data = result.get("filter_values", result.get("data", {}))
-    if isinstance(data, dict):
+    data = result.get("filter_values", result.get("data"))
+    if data is None:
+        # Flat response (NSS78): filter lists sit at the top level, next to
+        # api_params. An out-of-range indicator_code comes back as {}.
+        values = [v for k, v in result.items() if isinstance(v, list) and k != "api_params"]
+        is_empty = all(len(v) == 0 for v in values)
+    elif isinstance(data, dict):
         inner = data.get("data", data)
         if isinstance(inner, dict):
             values = [v for v in inner.values() if isinstance(v, list)]
