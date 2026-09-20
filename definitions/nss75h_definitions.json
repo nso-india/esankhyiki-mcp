@@ -1,0 +1,212 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Hospitalisation cases (excluding childbirth) per 100,000 persons during the last 365 days by age-group",
+    "description": "Hospitalisation cases (excluding childbirth) per 100,000 persons during the last 365 days by age-group"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Hospitalisation cases (excluding childbirth) per 100,000 persons of different social groups during the last 365 days",
+    "description": "Hospitalisation cases (excluding childbirth) per 100,000 persons of different social groups during the last 365 days"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Cases of hospitalisation (excluding childbirth) reported per 100,000 persons during the last 365 days by broad ailment category",
+    "description": "Cases of hospitalisation (excluding childbirth) reported per 100,000 persons during the last 365 days by broad ailment category"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Percentage distribution of hospitalised cases (excluding childbirth) over detailed ailment types during last 365 days",
+    "description": "Percentage distribution of hospitalised cases (excluding childbirth) over detailed ailment types during last 365 days"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Percentage distribution of hospitalised cases (excluding childbirth) over broad ailment categories for different age groups",
+    "description": "Percentage distribution of hospitalised cases (excluding childbirth) over broad ailment categories for different age groups"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Percentage distribution of hospitalised cases (excluding childbirth) by type of medical institution for each broad ailment type",
+    "description": "Percentage distribution of hospitalised cases (excluding childbirth) by type of medical institution for each broad ailment type"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Percentage distribution of hospitalisation cases(excluding childbirth) during the last 365 days by type of ward for each type of medical institution and, for each state/UT",
+    "description": "Percentage distribution of hospitalisation cases(excluding childbirth) during the last 365 days by type of ward for each type of medical institution and, for each state/UT"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Percentage distribution of hospitalisation cases (excluding childbirth) during last 365 days by nature of treatment received during hospitalisation, for each quintile class of household expenditure",
+    "description": "Percentage distribution of hospitalisation cases (excluding childbirth) during last 365 days by nature of treatment received during hospitalisation, for each quintile class of household expenditure"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Percentage distribution of hospitalisation cases (excluding childbirth) during last 365 days by nature of treatment received during hospitalisation, for each state/UT",
+    "description": "Percentage distribution of hospitalisation cases (excluding childbirth) during last 365 days by nature of treatment received during hospitalisation, for each state/UT"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Average medical expenditure (Rs.) for treatment per hospitalisation (excluding childbirth) case during stay at hospital (as inpatient) over last 365 days by quintile class of household expenditure",
+    "description": "Average medical expenditure (Rs.) for treatment per hospitalisation (excluding childbirth) case during stay at hospital (as inpatient) over last 365 days by quintile class of household expenditure"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Average total medical expenditure (Rs.) per hospitalisation case (excluding childbirth) for treatment during stay at hospital (as inpatient) in last 365 days by type of hospital, broad nature of ailment",
+    "description": "Average total medical expenditure (Rs.) per hospitalisation case (excluding childbirth) for treatment during stay at hospital (as inpatient) in last 365 days by type of hospital, broad nature of ailment"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Average medical expenditure (Rs.) for treatment per hospitalisation (excluding childbirth) case during stay at hospital (as inpatient) over last 365 days by social group",
+    "description": "Average medical expenditure (Rs.) for treatment per hospitalisation (excluding childbirth) case during stay at hospital (as inpatient) over last 365 days by social group"
+  },
+  {
+    "indicator_code": 13,
+    "name": "Average medical expenditure and non-medical expenditure on account of hospitalisation per hospitalisation case (excluding childbirth) for each quintile class of household expenditure during last 365 days",
+    "description": "Average medical expenditure and non-medical expenditure on account of hospitalisation per hospitalisation case (excluding childbirth) for each quintile class of household expenditure during last 365 days"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Average medical expenditure and non-medical expenditure (in Rs.) on account of hospitalisation per hospitalisation case (excluding childbirth) for each State/UT during last 365 days",
+    "description": "Average medical expenditure and non-medical expenditure (in Rs.) on account of hospitalisation per hospitalisation case (excluding childbirth) for each State/UT during last 365 days"
+  },
+  {
+    "indicator_code": 15,
+    "name": "Average medical expenditure (Rs.) per hospitalisation case (excluding childbirth) during last 365 days and its break-up by category of expenditure separately for each State/UT",
+    "description": "Average medical expenditure (Rs.) per hospitalisation case (excluding childbirth) during last 365 days and its break-up by category of expenditure separately for each State/UT"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Average out-of-pocket medical expenditure (OOPME)for treatment per hospitalisation (excluding childbirth) case during stay at hospital (as inpatient) over last 365 days by quintile class of household expenditure",
+    "description": "Average out-of-pocket medical expenditure (OOPME)for treatment per hospitalisation (excluding childbirth) case during stay at hospital (as inpatient) over last 365 days by quintile class of household expenditure"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Average out-of-pocket medical expenditure (OOPME) per hospitalisation case (excluding childbirth) for treatment during stay at hospital (as inpatient) in last 365 days by type of hospital for each state/UT",
+    "description": "Average out-of-pocket medical expenditure (OOPME) per hospitalisation case (excluding childbirth) for treatment during stay at hospital (as inpatient) in last 365 days by type of hospital for each state/UT"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Number per 1000 persons reporting ailments (PAP) during last 15 days",
+    "description": "Number per 1000 persons reporting ailments (PAP) during last 15 days"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Number of ailments reported Per 100000 persons during the last 15 days for each ailment type",
+    "description": "Number of ailments reported Per 100000 persons during the last 15 days for each ailment type"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Number of ailments of each broad ailment category reported per 100000 persons during the last 15 days",
+    "description": "Number of ailments of each broad ailment category reported per 100000 persons during the last 15 days"
+  },
+  {
+    "indicator_code": 21,
+    "name": "Percentage distribution of spells of ailment over broad ailment categories for different age groups during last 15 days",
+    "description": "Percentage distribution of spells of ailment over broad ailment categories for different age groups during last 15 days"
+  },
+  {
+    "indicator_code": 22,
+    "name": "Number of persons per 1,00,000 reporting onset of ailments during last 15 days and average duration of ailment by gender and broad ailment category separately for chronic and non-chronic ailments",
+    "description": "Number of persons per 1,00,000 reporting onset of ailments during last 15 days and average duration of ailment by gender and broad ailment category separately for chronic and non-chronic ailments"
+  },
+  {
+    "indicator_code": 23,
+    "name": "Average medical expenditure and non-medical expenditure (in Rs.) for treatment per ailing person during a period of last 15 days for each state/UT",
+    "description": "Average medical expenditure and non-medical expenditure (in Rs.) for treatment per ailing person during a period of last 15 days for each state/UT"
+  },
+  {
+    "indicator_code": 24,
+    "name": "Average medical expenditure and non-medical expenditure for treatment per treated spell of ailment during a period of last 15 days for each quintile class of household expenditure",
+    "description": "Average medical expenditure and non-medical expenditure for treatment per treated spell of ailment during a period of last 15 days for each quintile class of household expenditure"
+  },
+  {
+    "indicator_code": 25,
+    "name": "Average medical expenditure for (non-hospitalised) treatment per treated spell of ailment during last 15 days by level of care for each broad nature of ailment",
+    "description": "Average medical expenditure for (non-hospitalised) treatment per treated spell of ailment during last 15 days by level of care for each broad nature of ailment"
+  },
+  {
+    "indicator_code": 26,
+    "name": "Average medical expenditure for (non-hospitalised) treatment per treated spell of ailment during last 15 days by level of care  for each quintile class of household expenditure",
+    "description": "Average medical expenditure for (non-hospitalised) treatment per treated spell of ailment during last 15 days by level of care  for each quintile class of household expenditure"
+  },
+  {
+    "indicator_code": 27,
+    "name": "Average medical expenditure for (non-hospitalised) treatments per spell of treated ailment during last 15 days by nature of treatment, for each State/UT",
+    "description": "Average medical expenditure for (non-hospitalised) treatments per spell of treated ailment during last 15 days by nature of treatment, for each State/UT"
+  },
+  {
+    "indicator_code": 28,
+    "name": "Average medical expenditure for (non-hospitalised) treatments per treated spell of ailment during last 15 days by nature of treatment, for each quintile class of household expenditure",
+    "description": "Average medical expenditure for (non-hospitalised) treatments per treated spell of ailment during last 15 days by nature of treatment, for each quintile class of household expenditure"
+  },
+  {
+    "indicator_code": 29,
+    "name": "Average out-of-pocket medical expenditure for (non-hospitalised) treatment per treated spell of ailment during last 15 days by level of care  for each state/UT",
+    "description": "Average out-of-pocket medical expenditure for (non-hospitalised) treatment per treated spell of ailment during last 15 days by level of care  for each state/UT"
+  },
+  {
+    "indicator_code": 30,
+    "name": "Percentage distribution of aged persons by state of economic independence for each State/UT",
+    "description": "Percentage distribution of aged persons by state of economic independence for each State/UT"
+  },
+  {
+    "indicator_code": 31,
+    "name": "Percentage distribution persons by state of physical mobility",
+    "description": "Percentage distribution persons by state of physical mobility"
+  },
+  {
+    "indicator_code": 32,
+    "name": "Percentage distribution persons by state of physical mobility for each State/UT",
+    "description": "Percentage distribution persons by state of physical mobility for each State/UT"
+  },
+  {
+    "indicator_code": 33,
+    "name": "Percentage of children (0 – 5 years) receiving any type of immunisation and average expenditure incurred on immunisation during last 365 days for each State/UT",
+    "description": "Percentage of children (0 – 5 years) receiving any type of immunisation and average expenditure incurred on immunisation during last 365 days for each State/UT"
+  },
+  {
+    "indicator_code": 34,
+    "name": "Percentage distribution of cases of hospitalisation for childbirth by type of medical institution for each State/UT",
+    "description": "Percentage distribution of cases of hospitalisation for childbirth by type of medical institution for each State/UT"
+  },
+  {
+    "indicator_code": 35,
+    "name": "Percentage distribution of cases of hospitalisation for childbirth by type of medical institution for each quintile class of household expenditure",
+    "description": "Percentage distribution of cases of hospitalisation for childbirth by type of medical institution for each quintile class of household expenditure"
+  },
+  {
+    "indicator_code": 36,
+    "name": "Percentage distribution of cases of hospitalisation for childbirth by type of medical institution for each social group",
+    "description": "Percentage distribution of cases of hospitalisation for childbirth by type of medical institution for each social group"
+  },
+  {
+    "indicator_code": 37,
+    "name": "Average total expenditure per childbirth (excluding abortion cases) over last 365 days by place of delivery for different types of delivery for each state/UT",
+    "description": "Average total expenditure per childbirth (excluding abortion cases) over last 365 days by place of delivery for different types of delivery for each state/UT"
+  },
+  {
+    "indicator_code": 38,
+    "name": "Average total  expenditure per childbirth (excluding abortion cases) over last 365 days by place of delivery for different types of delivery for each quintile class of household expenditure and social group",
+    "description": "Average total  expenditure per childbirth (excluding abortion cases) over last 365 days by place of delivery for different types of delivery for each quintile class of household expenditure and social group"
+  },
+  {
+    "indicator_code": 39,
+    "name": "Average medical and non-medical expenditure (Rs.) per hospitalised childbirth during last 365 days – and item-wise of medical expenditure – for different medical institutions for each State/UT",
+    "description": "Average medical and non-medical expenditure (Rs.) per hospitalised childbirth during last 365 days – and item-wise of medical expenditure – for different medical institutions for each State/UT"
+  },
+  {
+    "indicator_code": 40,
+    "name": "Average medical and non-medical expenditure (Rs.) per hospitalised childbirth during last 365 days – and item-wise of medical expenditure – for different medical institutions for each quintile class of household expenditure",
+    "description": "Average medical and non-medical expenditure (Rs.) per hospitalised childbirth during last 365 days – and item-wise of medical expenditure – for different medical institutions for each quintile class of household expenditure"
+  },
+  {
+    "indicator_code": 41,
+    "name": "Average out-of-pocket medical expenditure (OOPME) for institutional childbirth cases during stay at hospital over last 365 days for each quintile class of  household expenditure",
+    "description": "Average out-of-pocket medical expenditure (OOPME) for institutional childbirth cases during stay at hospital over last 365 days for each quintile class of  household expenditure"
+  },
+  {
+    "indicator_code": 42,
+    "name": "Average out-of-pocket medical expenditure (OOPME) for institutional childbirth cases during stay at hospital over last 365 days for each State/UT",
+    "description": "Average out-of-pocket medical expenditure (OOPME) for institutional childbirth cases during stay at hospital over last 365 days for each State/UT"
+  }
+]
