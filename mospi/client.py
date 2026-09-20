@@ -86,6 +86,7 @@ class MoSPI:
             "NSS80": "/api/nss-80/getNSS80Records",
             "NSS76": "/api/nss-76/getNss76Records",
             "NSS75E": "/api/nss-75/getNSS75Records",
+            "NSS75H": "/api/nss-75/getNSS75Records",
             "NSS73": "/api/nss-73/getNss73Records",
             "CPIALRL": "/api/cpialrl/getCpialrlRecords",
             "HCES": "/api/hces/getHcesRecords",
@@ -1399,6 +1400,76 @@ class MoSPI:
                     "error": (
                         f"Invalid indicator_code {indicator_code}. "
                         "Valid range for NSS75E: 43-55 (Education module)."
+                    ),
+                    "statusCode": False,
+                }
+
+        params = {"indicator_code": indicator_code, "survey_code": survey_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-75/getNSS75FilterByIndicatorId",
+                params=params,
+                timeout=30,
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # NSS75H (NSS 75th Round - Health / Social Consumption on Health) Methods
+    # =========================================================================
+    @staticmethod
+    def _nss75h_survey_for(indicator_code: int) -> Optional[int]:
+        """
+        Map NSS75H indicator_code to survey_code.
+
+        Health module (survey_code=1): indicators 1-42.
+        """
+        if 1 <= indicator_code <= 42:
+            return 1
+
+        return None
+
+    def get_nss75h_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS75H indicators from MoSPI API.
+
+        Returns 42 health indicators from NSS 75th Round (survey_code=1):
+        hospitalisation, ailments, medical and out-of-pocket expenditure,
+        childbirth, immunisation, and condition of aged persons.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-75/getIndicatorList",
+                params={"survey_code": 1},
+                timeout=30,
+            )
+            response.raise_for_status()
+            result = response.json()
+            result["count"] = len(result.get("data", []))
+            result["_note"] = (
+                "survey_code=1 (Health module): indicators 1-42. "
+                "Pass survey_code in get_metadata/get_data or rely on auto-derivation."
+            )
+            return result
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss75h_filters(self, indicator_code: int, survey_code: Optional[int] = None) -> Dict[str, Any]:
+        """Fetch available NSS75H filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-42).
+            survey_code: Health module code (always 1). Auto-derived if omitted.
+        """
+        if survey_code is None:
+            survey_code = self._nss75h_survey_for(indicator_code)
+            if survey_code is None:
+                return {
+                    "error": (
+                        f"Invalid indicator_code {indicator_code}. "
+                        "Valid range for NSS75H: 1-42 (Health module)."
                     ),
                     "statusCode": False,
                 }

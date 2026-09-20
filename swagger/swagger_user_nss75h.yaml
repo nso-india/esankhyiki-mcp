@@ -1,0 +1,169 @@
+openapi: 3.0.1
+info:
+  title: NSS 75th Round - Health (NSS75H / Social Consumption on Health)
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: NSS75H
+  description: NSS 75th Round — All India Survey on Household Social Consumption on Health.
+paths:
+  /api/nss-75/getNSS75Records:
+    get:
+      tags:
+      - NSS75H
+      operationId: NSS75HIndicatorValues
+      description: |
+        - **Required:** `survey_code` (must be 1 for Health module), `indicator_code` (1-42)
+        - **Filters (optional):** state_code, sector_code, gender_code, age_group_code, social_group_code, quintile_type_code, broad_ailment_category_code, ailments_code, instituition_type_code, ward_type_code, treatment_type_code, medical_expenditure_type_code, delivery_type_code, immunisation_category_code, mobility_code, status_of_economic_independence_code, sub_indicator_code
+        - **Metadata/filters API (not in this path):** `/api/nss-75/getNSS75FilterByIndicatorId`
+        - **Indicators API (not in this path):** `/api/nss-75/getIndicatorList?survey_code=1`
+        - Filters are indicator-specific. Call get_metadata for the indicator to see which apply.
+
+      parameters:
+        - in: query
+          name: survey_code
+          required: true
+          schema: { type: integer, enum: [1] }
+          description: Health module code (always 1 for NSS75H indicators 1-42)
+
+        - in: query
+          name: indicator_code
+          required: true
+          schema: { type: integer }
+          description: Indicator code (1-42)
+
+        - in: query
+          name: state_code
+          schema: { type: integer }
+          description: State / UT code (use get_metadata for valid values; 39 is All India)
+
+        - in: query
+          name: sector_code
+          schema: { type: integer }
+          description: Sector code (1=Rural, 2=Urban, 3=Rural+Urban)
+
+        - in: query
+          name: gender_code
+          schema: { type: integer }
+          description: Gender code (1=Male, 2=Female, 3=Person)
+
+        - in: query
+          name: age_group_code
+          schema: { type: integer }
+          description: Age group code (applies to age-disaggregated indicators)
+
+        - in: query
+          name: social_group_code
+          schema: { type: integer }
+          description: Social group code (ST, SC, OBC, Others, All)
+
+        - in: query
+          name: quintile_type_code
+          schema: { type: integer }
+          description: Quintile class of household expenditure (1st to 5th quintile)
+
+        - in: query
+          name: broad_ailment_category_code
+          schema: { type: integer }
+          description: Broad ailment category code (Infection, Cancers, Injuries, etc.)
+
+        - in: query
+          name: ailments_code
+          schema: { type: integer }
+          description: Detailed ailment type code
+
+        - in: query
+          name: instituition_type_code
+          schema: { type: integer }
+          description: Type of medical institution (Public / Private Hospital, etc.). Spelling matches the upstream API.
+
+        - in: query
+          name: ward_type_code
+          schema: { type: integer }
+          description: Type of hospital ward (Free, Paying, etc.)
+
+        - in: query
+          name: treatment_type_code
+          schema: { type: integer }
+          description: Nature of treatment received (Allopathy, AYUSH, etc.)
+
+        - in: query
+          name: medical_expenditure_type_code
+          schema: { type: integer }
+          description: Category of medical or non-medical expenditure
+
+        - in: query
+          name: delivery_type_code
+          schema: { type: integer }
+          description: Type of childbirth delivery (Normal, Caesarean)
+
+        - in: query
+          name: immunisation_category_code
+          schema: { type: integer }
+          description: Child immunisation category code
+
+        - in: query
+          name: mobility_code
+          schema: { type: integer }
+          description: State of physical mobility code
+
+        - in: query
+          name: status_of_economic_independence_code
+          schema: { type: integer }
+          description: State of economic independence of aged persons code
+
+        - in: query
+          name: sub_indicator_code
+          schema: { type: integer }
+          description: Sub-indicator code (incidence rate, duration of ailment, etc.)
+
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1 }
+
+        - in: query
+          name: Format
+          schema:
+            type: string
+            enum: [JSON, CSV]
+            default: JSON
+          description: Response format (JSON or CSV)
+
+        - in: query
+          name: format
+          schema:
+            type: string
+          description: Set to `xlsx` to download as Excel
+
+      responses:
+        "200":
+          description: JSON array of indicator values
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: "2.0"

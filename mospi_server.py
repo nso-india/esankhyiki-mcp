@@ -35,7 +35,7 @@ def enrich_indicators(result: Dict[str, Any], dataset: str) -> Dict[str, Any]:
     """Enrich indicator list with definitions from definitions/ folder.
 
     Handles all response structures:
-    - result["data"] = flat list  (AISHE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS76, NSS75E, HCES, TUS, EC)
+    - result["data"] = flat list  (AISHE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS76, NSS75E, NSS75H, HCES, TUS, EC)
     - result["indicators_by_frequency"] = dict of lists  (PLFS, ASUSE)
     - result["data"]["indicator"] = list  (NAS, ENERGY, CPIALRL)
     - result["indicator"] = list  (NSS78)
@@ -98,7 +98,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS75H", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73"
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -132,13 +132,14 @@ DATASET_SWAGGER = {
     "NSS80": ("swagger_user_nss80.yaml", "/api/nss-80/getNSS80Records"),
     "NSS76": ("swagger_user_nss76.yaml", "/api/nss-76/getNss76Records"),
     "NSS75E": ("swagger_user_nss75e.yaml", "/api/nss-75/getNSS75Records"),
+    "NSS75H": ("swagger_user_nss75h.yaml", "/api/nss-75/getNSS75Records"),
     "NSS73": ("swagger_user_nss73.yaml", "/api/nss-73/getNss73Records")
 }
 
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS75H", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73"
 ]
 
 
@@ -322,7 +323,7 @@ def get_indicators(
     Args:
         dataset: Dataset name ΓÇö one of: PLFS, CPI, IIP, ISP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
-                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73.
+                 NSS77, NSS78, NSS76, NSS75E, NSS75H, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73.
                  For CPI, IIP, ISP, WPI: returns available base years and frequencies.
         user_query: The user's original question. Captured for telemetry analytics; not echoed back in the response.
 
@@ -358,6 +359,7 @@ def get_indicators(
         "MNRE": mospi.get_mnre_indicators,
         "NSS76": mospi.get_nss76_indicators,
         "NSS75E": mospi.get_nss75e_indicators,
+        "NSS75H": mospi.get_nss75h_indicators,
         "NSS80": mospi.get_nss80_indicators,
         "NSS73": mospi.get_nss73_indicators,
         # Special datasets - return guidance instead of indicators
@@ -418,7 +420,7 @@ def get_metadata(
     Args:
         dataset: Dataset name (same values as get_indicators).
         indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
-                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73.
+                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS75H, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73.
                         Not applicable for: CPI, IIP, ISP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
         state_code: For NAS only — required when indicator_code is 23-34
@@ -439,7 +441,8 @@ def get_metadata(
         classification_year: Required for ASI ("2008"/"2004"/"1998"/"1987").
         series: For CPI and NAS only ("Current"/"Back").
         use_of_energy_balance_code: For ENERGY only (1=Supply, 2=Consumption).
-        survey_code: For NSS76 (1=Disability, 2=Housing & drinking water), NSS75E
+        survey_code: For NSS76 (1=Disability, 2=Housing & drinking water), NSS75H
+                     (1=Health), NSS75E
                      (2=Education, indicators 43-55), NSS80 (1=Telecom (CMST), 2=Education (CMSE)),
                      and NSS77 AIDIS module (always 1).
         module: For NSS77 only ΓÇö land_livestock (portal nss77) or aidis (portal nss77a).
@@ -789,6 +792,25 @@ def get_metadata(
             result["next_step"] = _next
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code, survey_code=survey_code)
 
+        elif dataset == "NSS75H":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for NSS75H. Health module indicators 1-42."}
+            survey_code, err = _safe_int(survey_code, "survey_code")
+            if err:
+                return err
+            result = mospi.get_nss75h_filters(indicator_code=indicator_code, survey_code=survey_code)
+            result["api_params"] = get_swagger_param_definitions("NSS75H")
+            result["parameter_notes"] = (
+                "survey_code is required by the data API (always 1 for NSS75H Health module). "
+                "Auto-derived from indicator_code (1-42) if omitted. "
+                "Filter keys use id/label (e.g. state, gender, sector). "
+                "Filters are indicator-specific: only the keys returned here apply to this indicator. "
+                "state_code=39 is All India. "
+                "Note instituition_type_code keeps the upstream API's spelling."
+            )
+            result["next_step"] = _next
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, survey_code=survey_code)
+
         elif dataset == "NSS80":
             if indicator_code is None:
                 return {"error": "indicator_code is required for NSS80. CMST=1-20, CMSE=23-42."}
@@ -838,7 +860,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY,
                  AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
-                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73).
+                 NSS78, NSS76, NSS75E, NSS75H, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73).
                  CPI auto-routes to Group or Item endpoint based on
                  whether filters contain item_code.
                  IIP uses a single endpoint; pass frequency="Annually" or
@@ -896,6 +918,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         "MNRE": "MNRE",
         "NSS76": "NSS76",
         "NSS75E": "NSS75E",
+        "NSS75H": "NSS75H",
         "NSS80": "NSS80",
         "NSS73": "NSS73",
     }
@@ -944,6 +967,17 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
             try:
                 ic_int = int(str(ic).split(",")[0])
                 derived = mospi._nss75e_survey_for(ic_int)
+                if derived is not None:
+                    transformed_filters["survey_code"] = str(derived)
+            except (ValueError, AttributeError):
+                pass
+
+    if dataset == "NSS75H" and "survey_code" not in transformed_filters:
+        ic = transformed_filters.get("indicator_code")
+        if ic is not None:
+            try:
+                ic_int = int(str(ic).split(",")[0])
+                derived = mospi._nss75h_survey_for(ic_int)
                 if derived is not None:
                     transformed_filters["survey_code"] = str(derived)
             except (ValueError, AttributeError):
@@ -1033,7 +1067,7 @@ def list_datasets() -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 27,
+        "total_datasets": 28,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -1155,6 +1189,11 @@ def list_datasets() -> dict:
                 "description": "13 indicators from NSS 75th Round Education module (survey_code=2, indicators 43-55): literacy rate, educational attainment, mean years of schooling, student attendance distribution, Gross and Net Attendance Ratios (GAR/NAR), course-type distribution, average student expenditure on basic courses (general and technical/professional, by expenditure item), and household computer/internet access.",
                 "use_for": "Literacy rate, educational attainment, years of schooling, GAR, NAR, student attendance, education expenditure, general vs technical courses, household internet and computer access, NSS 75th round education"
             },
+            "NSS75H": {
+                "name": "NSS75H (75th Round - Health / Social Consumption on Health)",
+                "description": "42 indicators from NSS 75th Round Health module (survey_code=1, indicators 1-42): hospitalisation rates by age group, social group and ailment category; type of medical institution and ward; nature of treatment; average medical, non-medical and out-of-pocket expenditure per hospitalisation; ailments reported in the last 15 days and expenditure on non-hospitalised treatment; childbirth by place and type of delivery with expenditure; child immunisation; and economic independence and physical mobility of aged persons. Filters are indicator-specific: call get_metadata for the indicator before get_data.",
+                "use_for": "Hospitalisation rate, out-of-pocket medical expenditure, OOPME, cost of treatment, public vs private hospital, ailments, morbidity, childbirth expenditure, institutional delivery, child immunisation, health expenditure by quintile class, aged persons mobility and economic independence, NSS 75th round health"
+            },
             "NSS76": {
                 "name": "NSS76 (76th Round - Disability + Housing & Drinking Water)",
                 "description": "25 indicators from NSS 76th Round in two modules. Disability module (survey_code=1, indicators 1-13): prevalence of disability, literacy and education among persons with disability, employment, care arrangements, and receipt of aid/help by state/UT. Housing & water module (survey_code=2, indicators 14-26): principal and supplementary sources of drinking water, sufficiency of supply, treatment methods, housing characteristics (floor area, living rooms, plinth level, approach road, separate kitchen, floors), latrine use, and flood experience.",
@@ -1188,7 +1227,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.3 with OpenTelemetry")
-    log("Datasets: 27 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73)")
+    log("Datasets: 28 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS75H, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")
