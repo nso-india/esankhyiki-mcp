@@ -309,7 +309,7 @@ def get_indicators(
 
     Datasets often have broader coverage than expected ΓÇö for example, ASI covers
     57 indicators (capital structure, wages, employment, GVA, fuel consumption),
-    and GENDER covers 147 indicators across health, education, labor, and crime.
+    and GENDER covers 154 indicators across health, education, labor, and crime.
 
     For PLFS and ASUSE, indicators are grouped by frequency_code:
       - PLFS frequency_code=1 (Annual): all 8 indicators including wages
@@ -1087,8 +1087,8 @@ def list_datasets() -> dict:
             },
             "GENDER": {
                 "name": "Gender Statistics",
-                "description": "147 indicators across all domains: demographics (sex ratio, fertility, mortality, life expectancy), health (maternal mortality, immunization, nutrition, NCDs, HIV), education (literacy gaps, enrollment, GER, GPI, dropout rates, teacher ratios), labor (LFPR, WPR, wages, employment status, informal sector), time use patterns, financial inclusion (bank accounts, SHGs, government schemes), political participation (Lok Sabha, assemblies, PRIs, judiciary), leadership (corporate, police, defense, startups, MSMEs), and crimes against women (rape, domestic violence, cybercrimes, suicides).",
-                "use_for": "Gender statistics, women empowerment, sex ratio, female literacy, women in workforce, crimes against women"
+                "description": "154 indicators across all domains: demographics (sex ratio, fertility, mortality, life expectancy), health (maternal mortality, immunization, nutrition, NCDs, HIV, TB cases, cause of death distribution), education (literacy gaps, enrollment, GER, GPI, dropout rates, teacher ratios, board exam results for Class X/XII, students pursuing education abroad, STEM enrolment, learning outcomes for grades 3/6/9), labor (LFPR, WPR, wages, employment status, informal sector), time use patterns, financial inclusion (bank accounts, SHGs, government schemes, microfinance loans outstanding), political participation (Lok Sabha, assemblies, PRIs, judiciary), leadership (corporate, police, defense, startups, MSMEs registered under Udyam), social welfare (National Social Assistance Programme), law enforcement infrastructure (women police strength, women help desks in police stations), and crimes against women (rape, domestic violence, cybercrimes, cybercrime complaint reporting, suicides).",
+                "use_for": "Gender statistics, women empowerment, sex ratio, female literacy, women in workforce, crimes against women, board exam results by gender, students studying abroad, TB and mortality statistics, financial inclusion schemes, women in police and law enforcement, social welfare scheme coverage"
             },
             "NFHS": {
                 "name": "National Family Health Survey",
