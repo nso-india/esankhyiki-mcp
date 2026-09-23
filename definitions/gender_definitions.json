@@ -142,7 +142,7 @@
     "indicator_code": 28,
     "name": "Proportion of Adults who are Obese (BMI >= 30.0)",
     "description": "Proportion of Adults who are Obese (BMI >= 30.0)",
-    "specification": "Use this indicator for the proportion of adults classified as obese based on a Body Mass Index (BMI) of 30.0 or above. Do not confuse this indicator with general overweight, underweight, or other BMI categories."
+    "specification": "Use this indicator for the proportion of male and female classified as obese based on a Body Mass Index (BMI) of 30.0 or above. Do not confuse this indicator with general overweight, underweight, or other BMI categories."
   },
   {
     "indicator_code": 29,
