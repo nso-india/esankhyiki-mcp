@@ -7,7 +7,8 @@
   {
     "indicator_code": 2,
     "name": "Sex Ratio",
-    "description": "Sex Ratio"
+    "description": "Sex Ratio",
+    "specification": "General sex ratio. Use this indicator for queries asking for the overall or general sex ratio. Do not use this indicator when the query specifically refers to developmental planning or sex ratio at birth based on registered events."
   },
   {
     "indicator_code": 3,
@@ -22,17 +23,20 @@
   {
     "indicator_code": 5,
     "name": "Sex ratio in context of developmental planning",
-    "description": "Sex ratio in context of developmental planning"
+    "description": "Sex ratio in context of developmental planning",
+    "specification": "Use this indicator only when the query explicitly refers to sex ratio in the context of developmental planning or development planning. Do not use this indicator for general sex ratio or sex ratio at birth."
   },
   {
     "indicator_code": 6,
-    "name": "State-wise Sex Ratio ",
-    "description": "State-wise Sex Ratio "
+    "name": "Sex Ratio at birth based on registered events",
+    "description": "Sex Ratio at birth based on registered events",
+    "specification": "Use this indicator when the query refers to sex ratio at birth, registered births, or registered birth events. Do not use this indicator for general sex ratio or developmental-planning sex ratio."
   },
   {
     "indicator_code": 7,
     "name": "Sex ratio at birth for bigger States based on Sample Registration System",
-    "description": "Sex ratio at birth for bigger States based on Sample Registration System"
+    "description": "Sex ratio at birth for bigger States based on Sample Registration System",
+    "specification": "Use this indicator when the query refers to sex ratio at birth for bigger States or explicitly mentions the Sample Registration System (SRS). Do not use this indicator for general sex ratio or sex ratio at birth based on registered events."
   },
   {
     "indicator_code": 8,
@@ -56,8 +60,8 @@
   },
   {
     "indicator_code": 12,
-    "name": "Adolescent Fertility Rates",
-    "description": "Adolescent Fertility Rates"
+    "name": "Adolescent (15-19) Fertility Rates",
+    "description": "Adolescent (15-19) Fertility Rates"
   },
   {
     "indicator_code": 13,
@@ -116,8 +120,8 @@
   },
   {
     "indicator_code": 24,
-    "name": "Percentage of married women use any modern method of family planning",
-    "description": "Percentage of married women use any modern method of family planning"
+    "name": "Percentage of currently married women aged 15-49 years who use any modern method of family planning",
+    "description": "Percentage of currently married women aged 15-49 years who use any modern method of family planning"
   },
   {
     "indicator_code": 25,
@@ -137,17 +141,18 @@
   {
     "indicator_code": 28,
     "name": "Proportion of Adults who are Obese (BMI >= 30.0)",
-    "description": "Proportion of Adults who are Obese (BMI >= 30.0)"
+    "description": "Proportion of Adults who are Obese (BMI >= 30.0)",
+    "specification": "Use this indicator for the proportion of male and female classified as obese based on a Body Mass Index (BMI) of 30.0 or above. Do not confuse this indicator with general overweight, underweight, or other BMI categories."
   },
   {
     "indicator_code": 29,
-    "name": "Number of new HIV infections per 1,000 uninfected population",
-    "description": "Number of new HIV infections per 1,000 uninfected population"
+    "name": "Number of new HIV infections per 1000 uninfected population",
+    "description": "Number of new HIV infections per 1000 uninfected population"
   },
   {
     "indicator_code": 30,
-    "name": "Number of PLHIV alive and on ART at the end of January 2025",
-    "description": "Number of PLHIV alive and on ART at the end of January 2025"
+    "name": "Number of PLHIV alive and on ART at the end of November 2025",
+    "description": "Number of PLHIV alive and on ART at the end of November 2025"
   },
   {
     "indicator_code": 31,
@@ -281,8 +286,8 @@
   },
   {
     "indicator_code": 67,
-    "name": "Female-Male Ratio in Important Programmes - Regular Mode of Education",
-    "description": "Female-Male Ratio in Important Programmes - Regular Mode of Education"
+    "name": "Female per 100 Male Students in important Programmes at Under Graduate & Post Graduate Level - Regular Mode of Education",
+    "description": "Female per 100 Male Students in important Programmes at Under Graduate & Post Graduate Level - Regular Mode of Education"
   },
   {
     "indicator_code": 68,
@@ -306,8 +311,8 @@
   },
   {
     "indicator_code": 72,
-    "name": "Population with at least secondary as the highest level of education successfully completed",
-    "description": "Population with at least secondary as the highest level of education successfully completed"
+    "name": "Population(age 25 years & above) with at least secondary as the highest level of education successfully completed",
+    "description": "Population(age 25 years & above) with at least secondary as the highest level of education successfully completed"
   },
   {
     "indicator_code": 73,
@@ -436,8 +441,8 @@
   },
   {
     "indicator_code": 98,
-    "name": "Average time (in minutes) spent in a day per participant in different activities",
-    "description": "Average time (in minutes) spent in a day per participant in different activities"
+    "name": "Average time (in minutes) spent in a day in different activities",
+    "description": "Average time (in minutes) spent in a day in different activities"
   },
   {
     "indicator_code": 99,
@@ -446,8 +451,8 @@
   },
   {
     "indicator_code": 100,
-    "name": "Percentage of persons in different age groups participating in the activities in a day (TUS 2024)",
-    "description": "Percentage of persons in different age groups participating in the activities in a day (TUS 2024)"
+    "name": "Percentage of persons in different age groups participating in the activities in a day (TUS 2019)",
+    "description": "Percentage of persons in different age groups participating in the activities in a day (TUS 2019)"
   },
   {
     "indicator_code": 101,
@@ -471,8 +476,8 @@
   },
   {
     "indicator_code": 105,
-    "name": "Percentage of women employed in Scheduled Commercial Banks",
-    "description": "Percentage of women employed in Scheduled Commercial Banks"
+    "name": "Women employed in Scheduled Commercial Banks",
+    "description": "Women employed in Scheduled Commercial Banks"
   },
   {
     "indicator_code": 106,
@@ -501,8 +506,8 @@
   },
   {
     "indicator_code": 111,
-    "name": "Indicators of Pradhan Mantri Jan Dhan Yojan (PMJDY)",
-    "description": "Indicators of Pradhan Mantri Jan Dhan Yojan (PMJDY)"
+    "name": "No. of Accounts under Pradhan Mantri Jan Dhan Yojan (PMJDY)",
+    "description": "No. of Accounts under Pradhan Mantri Jan Dhan Yojan (PMJDY)"
   },
   {
     "indicator_code": 112,
@@ -511,8 +516,8 @@
   },
   {
     "indicator_code": 113,
-    "name": "Indicators of Atal Pension Yojana (APY) ",
-    "description": "Indicators of Atal Pension Yojana (APY) "
+    "name": "Subscribers under Atal Pension Yojana (APY)",
+    "description": "Subscribers under Atal Pension Yojana (APY)"
   },
   {
     "indicator_code": 114,
@@ -571,8 +576,8 @@
   },
   {
     "indicator_code": 125,
-    "name": "Women Elected in 18th Lok Sabha, 2024",
-    "description": "Women Elected in 18th Lok Sabha, 2024"
+    "name": "Women Elected in 18th Lok Sabha 2024",
+    "description": "Women Elected in 18th Lok Sabha 2024"
   },
   {
     "indicator_code": 126,
@@ -621,8 +626,8 @@
   },
   {
     "indicator_code": 135,
-    "name": "Women officers in Various All India Central Group B & C Services",
-    "description": "Women officers in Various All India Central Group B & C Services"
+    "name": "Intake of Women & Men officers in Various All India Central Group B & C Services",
+    "description": "Intake of Women & Men officers in Various All India Central Group B & C Services"
   },
   {
     "indicator_code": 136,
@@ -661,8 +666,8 @@
   },
   {
     "indicator_code": 143,
-    "name": "Percentage of Married Women Experienced Violence by their Husband",
-    "description": "Percentage of Married Women Experienced Violence by their Husband"
+    "name": "Percentage of Married Women age 18-49 years Experienced Violence by their Husband",
+    "description": "Percentage of Married Women age 18-49 years Experienced Violence by their Husband"
   },
   {
     "indicator_code": 144,
@@ -733,5 +738,100 @@
     "indicator_code": 157,
     "name": "Year wise Cyber Crimes against Women",
     "description": "Year wise Cyber Crimes against Women"
+  },
+  {
+    "indicator_code": 159,
+    "name": "TB cases notified for the year 2024",
+    "description": "TB cases notified for the year 2024"
+  },
+  {
+    "indicator_code": 160,
+    "name": "Distribution of Deaths by Major Cause Groups in India",
+    "description": "Distribution of Deaths by Major Cause Groups in India"
+  },
+  {
+    "indicator_code": 161,
+    "name": "State-wise Gender Parity Indices (GPI)",
+    "description": "State-wise Gender Parity Indices (GPI)"
+  },
+  {
+    "indicator_code": 162,
+    "name": "Percentage of students reported expenditure on course fees",
+    "description": "Percentage of students reported expenditure on course fees"
+  },
+  {
+    "indicator_code": 163,
+    "name": "Average expenditure (Rs.) per reported student on school education",
+    "description": "Average expenditure (Rs.) per reported student on school education"
+  },
+  {
+    "indicator_code": 164,
+    "name": "Results Of Secondary Examination (Class X) - Regular Board",
+    "description": "Results Of Secondary Examination (Class X) - Regular Board"
+  },
+  {
+    "indicator_code": 165,
+    "name": "Results Of Secondary Examination (Class X) - Open Board",
+    "description": "Results Of Secondary Examination (Class X) - Open Board"
+  },
+  {
+    "indicator_code": 166,
+    "name": "Results Of Secondary Examination (Class XII) - Regular Board",
+    "description": "Results Of Secondary Examination (Class XII) - Regular Board"
+  },
+  {
+    "indicator_code": 167,
+    "name": "Results Of Secondary Examination (Class XII) - Open Board",
+    "description": "Results Of Secondary Examination (Class XII) - Open Board"
+  },
+  {
+    "indicator_code": 168,
+    "name": "State-wise Enrolment in STEM courses",
+    "description": "State-wise Enrolment in STEM courses"
+  },
+  {
+    "indicator_code": 169,
+    "name": "Number of Indian Students Pursuing Education Abroad",
+    "description": "Number of Indian Students Pursuing Education Abroad"
+  },
+  {
+    "indicator_code": 170,
+    "name": "Overall Performance Comparison - Grades 3, 6, and 9",
+    "description": "Overall Performance Comparison - Grades 3, 6, and 9"
+  },
+  {
+    "indicator_code": 171,
+    "name": "National Social Assistance Programme",
+    "description": "National Social Assistance Programme"
+  },
+  {
+    "indicator_code": 172,
+    "name": "Strength of Women Police, Reservation of Women Police, Women Population Per Woman Police",
+    "description": "Strength of Women Police, Reservation of Women Police, Women Population Per Woman Police"
+  },
+  {
+    "indicator_code": 173,
+    "name": "Gender-wise number of officers",
+    "description": "Gender-wise number of officers"
+  },
+  {
+    "indicator_code": 174,
+    "name": "Distribution of Proprietary MSME by Gender of Owners Under Udyam and Udyam Assist Portal",
+    "description": "Distribution of Proprietary MSME by Gender of Owners Under Udyam and Udyam Assist Portal"
+  },
+  {
+    "indicator_code": 175,
+    "name": "Percentage of persons able to complain about cybercrime/ report cyber fraud in the cybercrime reporting portal",
+    "description": "Percentage of persons able to complain about cybercrime/ report cyber fraud in the cybercrime reporting portal"
+  },
+  {
+    "indicator_code": 176,
+    "name": "Data regarding Women Help Desks set up in Police Stations",
+    "description": "Data regarding Women Help Desks set up in Police Stations"
+  },
+  {
+    "indicator_code": 177,
+    "name": "Progress under Microfinance - Bank Loans outstanding against SHGs",
+    "description": "Progress under Microfinance - Bank Loans outstanding against SHGs"
   }
 ]

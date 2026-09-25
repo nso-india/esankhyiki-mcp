@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Women and Men in India
-  version: 1.0.11
+  version: 1.0.12
 servers:
 - url: https://api.mospi.gov.in/
 tags:
@@ -25,13 +25,13 @@ paths:
           - Average Annual Growth Rate of Population
           - Percentage Distribution of Projected Population
           - Sex ratio in context of developmental planning
-          - 'State-wise Sex Ratio '
+          - Sex Ratio at birth based on registered events
           - Sex ratio at birth for bigger States based on Sample Registration System
           - General Fertility Rate
           - Age-specific Fertility rate
           - Total Fertility Rate
           - Percentage distribution of live births
-          - Adolescent Fertility Rates
+          - Adolescent (15-19) Fertility Rates
           - Age Specific Fertility Rate by level of education of women
           - Women's Mean Age at Marriage
           - Year Wise Infant Mortality Rate
@@ -43,43 +43,22 @@ paths:
           - Maternal Mortality Ratio
           - Maternity Care Indicators
           - Percentage of Births Attended by Skilled Health Personnel
-          - Percentage of married women use any modern method of family planning
+          - Percentage of currently married women aged 15-49 years who use any modern method of family planning
           - Unmet Need for Family Planning
           - Need for Family Planning Satisfied with Modern Methods(Proportion of Women)
           - Current tobacco use (15years or above)
           - Proportion of Adults who are Obese (BMI >= 30.0)
-          - Number of new HIV infections per 1,000 uninfected population
-          - Number of PLHIV alive and on ART at the end of January 2025
+          - Number of new HIV infections per 1000 uninfected population
+          - Number of PLHIV alive and on ART at the end of November 2025
           - Cases and Deaths due to Acute Diarrhoeal Diseases
-          - Cases and Deaths due to Cholera Infection
-          - Cases and Deaths due to Enteric Fever (Typhoid) Infection
-          - Cases and Deaths due to Acute Respiratory Infection
-          - Cases and Deaths due to Neonatal Tentanus Infection
-          - Cases and Deaths due to Tetanus Infection
-          - Cases and Deaths due to Diphtheria Infection
-          - Cases and Deaths due to Whooping Cough infection
-          - Cases and Deaths due to Measles Infection
-          - Cases and Deaths due to Viral Hepatitis (All Causes)
-          - Cases and Deaths due to Rabies Infection
-          - Cases and Deaths due to Pneumonia Infection
-          - Cases and Deaths due to Meningococcal Meningitis Infectionv
-          - Cases and Deaths due to Syphilis
-          - Cases and Deaths due to Gonococcal Infection
-          - Cases and Deaths due to Chicken Pox
-          - Cases and Deaths due to Encephalitis Infection
-          - Cases and Deaths due to Viral Meningitis Infection
-          - Cases and Deaths due to Snake Bite
-          - Women undergone a screening test for cervical cancer and breast cancer
-            (%)
+          - Women undergone a screening test for cervical cancer and breast cancer (%)
           - Women who have comprehensive knowledge of HIV/AIDS (%)
-          - 'Women whose Body Mass Index is below normal and who are overweight or
-            obese '
+          - Women whose Body Mass Index is below normal and who are overweight or obese
           - Ayush Registered Practitioners (Doctors)
           - Number of Registered Nurses
           - Literacy Rates for persons aged 7 years and above
           - Gender Gap in Literacy Rate for persons of age 7 years and above
-          - State/UT wise Gender Gap in Literacy Rate for persons of age 7 years and
-            above
+          - State/UT wise Gender Gap in Literacy Rate for persons of age 7 years and above
           - Literacy Rate of Youth in the Age Group of 15-24 Years
           - Percentage of persons able to read and write short simple statements
           - Gross Enrolment Ratio
@@ -89,18 +68,14 @@ paths:
           - Gender Parity Indices (GPI) in Higher Education
           - Enrolment at Under Graduate Level
           - Enrolment at Ph.D., M.Phil. & Post Graduate Level
-          - Female-Male Ratio in Important Programmes - Regular Mode of Education
+          - Female per 100 Male Students in important Programmes at Under Graduate & Post Graduate Level - Regular Mode of Education
           - Average years completed in formal education (pre-primary or above)
-          - Mean years of schooling in formal education (including pre-primary level
-            of education)
+          - Mean years of schooling in formal education (including pre-primary level of education)
           - Mean years of schooling in formal education (15 years and above)
           - Mean years of schooling in formal education (25 years and above)
-          - Population with at least secondary as the highest level of education successfully
-            -completed
-          - 'Examination Result Level-wise Out-turn/Pass out in Higher Education '
+          - Population(age 25 years & above) with at least secondary as the highest level of education successfully completed
+          - Examination Result Level-wise Out-turn/Pass out in Higher Education
           - Dropout Rate
-          - Average expenditure (Rs.) per student pursuing general course
-          - Average expenditure (Rs.) per student in basic course
           - Number of Female Teachers per 100 Male Teachers
           - Proportion of females among tertiary education teachers or professors
           - Number of Male & Female Teacher
@@ -109,88 +84,68 @@ paths:
           - Labour Force Participation Rate for persons aged 15 years & above
           - Worker Population Ratio for persons of all ages
           - Worker Population Ratio for Persons Aged 15 Years & Above
-          - Worker Population Ratio (WPR) in usual status (ps+ss) for persons of age
-            15 years and above
+          - Worker Population Ratio (WPR) in usual status (ps+ss) for persons of age 15 years and above
           - Age group wise Worker Population Ratio (WPR)
-          - Average Wage Earning (in Rs.) received per day by Casual Labourers in
-            works other than Public Works
+          - Average Wage Earning (in Rs.) received per day by Casual Labourers in works other than Public Works
           - Average Wage (in Rs.) Per Hour Earned by Occupation Divisions
           - Percentage Distribution of Workers According to Broad Employment Status
-          - Percentage distribution of workers in usual status (ps+ss) by broad status
-            in employment
-          - Percentage distribution of workers in usual status (ps+ss) by broad industry
-            division
-          - Proportion (in per cent) of worker in usual status (ps+ss) in informal
-            sector
+          - Percentage distribution of workers in usual status (ps+ss) by broad status in employment
+          - Percentage distribution of workers in usual status (ps+ss) by broad industry division
+          - Proportion (in per cent) of worker in usual status (ps+ss) in informal sector
           - Year Wise Unemployment rates in the labour force-usual status
           - Age Wise Unemployment rates in the labour force-usual status
           - Unemployment Rate for Persons aged 15 years & above
           - Percentage of persons participating in different activities in a day
-          - Percentage of persons of age 6 years and above participating in different
-            activities in a day
-          - Average time (in minutes) spent in a day per participant in different
-            activities
-          - Average time (in minutes) spent in a day per participant in different
-            activities (TUS 2019)
-          - Percentage of persons in different age groups participating in the activities
-            in a day (TUS 2024)
-          - Percentage of persons participating in learning activities and average
-            time (in minutes) spent in a day per participant in learning activities
-          - Average Time (in Minutes)spent per day per person- Unpaid, Paid & Residual
-            activities
-          - Average Time (in Minutes)spent per day per person- Unpaid, Paid & Residual
-            activities (6 years & above) (TUS 2019)
-          - Average time (in minutes) spent in a day in unpaid and paid activities
-            (TUS 2024)
-          - Percentage of women employed in Scheduled Commercial Banks
+          - Percentage of persons of age 6 years and above participating in different activities in a day
+          - Average time (in minutes) spent in a day in different activities
+          - Average time (in minutes) spent in a day per participant in different activities (TUS 2019)
+          - Percentage of persons in different age groups participating in the activities in a day (TUS 2019)
+          - Percentage of persons participating in learning activities and average time (in minutes) spent in a day per participant in learning activities
+          - Average Time (in Minutes)spent per day per person– Unpaid, Paid & Residual activities
+          - Average Time (in Minutes)spent per day per person– Unpaid, Paid & Residual activities (6 years & above) (TUS 2019)
+          - Average time (in minutes) spent in a day in unpaid and paid activities (TUS 2024)
+          - Women employed in Scheduled Commercial Banks
           - Distribution of Employees of Scheduled Commercial Banks
           - Population Group Wise Deposits of Scheduled Commercial Banks
           - State/UT Wise Deposits of Scheduled Commercial Banks
           - Cumulative Enrolments in PMJJBY, PMSBY
           - Indicators of Pradhan Mantri Vaya Vandana Yojana (PMVVY)
-          - Indicators of Pradhan Mantri Jan Dhan Yojan (PMJDY)
+          - No. of Accounts under Pradhan Mantri Jan Dhan Yojan (PMJDY)
           - Indicators of  Pradhan Mantri Mudra Yojna (PMMY)
-          - Indicators of Atal Pension Yojana (APY)
+          - Subscribers under Atal Pension Yojana (APY)
           - Indicators of Stand Up India (SUPI)
-          - Subscribers of Demat accounts with CDSL
+          - Details of Demat accounts with CDSL
           - Progress under Microfinance - Savings of SHGs with banks
           - Progress under Microfinance - Bank loans disbursed by banks to SHGs
           - Distribution of individual investors
-          - Percentage Share of estimated number of Female Workers for top 3 States
-            (all-India)
-          - Share of female headed estimated proprietary establishments of  major
-            states by broad activity category
+          - Percentage Share of estimated number of Female Workers for top 3 States (all-India)
+          - Share of female headed estimated proprietary establishments of  major states by broad activity category
           - Per 1000 distribution of number of establishments of major states
           - Percentage share of female workers to total number of workers
           - Representation of Women in the Central Council of Ministers
           - Persons Contesting and Elected in Various Lok Sabha Elections
-          - Women Elected in 18th Lok Sabha, 2024
+          - Women Elected in 18th Lok Sabha 2024
           - Women and Men Elected in State Assemblies
           - Status of representation of women in Panchayati Raj Institutions (PRIs)
-          - Number of Electors and Percentage of Electors Voting in Various General
-            Elections
+          - Number of Electors and Percentage of Electors Voting in Various General Elections
           - Women Voters Turnout for General Election - 2024
           - Women Judges in Supreme Court and High Courts
           - Persons Engaged at Managerial Positions in Companies
           - Strength of Female Police Officers in India
           - Number of Women-led Start-ups
           - Participation of officers in Indian Army, Navy and Airforce
-          - Women officers in Various All India Central Group B & C Services
-          - Total Women Owned MSMEs Registered & Classified and their Employment,
-            Investment & Turnover Under Udyam
+          - Intake of Women & Men officers in Various All India Central Group B & C Services
+          - Total Women Owned MSMEs Registered & Classified and their Employment, Investment & Turnover Under Udyam
           - Women IMEs and employment data for the women IMEs
           - Women Participation in Household Decision-Making
-          - Ownership of Assets
           - Status of Major Crimes Committed Against Women
-          - Rate (per Lakh Women) of Incidence of Various Crimes Committed against
-            Women
+          - Rate (per Lakh Women) of Incidence of Various Crimes Committed against Women
           - Distribution of Rape Victims
-          - Percentage of Married Women Experienced Violence by their Husband
+          - Percentage of Married Women age 18-49 years Experienced Violence by their Husband
           - Disposal of Crimes Committed Against Women Cases by Police
           - Disposal of Crimes Committed Against Women Cases by Courts
           - Percentage of women aged 20-24 years married before age 18 years
           - Percentage of Men aged 25-29 years who were married before age 21 years
-          - Adolescent Fertility Rate for women aged 15-19 years
           - Incidence of Suicides
           - Profile of Suicide Victims by various Parameters
           - Cyber Crimes against Women
@@ -199,6 +154,26 @@ paths:
           - Percentage of Disabled persons to Total population
           - Percentage of females by type of disability
           - Cases Filed by Women
+          - Year wise Cyber Crimes against Women
+          - TB cases notified for the year 2024
+          - Distribution of Deaths by Major Cause Groups in India
+          - State-wise Gender Parity Indices (GPI)
+          - Percentage of students reported expenditure on course fees
+          - Average expenditure (Rs.) per reported student on school education
+          - Results Of Secondary Examination (Class X) - Regular Board
+          - Results Of Secondary Examination (Class X) - Open Board
+          - Results Of Secondary Examination (Class XII) - Regular Board
+          - Results Of Secondary Examination (Class XII) - Open Board
+          - State-wise Enrolment in STEM courses
+          - Number of Indian Students Pursuing Education Abroad
+          - Overall Performance Comparison - Grades 3, 6, and 9
+          - National Social Assistance Programme
+          - Strength of Women Police, Reservation of Women Police, Women Population Per Woman Police
+          - Gender-wise number of officers
+          - Distribution of Proprietary MSME by Gender of Owners Under Udyam and Udyam Assist Portal
+          - Percentage of persons able to complain about cybercrime/ report cyber fraud in the cybercrime reporting portal
+          - Data regarding Women Help Desks set up in Police Stations
+          - Progress under Microfinance - Bank Loans outstanding against SHGs
       - name: year
         in: query
         description: Enter the Year (format YYYY-YY/YYYY. Comma separated for multiple
@@ -215,15 +190,15 @@ paths:
           pattern: ^\d+(,\d+)*$
       - name: sub_indicator_code
         in: query
-        description: Enter the Sub Indicator code (from 1 to 152. Comma separated
+        description: Enter the Sub Indicator code (from 1 to 203. Comma separated
           for multiple values)
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
       - name: state_ut_code
         in: query
-        description: Enter the State code (from 1 to 43. Comma separated for multiple
-          values)
+        description: Enter the State code (from 1 to 45, plus 99 for All India. Comma
+          separated for multiple values)
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
@@ -236,14 +211,14 @@ paths:
           pattern: ^\d+(,\d+)*$
       - name: gender_code
         in: query
-        description: Enter the Gender code (from 1 to 9. Comma separated for multiple
+        description: Enter the Gender code (from 1 to 12. Comma separated for multiple
           values)
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
       - name: age_group_code
         in: query
-        description: Enter the Age Group code (from 1 to 41. Comma separated for multiple
+        description: Enter the Age Group code (from 1 to 45. Comma separated for multiple
           values)
         schema:
           type: string
@@ -257,7 +232,7 @@ paths:
           pattern: ^\d+(,\d+)*$
       - name: education_level_code
         in: query
-        description: Enter the Education Level code (from 1 to 74. Comma separated
+        description: Enter the Education Level code (from 1 to 77. Comma separated
           for multiple values)
         schema:
           type: string
@@ -290,7 +265,7 @@ paths:
           pattern: ^\d+(,\d+)*$
       - name: discipline_code
         in: query
-        description: Enter the discipline code (from 1 to 81. Comma separated for
+        description: Enter the discipline code (from 1 to 320. Comma separated for
           multiple values)
         schema:
           type: string
@@ -318,14 +293,14 @@ paths:
           pattern: ^\d+(,\d+)*$
       - name: bank_group_code
         in: query
-        description: Enter the Bank Group code (from 1 to 6. Comma separated for multiple
+        description: Enter the Bank Group code (from 1 to 7. Comma separated for multiple
           values)
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
       - name: activity_code
         in: query
-        description: Enter the Activity code (from 1 to 30. Comma separated for multiple
+        description: Enter the Activity code (from 1 to 39. Comma separated for multiple
           values)
         schema:
           type: string
@@ -353,7 +328,7 @@ paths:
           pattern: ^\d+(,\d+)*$
       - name: scheme_code
         in: query
-        description: Enter the Scheme code (from 1 to 2. Comma separated for multiple
+        description: Enter the Scheme code (from 1 to 5. Comma separated for multiple
           values)
         schema:
           type: string
@@ -388,15 +363,45 @@ paths:
           pattern: ^\d+(,\d+)*$
       - name: crime_head_code
         in: query
-        description: Enter the Crime Head code (from 1 to 32. Comma separated for
+        description: Enter the Crime Head code (from 1 to 34. Comma separated for
           multiple values)
         schema:
           type: string
           pattern: ^\d+(,\d+)*$
       - name: category_code
         in: query
-        description: Enter the Category code (from 1 to 31. Comma separated for multiple
+        description: Enter the Category code (from 1 to 41. Comma separated for multiple
           values)
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: board_code
+        in: query
+        description: Enter the Board code (from 1 to 69. Comma separated for multiple
+          values). Used with indicator_code 164-167 (Class X / XII results).
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: country_code
+        in: query
+        description: Enter the Country code (from 1 to 131. Comma separated for multiple
+          values). Used with indicator_code 169 (students pursuing education abroad).
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: national_average_code
+        in: query
+        description: Enter the National Average code (currently only code 1). Used
+          with indicator_code 170 (Overall Performance Comparison - Grades 3, 6, and
+          9).
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: subject_code
+        in: query
+        description: Enter the Subject code (from 1 to 5. Comma separated for multiple
+          values). Used with indicator_code 170 (Overall Performance Comparison -
+          Grades 3, 6, and 9).
         schema:
           type: string
           pattern: ^\d+(,\d+)*$

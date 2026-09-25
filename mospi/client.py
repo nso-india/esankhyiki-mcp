@@ -793,7 +793,7 @@ class MoSPI:
     def get_gender_indicators(self) -> Dict[str, Any]:
         """Fetch list of Gender indicators from MoSPI API.
 
-        Returns 157 indicators covering demographics, health, education,
+        Returns 154 indicators covering demographics, health, education,
         labour, time use, financial inclusion, political participation,
         crimes against women, and more.
         """
@@ -811,7 +811,7 @@ class MoSPI:
         """Fetch available Gender filters for given indicator.
 
         Args:
-            indicator_code: Indicator code (1-157)
+            indicator_code: Indicator code (1-177)
         """
         params = {"indicator_code": indicator_code}
 

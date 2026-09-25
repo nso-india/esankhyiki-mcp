@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- GENDER: 19 new indicators (codes 159-177) covering TB notifications, cause-of-death
+  distribution, state-wise GPI, school expenditure, Class X/XII board exam results
+  (regular/open board), STEM enrolment, students pursuing education abroad, learning
+  outcomes for grades 3/6/9 (NAS-style), National Social Assistance Programme,
+  women police strength and women help desks in police stations, gender-wise officer
+  counts, MSMEs registered under Udyam/Udyam Assist by gender, cybercrime complaint
+  reporting, and microfinance loans outstanding against SHGs.
+- GENDER: 4 new filter params — `board_code` (1-69, for indicator_code 164-167),
+  `country_code` (1-131, for indicator_code 169), `national_average_code`
+  (for indicator_code 170), `subject_code` (1-5, for indicator_code 170).
+### Changed
+- GENDER swagger updated from portal (v1.0.11 → v1.0.12): indicator_code enum
+  refreshed to 154 active indicators; 15 indicator names corrected to match
+  current portal descriptions (codes 6, 12, 24, 29, 30, 67, 72, 98, 100, 105,
+  111, 113, 125, 135, 143); outdated filter ranges corrected — sub_indicator_code
+  (152→203), state_ut_code (43→45, plus code 99 for All India), gender_code (9→12),
+  age_group_code (41→45), education_level_code (74→77), discipline_code (81→320),
+  activity_code (30→39), crime_head_code (32→34), category_code (31→41),
+  bank_group_code (6→7), scheme_code (2→5).
+- GENDER indicator count: 147 → 154 active indicators (definitions.json and
+  list_datasets description updated accordingly).
 
 ### Changed
 - Total datasets: 26 → 27
