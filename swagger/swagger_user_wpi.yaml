@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Wholesale Price Index (WPI)
-  version: 1.0.11
+  version: 1.0.12
 servers:
 - url: https://api.mospi.gov.in/
 tags:
@@ -16,13 +16,14 @@ paths:
       parameters:
       - name: base_year
         in: query
-        description: Base year for the index ("2011-12", "2004-05", "1993-94"). Defaults to "2011-12".
+        description: Base year for the index ("2022-23", "2011-12", "2004-05", "1993-94"). If the user does not mention a base year, pass "2022-23". 2022-23 has data from 2023 onwards; for earlier years pass "2011-12" (2012 onwards), "2004-05" (2005-2017) or "1993-94" (1994-2010). Index values and item/group codes differ by base year, so always pass base_year together with code filters.
         schema:
           type: string
           enum:
           - "2011-12"
           - "2004-05"
           - "1993-94"
+          - "2022-23"
       - name: year
         in: query
         description: Enter the Year (format YYYY. Comma separated for multiple values)

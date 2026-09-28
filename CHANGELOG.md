@@ -7,10 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- WPI: new base year 2022-23 (5 major groups, 29 groups, 142 sub-groups, 953 items; data from 2023 onwards).
+
+### Changed
+- WPI: default base_year changed from 2011-12 to 2022-23 (applied by the MCP server when base_year is omitted; queries only for years before 2023 fall back to 2011-12). Index values differ between base years.
+- WPI swagger (v1.0.11 → v1.0.12): `base_year` enum now includes "2022-23"; description tells LLMs to pass "2022-23" when no base year is mentioned and notes that item/group codes differ by base year.
+- WPI base-year notes in client.py and mospi_server.py updated (default 2022-23; older base years for years before 2023).
+
+### Added
 - GENDER: 19 new indicators (codes 159-177) covering TB notifications, cause-of-death
   distribution, state-wise GPI, school expenditure, Class X/XII board exam results
   (regular/open board), STEM enrolment, students pursuing education abroad, learning
-  outcomes for grades 3/6/9 (NAS-style), National Social Assistance Programme,
+  outcomes for grades 3/6/9, National Social Assistance Programme,
   women police strength and women help desks in police stations, gender-wise officer
   counts, MSMEs registered under Udyam/Udyam Assist by gender, cybercrime complaint
   reporting, and microfinance loans outstanding against SHGs.
@@ -33,7 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Total datasets: 26 → 27
 - list_datasets, get_indicators, and get_metadata updated to include NSS73
 
-## Added
+### Added
 -NSS73 (- NSS73 (NSS 73rd Round - Unincorporated Non-Agricultural Enterprises) with indicators covering enterprise characteristics, economic activity, manufacturing, trade and other services (excluding construction), ownership, location, employment, worker categories, gross value added, assets, loans, ICT usage, and other operational and financial characteristics of unincorporated non-agricultural enterprises. Filter metadata uses `/api/nss-73/getNss73FiltersByIndicatorCode'.)
 
 ### Added

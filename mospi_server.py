@@ -432,7 +432,7 @@ def get_metadata(
         base_year: Required for CPI ("2024"/"2012"/"2010"),
                    IIP ("2011-12"/"2004-05"/"1993-94"),
                    NAS ("2022-23"/"2011-12"),
-                   WPI ("2011-12"/"2004-05"/"1993-94").
+                   WPI ("2022-23"/"2011-12"/"2004-05"/"1993-94").
                    Not applicable for PLFS, ASI.
         level: Required for CPI ("Group"/"Item").
         frequency: Required for IIP ("Annually"/"Monthly").
@@ -523,13 +523,13 @@ def get_metadata(
             return _check_empty_metadata(result, dataset, classification_year=classification_year)
 
         elif dataset == "WPI":
-            result = mospi.get_wpi_filters(base_year=base_year or "2011-12")
+            result = mospi.get_wpi_filters(base_year=base_year or "2022-23")
             result["api_params"] = get_swagger_param_definitions("WPI")
             result["next_step"] = _next
             result["base_year_coverage"] = (
-                f"Current base_year='{base_year or '2011-12'}'. "
-                "Other available base years: '2011-12', '2004-05', '1993-94'. "
-                "Each base year has different commodity structures and time coverage."
+                f"Current base_year='{base_year or '2022-23'}'. "
+                "Default base_year is '2022-23' (data from 2023 onwards). For years before 2023, use '2011-12' (2012 onwards), '2004-05' or '1993-94'. "
+                "Index values and item/group codes differ by base year, so state the base year in the answer."
             )
             return _check_empty_metadata(result, dataset, base_year=base_year)
 
@@ -907,6 +907,11 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     # Transform filters: skip None values and convert to strings
     transformed_filters = transform_filters(filters)
 
+    # WPI auto-selects base_year based on year filter if not provided 
+    if dataset == "WPI" and "base_year" not in transformed_filters:
+        years = [y.strip() for y in transformed_filters.get("year", "").split(",") if y.strip().isdigit()]
+        transformed_filters["base_year"] = "2011-12" if years and max(int(y) for y in years) < 2023 else "2022-23"
+
     # RBI uses sub_indicator_code but accept indicator_code for consistency
     if dataset == "RBI" and "indicator_code" in transformed_filters:
         transformed_filters["sub_indicator_code"] = transformed_filters.pop("indicator_code")
@@ -1067,7 +1072,7 @@ def list_datasets() -> dict:
             },
             "WPI": {
                 "name": "Wholesale Price Index",
-                "description": "Hierarchical commodity structure with 1000+ items across 5 levels: Major Groups (Primary articles, Fuel & power, Manufactured products, Food index) ΓåÆ Groups (22) ΓåÆ Sub-groups (90+) ΓåÆ Sub-sub-groups ΓåÆ Items. Tracks wholesale/producer price inflation monthly. Three base years available: 2011-12 (latest, default), 2004-05, and 1993-94.",
+                "description": "Hierarchical commodity structure with 1000+ items across 5 levels: Major Groups (Primary articles, Fuel & power, Manufactured products, Food index) ΓåÆ Groups (22) ΓåÆ Sub-groups (90+) ΓåÆ Sub-sub-groups ΓåÆ Items. Tracks wholesale/producer price inflation monthly. Four base years available: 2022-23 (latest, default; data from 2023 onwards), 2011-12, 2004-05, and 1993-94. For years before 2023 use an older base year; index values differ across base years, so state the base year in the answer.",
                 "use_for": "Wholesale inflation, producer prices, commodity price trends"
             },
             "ENERGY": {

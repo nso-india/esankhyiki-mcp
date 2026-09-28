@@ -594,20 +594,22 @@ class MoSPI:
             result = response.json()
             result["_note"] = (
                 "WPI has multiple base years with different commodity structures and time coverage. "
-                "Latest base_year is '2011-12'. "
-                "base_year='2011-12': Data from 2012 onwards. "
+                "Default base_year is '2022-23' (latest series, data from 2023 onwards). "
+                "base_year='2011-12': Data from 2012 onwards; use for years before 2023. "
                 "base_year='2004-05': Data from 2005 to 2017. "
-                "base_year='1993-94': Historical data from 1995 to 2010."
+                "base_year='1993-94': Historical data from 1994 to 2010. "
+                "Index values and item/group codes differ by base year, so always pass base_year with code filters "
+                "and state the base year in the answer."
             )
             return result
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 
-    def get_wpi_filters(self, base_year: str = "2011-12") -> Dict[str, Any]:
+    def get_wpi_filters(self, base_year: str = "2022-23") -> Dict[str, Any]:    
         """Fetch available WPI filters for a given base year.
 
         Args:
-            base_year: "2011-12" (default/latest), "2004-05", or "1993-94"
+            base_year: "2022-23" (default/latest), "2011-12", "2004-05", or "1993-94"
 
         Returns:
             Available filters: year, month, major_group, group, sub_group, sub_sub_group, item
