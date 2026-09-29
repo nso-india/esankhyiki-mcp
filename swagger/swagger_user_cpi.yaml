@@ -90,7 +90,7 @@ paths:
           pattern: ^[YN](,[YN])*$
       - name: limit
         in: query
-        description: Number of records per page (default 10)
+        description: Number of records per page (default 10). For base_year 2024, use 10-100.
         schema:
           type: integer
           pattern: ^\d+$
@@ -239,7 +239,7 @@ paths:
           pattern: ^[YN](,[YN])*$
       - name: limit
         in: query
-        description: Number of records per page (default 10)
+        description: Number of records per page (default 10). For base_year 2024, use 10-100.
         schema:
           type: integer
           pattern: ^\d+$

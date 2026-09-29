@@ -475,6 +475,11 @@ def get_metadata(
             )
             result["api_params"] = get_swagger_param_definitions(swagger_key)
             result["next_step"] = _next
+            if (base_year or "2024") == "2024":
+                result["parameter_notes"] = (
+                    "For CPI base_year='2024', get_data limit must be between 10 and 100 "
+                    "records per page (default 10). Use page to fetch further records."
+                )
             result["base_year_coverage"] = (
                 f"Current base_year='{base_year or '2024'}'. "
                 "Other available base years: '2024', '2012', '2010'. "
@@ -848,6 +853,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
                  NAS requires base_year ("2022-23" or "2011-12").
                  MNRE: indicator_code (1-5) is mapped to type_of_renewable_energy_code.
                  Pass limit (e.g., "50") to retrieve more than 10 records.
+                 For CPI base_year="2024", limit must be 10-100 (default 10).
 
     Returns:
         dict with statistical records, or an error/validation message
@@ -981,13 +987,21 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     if not validation["valid"]:
         return {"error": "Invalid parameters", **validation}
 
+    if dataset in ("CPI_GROUP", "CPI_ITEM") and transformed_filters.get("base_year") == "2024":
+        if "limit" in transformed_filters:
+            limit, err = _safe_int(transformed_filters["limit"], "limit")
+            if err:
+                return err
+            if not 10 <= limit <= 100:
+                return {"error": "For CPI base_year=2024, limit must be between 10 and 100."}
+
     if dataset == "NSS77":
         result = mospi.get_nss77_data(transformed_filters)
     else:
         result = mospi.get_data(api_dataset, transformed_filters)
 
     # Upstream error (500s, timeouts, etc.)
-    if isinstance(result, dict) and "error" in result and "msg" not in result:
+    if isinstance(result, dict) and "error" in result and "msg" not in result and not result.get("upstream_reason"):
         filter_str = ", ".join(f"{k}={v}" for k, v in transformed_filters.items() if k not in ("Format", "limit", "page"))
         result["troubleshooting"] = (
             f"The upstream API returned an error for dataset '{dataset}' "
