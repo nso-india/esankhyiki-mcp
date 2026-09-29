@@ -1,0 +1,107 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Number of enterprises by status of registration for each Broad Activity Code(BAC) at All-India level",
+    "description": "Number of enterprises by status of registration for each Broad Activity Code(BAC) at All-India level"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Number of enterprises by status of registration",
+    "description": "Number of enterprises by status of registration"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Number of establishments for each Broad Activity Code (BAC)",
+    "description": "Number of establishments for each Broad Activity Code (BAC)"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Proportion (per 1000) of enterprises with mixed activity for each Board Activity Code (BAC)",
+    "description": "Proportion (per 1000) of enterprises with mixed activity for each Board Activity Code (BAC)"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Distribution (per 1000) of enterprises by number of months operated",
+    "description": "Distribution (per 1000) of enterprises by number of months operated"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Distribution (per 1000) of enterprises for each Board Activity Code (BAC) by number of establishments",
+    "description": "Distribution (per 1000) of enterprises for each Board Activity Code (BAC) by number of establishments"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Distribution (per 1000) of enterprises by type of production carried out",
+    "description": "Distribution (per 1000) of enterprises by type of production carried out"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Proportion (per 1000) of enterprises by use of ICT",
+    "description": "Proportion (per 1000) of enterprises by use of ICT"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Value (in Rs.'000) per establishment of selected characteristics of establishments for each Broad Activity Code (BAC) of the enterprise engaged in market production",
+    "description": "Value (in Rs.'000) per establishment of selected characteristics of establishments for each Broad Activity Code (BAC) of the enterprise engaged in market production"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Value (in Rs.'000) per establishment of selected characteristics of establishments at 2-digit of NIC of the enterprises engaged in market production",
+    "description": "Value (in Rs.'000) per establishment of selected characteristics of establishments at 2-digit of NIC of the enterprises engaged in market production"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Value (in Rs.'000) per establishment of selected characteristics of establishments for each Compilation Category (CC) of the enterprises engaged in market production",
+    "description": "Value (in Rs.'000) per establishment of selected characteristics of establishments for each Compilation Category (CC) of the enterprises engaged in market production"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Value (in Rs.'000) per establishment of selected characteristics of establishments relating to employment and labour cost for each Broad Activity Code(BAC) of the enterprises engaged in market production",
+    "description": "Value (in Rs.'000) per establishment of selected characteristics of establishments relating to employment and labour cost for each Broad Activity Code(BAC) of the enterprises engaged in market production"
+  },
+  {
+    "indicator_code": 13,
+    "name": "Total workers (hired workers and unpaid family members/proprietors) per establishments of the establishments for each Board Activity Code (BAC) of the enterprise engaged in market production",
+    "description": "Total workers (hired workers and unpaid family members/proprietors) per establishments of the establishments for each Board Activity Code (BAC) of the enterprise engaged in market production"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Total workers (hired workers and unpaid family members/proprietors) per establishments of the establishments for each Compilation Category of the enterprises",
+    "description": "Total workers (hired workers and unpaid family members/proprietors) per establishments of the establishments for each Compilation Category of the enterprises"
+  },
+  {
+    "indicator_code": 15,
+    "name": "Distribution (per 1000) of enterprises by number of workers at the all-India level",
+    "description": "Distribution (per 1000) of enterprises by number of workers at the all-India level"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Structural ratio and technical ratio of establishments engaged in market production",
+    "description": "Structural ratio and technical ratio of establishments engaged in market production"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Structural ratio and technical ratio at all-India level for establishments engaged in market production for each class of number of workers",
+    "description": "Structural ratio and technical ratio at all-India level for establishments engaged in market production for each class of number of workers"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Structural ratio and technical ratio for each range of GVA for establishments engaged in market production",
+    "description": "Structural ratio and technical ratio for each range of GVA for establishments engaged in market production"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Value (in Rs.'000) per establishment of selected characteristics of the enterprises engaged in non-market activity for each NIC 2008 section",
+    "description": "Value (in Rs.'000) per establishment of selected characteristics of the enterprises engaged in non-market activity for each NIC 2008 section"
+  },
+  {
+    "indicator_code": 21,
+    "name": "Structural ratios and technical ratios of enterprises engaged in non-market activity for each NIC-2008 sections",
+    "description": "Structural ratios and technical ratios of enterprises engaged in non-market activity for each NIC-2008 sections"
+  },
+  {
+    "indicator_code": 22,
+    "name": "Proportion (per 1000) of enterprises that can supply data online and data separately for each of the establishments",
+    "description": "Proportion (per 1000) of enterprises that can supply data online and data separately for each of the establishments"
+  }
+]

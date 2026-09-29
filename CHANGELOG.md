@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- NSS74 (NSS 74th Round - Services Sector Enterprises in India) with 21 indicators (July 2016 - June 2017) from EC, BR and MCA frames: enterprise counts by registration status, establishments by broad activity code, months operated, ICT use, workers, value per establishment of selected characteristics, and structural/technical ratios. Filters are indicator-specific; state_code=37 is All India.
+
+### Added
 - WPI: new base year 2022-23 (5 major groups, 29 groups, 142 sub-groups, 953 items; data from 2023 onwards).
 
 ### Changed

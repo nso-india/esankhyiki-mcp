@@ -221,6 +221,12 @@ DATASETS = [
         {"indicator_code": "1", "limit": "20"},
         id="NSS73",
     ),
+    pytest.param(
+        "NSS74", 
+        {"indicator_code": 1}, 
+        {"indicator_code": "1", "limit": "20"},
+          id="NSS74"
+    ),
 ]
 
 EXPECTED_TOOLS = {
@@ -233,7 +239,7 @@ EXPECTED_TOOLS = {
 EXPECTED_DATASETS = {
     "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73",
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74",
 }
 
 # Internal keys injected by the server (not dataset-specific content)
