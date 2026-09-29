@@ -18,7 +18,7 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
-  models: read
+  copilot-requests: write
 
 concurrency:
   group: ai-review-${{ github.event.pull_request.number }}
@@ -64,12 +64,19 @@ jobs:
             echo "CHGEOF"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+
+      - name: Install Copilot CLI
+        run: npm install -g @github/copilot
+
       - name: Run AI review
         id: ai
-        uses: actions/ai-inference@v2
+        uses: actions/ai-inference@v3
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         with:
-          model: openai/gpt-4o
-          max-completion-tokens: 1500
+          model: auto
           system-prompt: |
             You are reviewing a PR on the MoSPI MCP server (FastMCP 3.0,
             single-file mospi_server.py, swagger-driven validation).
@@ -155,7 +162,7 @@ jobs:
         with:
           script: |
             const marker = '<!-- ai-pr-review -->';
-            const body = `${marker}\n## 🤖 AI PR Review\n\n${process.env.REVIEW}\n\n---\n_Auto-generated. Structural checks (dataset count, wiring) are handled deterministically by [\`tests/test_consistency.py\`](../blob/main/tests/test_consistency.py); this review focuses on code quality. Model: \`openai/gpt-4o\` via [GitHub Models](https://docs.github.com/en/github-models). Workflow: \`.github/workflows/ai-review.yml\`. Add the \`skip-review\` label to suppress._`;
+            const body = `${marker}\n## 🤖 AI PR Review\n\n${process.env.REVIEW}\n\n---\n_Auto-generated. Structural checks (dataset count, wiring) are handled deterministically by [\`tests/test_consistency.py\`](../blob/main/tests/test_consistency.py); this review focuses on code quality. Model: Copilot CLI auto selection. Workflow: \`.github/workflows/ai-review.yml\`. Add the \`skip-review\` label to suppress._`;
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
