@@ -870,7 +870,7 @@ class MoSPI:
     def get_envstats_indicators(self) -> Dict[str, Any]:
         """Fetch list of Environment Statistics indicators from MoSPI API.
 
-        Returns 124 indicators covering climate, biodiversity, pollution,
+        Returns 126 indicators covering climate, biodiversity, pollution,
         resources, disasters, health, and environmental expenditure.
         """
         try:
@@ -887,7 +887,7 @@ class MoSPI:
         """Fetch available Environment Statistics filters for given indicator.
 
         Args:
-            indicator_code: Indicator code (1-130)
+            indicator_code: Indicator code (1-132)
         """
         params = {"indicator_code": indicator_code}
 
