@@ -90,6 +90,7 @@ This server provides AI-ready access to official Indian government statistics th
 |      29 |  **NSS80E**  | NSS 80th Round – Comprehensive Modular Survey: Education (CMSE)             | School enrolment, education expenditure, tuition fees, private coaching, scholarships, sources of education funding                  |
 |      30 |  **NSS73**   | NSS 73rd Round – Unincorporated Non-Agricultural Enterprises                |  Enterprise type, enterprise ownership, hired workers, annual emoluments, GVA per worker, employment type, working hours, activity category, sector-wise and state-wise enterprise statistics                                                                        |  
 |      31 |  **ISP**     | Index of Service Production                                                  | Services sector growth, monthly services output, sub-sector indices                                                                            |
+|      32 |  **NSS75H**  | NSS 75th Round – Social Consumption on Health                                | Hospitalisation, ailments, medical and out-of-pocket expenditure, public vs private hospitals, childbirth costs, child immunisation, health of aged persons                                     |
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 
 ---
