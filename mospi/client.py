@@ -114,14 +114,36 @@ class MoSPI:
 
         try:
             response = self.session.get(full_url, params=params, timeout=30)
-            response.raise_for_status()
-
             # Check if CSV format was requested
             format_param = params.get("Format", "JSON") if params else "JSON"
-            if format_param == "CSV":
+            if format_param == "CSV" and response.ok:
                 return {"data": response.text, "format": "CSV"}
-            else:
-                return response.json()
+
+            try:
+                payload = response.json()
+            except ValueError:
+                response.raise_for_status()
+                return {"error": "The upstream API returned a non-JSON response."}
+
+            if isinstance(payload, dict):
+                reason = payload.get("message") or payload.get("error")
+                failed = (
+                    not response.ok
+                    or payload.get("success") is False
+                    or payload.get("statusCode") is False
+                    or bool(payload.get("error"))
+                )
+                if failed:
+                    if isinstance(reason, str) and reason.strip():
+                        return {**payload, "error": payload.get("error") or reason,
+                                "http_status": response.status_code,
+                                "upstream_reason": reason}
+                    response.raise_for_status()
+                    return {"error": "The upstream API reported a failure without a reason.",
+                            "http_status": response.status_code}
+
+            response.raise_for_status()
+            return payload
         except Exception as e:
             return {"error": f"An error occurred: {e}"}
 
