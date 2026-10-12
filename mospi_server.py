@@ -98,7 +98,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74", "NSS71"
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -134,12 +134,13 @@ DATASET_SWAGGER = {
     "NSS75E": ("swagger_user_nss75e.yaml", "/api/nss-75/getNSS75Records"),
     "NSS73": ("swagger_user_nss73.yaml", "/api/nss-73/getNss73Records"),
     "NSS74": ("swagger_user_nss74.yaml", "/api/nss-74/getNss74Records"),
+    "NSS71": ("swagger_user_nss71.yaml", "/api/nss-71/getNss71Records"),
 }
 
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74","NSS71"
 ]
 
 
@@ -362,6 +363,7 @@ def get_indicators(
         "NSS80": mospi.get_nss80_indicators,
         "NSS73": mospi.get_nss73_indicators,
         "NSS74": mospi.get_nss74_indicators,
+        "NSS71": mospi.get_nss71_indicators,
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
         "IIP": mospi.get_iip_base_years,
@@ -824,6 +826,22 @@ def get_metadata(
             result["next_step"] = _next
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
 
+        elif dataset == "NSS71":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for NSS71. Education=1-12, Health=13-46."}
+            survey_code, err = _safe_int(survey_code, "survey_code")
+            if err:
+                return err
+            result = mospi.get_nss71_filters(indicator_code=indicator_code, survey_code=survey_code)
+            result["api_params"] = get_swagger_param_definitions("NSS71")
+            result["parameter_notes"] = (
+                "survey_code is required by the data API. 1=Social Consumption: Education (indicators 1-12), "
+                "2=Social Consumption: Health (indicators 13-46). "
+                "Auto-derived from indicator_code if omitted. state_code=37 is All India."
+            )
+            result["next_step"] = _next
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, survey_code=survey_code)        
+
         else:
             return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
 
@@ -909,6 +927,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         "NSS80": "NSS80",
         "NSS73": "NSS73",
         "NSS74": "NSS74",
+        "NSS71": "NSS71",
     }
 
     api_dataset = dataset_map.get(dataset)
@@ -918,8 +937,20 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     # Transform filters: skip None values and convert to strings
     transformed_filters = transform_filters(filters)
 
-    # NSS74 drop Format/format, the swagger only documents lowercase xlsx format
-    if dataset == "NSS74":
+    # NSS71 requires survey_code; auto-derive from indicator_code if not supplied
+    if dataset == "NSS71" and "survey_code" not in transformed_filters:
+        ic = transformed_filters.get("indicator_code")
+        if ic is not None:
+            try:
+                ic_int = int(str(ic).split(",")[0])
+                derived = mospi._nss71_survey_for(ic_int)
+                if derived is not None:
+                    transformed_filters["survey_code"] = str(derived)
+            except (ValueError, AttributeError):
+                pass
+
+    # NSS74 drop Format/format, the swagger only documents lowercase xlsx format    
+    if dataset in ("NSS74", "NSS71"):
         transformed_filters.pop("Format", None)
         transformed_filters.pop("format", None)
 
@@ -1054,7 +1085,7 @@ def list_datasets() -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 28,
+        "total_datasets": 29,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -1195,7 +1226,12 @@ def list_datasets() -> dict:
                 "name": "NSS74 (74th Round - Services Sector Enterprises in India)",
                 "description": "21 indicators from the NSS 74th Round (July 2016 - June 2017) on services sector enterprises drawn from three frames: Economic Census (EC), Business Register (BR) and Ministry of Corporate Affairs (MCA). Statistics are by state/UT (state_code=37 is All India), Broad Activity Code (BAC: trade, transport, accommodation, ICT, real estate, professional services, education, health, arts, other services), registration status (not registered / one authority / more than one authority) and enterprise type (mixed activity vs without mixed activity). Depending on the indicator, further dimensions include mixed activity type (primary/secondary/tertiary), months operated, number of establishments, proportion of enterprises (ICT use), 83 selected characteristics (capital, employment, labour cost), NIC 2-digit, compilation category, range of workers, decile class of GVA, NIC 2008 section, type of production and sub-indicator.",
                 "use_for": "Services sector enterprises, enterprise counts, registration status, establishments by activity, months operated, ICT use, workers per establishment, value per establishment, structural and technical ratios, market vs non-market enterprises. Note: each indicator supports only a specific subset of filters (for example nic_code applies to indicator 10 only, decile_class_of_gva_code to indicator 18 only), so combining filters across indicators returns no data."
-            },            
+            },
+            "NSS71": {
+                "name": "NSS71 (71st Round - Social Consumption: Education and Health in India)",
+                "description": "46 indicators from the NSS 71st Round (Jan-Jun 2014) across two survey modules. Education module (survey_code=1, indicators 1-12): literacy rate, completed level of education, dropout/never-enrolled, current attendance and enrolment status, Gross/Net Attendance Ratio, general vs technical/vocational education, and average expenditure per student by course type and item of expenditure. Health module (survey_code=2, indicators 13-46): hospitalisation cases per 100,000 persons by age-group/social group/religion/ailment category, distribution by hospital type/ward/treatment, medical expenditure for hospitalised and non-hospitalised treatment, aged persons by economic independence and mobility, and childbirth-related hospitalisation. state_code=37 is All India.",
+                "use_for": "Literacy, school attendance and enrolment, education expenditure, hospitalisation rates, ailment types, medical expenditure, aged persons' economic independence and mobility, childbirth hospitalisation. survey_code is required (1=Education, 2=Health) but is auto-derived from indicator_code if omitted."
+            },                        
         },
         "workflow": [
             "1. list_datasets() ΓÇö identify the relevant dataset",
@@ -1214,7 +1250,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.3 with OpenTelemetry")
-    log("Datasets: 28 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74)")
+    log("Datasets: 29 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")

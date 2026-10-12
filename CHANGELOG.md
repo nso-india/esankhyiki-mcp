@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 ### Added
+- NSS71 (NSS 71st Round - Social Consumption: Education and Health in India) with 46 indicators across two modules: Education (survey_code=1, indicators 1-12) and Health (survey_code=2, indicators 13-46). survey_code is auto-derived from indicator_code if not passed. state_code=37 is All India.
+
+### Added
 - NSS74 (NSS 74th Round - Services Sector Enterprises in India) with 21 indicators (July 2016 - June 2017) from EC, BR and MCA frames: enterprise counts by registration status, establishments by broad activity code, months operated, ICT use, workers, value per establishment of selected characteristics, and structural/technical ratios. Filters are indicator-specific; state_code=37 is All India.
 
 ### Added

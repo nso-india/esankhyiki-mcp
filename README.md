@@ -90,7 +90,10 @@ This server provides AI-ready access to official Indian government statistics th
 |      29 |  **NSS80E**  | NSS 80th Round – Comprehensive Modular Survey: Education (CMSE)             | School enrolment, education expenditure, tuition fees, private coaching, scholarships, sources of education funding                  |
 |      30 |  **NSS73**   | NSS 73rd Round – Unincorporated Non-Agricultural Enterprises                |  Enterprise type, enterprise ownership, hired workers, annual emoluments, GVA per worker, employment type, working hours, activity category, sector-wise and state-wise enterprise statistics
 |      31 |  **NSS74**   | NSS 74th Round – Services Sector Enterprises | Service sector enterprises, registration status, establishments by activity, ICT use, workers per establishment, value per establishment, structural ratios |                                                                        |  
-|      32 |  **ISP**     | Index of Service Production                                                  | Services sector growth, monthly services output, sub-sector indices                                                                            |
+|      32 |   **NSS71** | NSS 71st Round – Social Consumption: Education in India                     | Literacy rate, completed level of education, dropout/never-enrolled, attendance and enrolment status, GAR/NAR, general vs technical/vocational education, expenditure per student |
+|      33 |   **NSS71H** | NSS 71st Round – Social Consumption: Health in India                        | Hospitalisation cases by age-group/social group/religion/ailment, hospital type and ward distribution, medical expenditure, aged persons' economic independence and mobility, childbirth hospitalisation |
+|      34 |  **ISP**     | Index of Service Production                                                  | Services sector growth, monthly services output, sub-sector indices                                                                            |
+
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 
 ---
