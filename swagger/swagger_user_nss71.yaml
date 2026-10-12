@@ -1,0 +1,189 @@
+openapi: 3.0.1
+info:
+  title: "All India Survey on Social Consumption: Education and Health in India (NSS 71)"
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in
+tags:
+- name: NSS71
+  description: National Sample Survey 71 (Education and Health)
+paths:
+  /api/nss-71/getNss71Records:
+    get:
+      tags:
+      - NSS71
+      operationId: NSS71IndicatorValues
+      description: |
+        - **Required:** `survey_code`, `indicator_code`
+        - **survey_code:** 1 = Social Consumption: Education in India (indicators 1-12); 2 = Social Consumption: Health in India (indicators 13-46)
+        - **Education filters (survey_code=1):** state_code, sector_code, gender_code, age_group_code, attendance_status_code, attendance_type_code, enrollment_status_code, education_type_code, level_of_attendance_code, level_of_education_code, completed_level_of_education_code, item_of_expenditure_code
+        - **Health filters (survey_code=2):** state_code, sector_code, gender_code, social_group_code, age_group_code, religion_code, aged_persons_code, ailment_type_code, broad_ailment_category_code, detailed_ailment_type_code, expenditure_type_code, average_expenditure_type_code, hospital_type_code, hospital_sub_type_code, hospitalized_cases_by_mother_age_code, level_of_care_code, mobility_code, nature_of_treatment_code, quintile_class_of_umpce_code
+        - **Note:** For Education (survey_code=1), data exists only for sector_code 1-3 and gender_code 1-3.
+      parameters:
+        - in: query
+          name: survey_code
+          required: true
+          schema: { type: integer, enum: [1, 2] }
+          description: "1 = Education, 2 = Health"
+        - in: query
+          name: indicator_code
+          required: true
+          schema: { type: integer, minimum: 1, maximum: 46 }
+          description: Enter The Indicator code (1-12 for survey 1 Education, 13-46 for survey 2 Health)
+        - in: query
+          name: state_code
+          schema: { type: integer, minimum: 1, maximum: 37 }
+          description: Enter The State code (1-37)
+        - in: query
+          name: sector_code
+          schema: { type: integer, minimum: 1, maximum: 4 }
+          description: Enter The Sector code (1-4)
+        - in: query
+          name: gender_code
+          schema: { type: integer, minimum: 1, maximum: 5 }
+          description: Enter The Gender code (1-5)
+        - in: query
+          name: social_group_code
+          schema: { type: integer, minimum: 1, maximum: 5 }
+          description: Enter The Social Group code (1-5)
+        - in: query
+          name: age_group_code
+          schema: { type: integer, minimum: 1, maximum: 40 }
+          description: Enter The Age Group code (1-40)
+        - in: query
+          name: religion_code
+          schema: { type: integer, minimum: 1, maximum: 9 }
+          description: Enter The Religion code (1-9)
+        - in: query
+          name: aged_persons_code
+          schema: { type: integer, minimum: 1, maximum: 4 }
+          description: Enter The Aged Persons code (1-4)
+        - in: query
+          name: ailment_type_code
+          schema: { type: integer, minimum: 1, maximum: 2 }
+          description: Enter The Ailment Type code (1-2)
+        - in: query
+          name: broad_ailment_category_code
+          schema: { type: integer, minimum: 1, maximum: 17 }
+          description: Enter The Broad Ailment Category code (1-17)
+        - in: query
+          name: detailed_ailment_type_code
+          schema: { type: integer, minimum: 1, maximum: 60 }
+          description: Enter The Detailed Ailment Type code (1-60)
+        - in: query
+          name: expenditure_type_code
+          schema: { type: integer, minimum: 1, maximum: 9 }
+          description: Enter The Expenditure Type code (1-9)
+        - in: query
+          name: average_expenditure_type_code
+          schema: { type: integer, minimum: 1, maximum: 8 }
+          description: Enter The Average Expenditure Type code (1-8)
+        - in: query
+          name: hospital_type_code
+          schema: { type: integer, minimum: 1, maximum: 4 }
+          description: Enter The Hospital Type code (1-4)
+        - in: query
+          name: hospital_sub_type_code
+          schema: { type: integer, minimum: 1, maximum: 4 }
+          description: Enter The Hospital Sub Type code (1-4)
+        - in: query
+          name: hospitalized_cases_by_mother_age_code
+          schema: { type: integer, minimum: 1, maximum: 8 }
+          description: Enter The Hospitalized Cases By Mother Age code (1-8)
+        - in: query
+          name: level_of_care_code
+          schema: { type: integer, minimum: 1, maximum: 5 }
+          description: Enter The Level Of Care code (1-5)
+        - in: query
+          name: mobility_code
+          schema: { type: integer, minimum: 1, maximum: 5 }
+          description: Enter The Mobility code (1-5)
+        - in: query
+          name: nature_of_treatment_code
+          schema: { type: integer, minimum: 1, maximum: 6 }
+          description: Enter The Nature Of Treatment code (1-6)
+        - in: query
+          name: quintile_class_of_umpce_code
+          schema: { type: integer, minimum: 1, maximum: 6 }
+          description: Enter The Quintile Class Of UMPCE code (1-6)
+        - in: query
+          name: attendance_status_code
+          schema: { type: integer, minimum: 1, maximum: 3 }
+          description: Enter The Attendance Status code (1-3)
+        - in: query
+          name: attendance_type_code
+          schema: { type: integer, minimum: 1, maximum: 17 }
+          description: Enter The Attendance Type code (1-17)
+        - in: query
+          name: enrollment_status_code
+          schema: { type: integer, minimum: 1, maximum: 2 }
+          description: Enter The Enrollment Status code (1-2)
+        - in: query
+          name: education_type_code
+          schema: { type: integer, minimum: 1, maximum: 4 }
+          description: Enter The Education Type code (1-4)
+        - in: query
+          name: level_of_attendance_code
+          schema: { type: integer, minimum: 1, maximum: 12 }
+          description: Enter The Level Of Attendance code (1-12)
+        - in: query
+          name: level_of_education_code
+          schema: { type: integer, minimum: 1, maximum: 7 }
+          description: Enter The Level Of Education code (1-7)
+        - in: query
+          name: completed_level_of_education_code
+          schema: { type: integer, minimum: 1, maximum: 12 }
+          description: Enter The Completed Level Of Education code (1-12)
+        - in: query
+          name: item_of_expenditure_code
+          schema: { type: integer, minimum: 1, maximum: 6 }
+          description: Enter The Item Of Expenditure code (1-6)
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1 }
+        - in: query
+          name: format
+          schema:
+            type: string
+          description: Set to `xlsx` to download as excel
+      responses:
+        "200":
+          description: A JSON array of records
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+ 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: "2.0"
+ 

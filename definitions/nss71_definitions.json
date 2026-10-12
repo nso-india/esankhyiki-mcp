@@ -1,0 +1,232 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Literacy rate (in percent) among persons of age 7 years and above",
+    "description": "Literacy rate (in percent) among persons of age 7 years and above"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Per 1000 distribution of persons by completed level of education for each age-group",
+    "description": "Per 1000 distribution of persons by completed level of education for each age-group"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Proportion (per 1000) of persons (age 5-29 years) dropping out / discontinuance and never-enrolled",
+    "description": "Proportion (per 1000) of persons (age 5-29 years) dropping out / discontinuance and never-enrolled"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Per 1000 distribution of persons of age 5-29 years by current attendance and current enrolment status",
+    "description": "Per 1000 distribution of persons of age 5-29 years by current attendance and current enrolment status"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Gross Attendance Ratio (GAR) at different levels of education",
+    "description": "Gross Attendance Ratio (GAR) at different levels of education"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Net Attendance Ratio (NAR) at different levels of education",
+    "description": "Net Attendance Ratio (NAR) at different levels of education"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Per 1000 distribution of students by general, technical/ professional (except vocational) and vocational education",
+    "description": "Per 1000 distribution of students by general, technical/ professional (except vocational) and vocational education"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Average expenditure (Rs.) per student during current academic session pursuing general course by  level  of attendance",
+    "description": "Average expenditure (Rs.) per student during current academic session pursuing general course by  level  of attendance"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Average expenditure (Rs.) per student during current academic session pursuing technical/professional course by level  of attendance",
+    "description": "Average expenditure (Rs.) per student during current academic session pursuing technical/professional course by level  of attendance"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Average expenditure (Rs.) per student during current academic session pursuing general course  by items of expenditure",
+    "description": "Average expenditure (Rs.) per student during current academic session pursuing general course  by items of expenditure"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Average expenditure (Rs.) per student  during current academic session pursuing technical/professional course  by items of expenditure",
+    "description": "Average expenditure (Rs.) per student  during current academic session pursuing technical/professional course  by items of expenditure"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Average expenditure (Rs.) per student  during current academic session pursuing any course by items of expenditure",
+    "description": "Average expenditure (Rs.) per student  during current academic session pursuing any course by items of expenditure"
+  },
+  {
+    "indicator_code": 13,
+    "name": "Hospitalisation cases (EC) per 100,000 persons during the last 365 days by age-group",
+    "description": "Hospitalisation cases (EC) per 100,000 persons during the last 365 days by age-group"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Hospitalisation cases (EC) per 100,000 persons of different social groups during the last 365 days",
+    "description": "Hospitalisation cases (EC) per 100,000 persons of different social groups during the last 365 days"
+  },
+  {
+    "indicator_code": 15,
+    "name": "Age-group wise cases of hospitalisation (EC) reported per 1000 persons during the last 365 days",
+    "description": "Age-group wise cases of hospitalisation (EC) reported per 1000 persons during the last 365 days"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Per thousand distribution of hospitalised cases (EC) over broad age groups in selected States for each gender",
+    "description": "Per thousand distribution of hospitalised cases (EC) over broad age groups in selected States for each gender"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Hospitalisation cases (EC) per 100,000 persons of different religion during the last 365 days",
+    "description": "Hospitalisation cases (EC) per 100,000 persons of different religion during the last 365 days"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Cases of hospitalisation (EC) on account of ailments of different broad ailment categories reported per 100,000 persons during the last 365 days by gender and age-group",
+    "description": "Cases of hospitalisation (EC) on account of ailments of different broad ailment categories reported per 100,000 persons during the last 365 days by gender and age-group"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Cases of hospitalisation(EC) on account of ailments of each broad ailment category reported per 100,000 persons during the last 365 days by gender",
+    "description": "Cases of hospitalisation(EC) on account of ailments of each broad ailment category reported per 100,000 persons during the last 365 days by gender"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Per thousand distribution of hospitalised cases (EC) over detailed ailment types, separately for each gender and sector",
+    "description": "Per thousand distribution of hospitalised cases (EC) over detailed ailment types, separately for each gender and sector"
+  },
+  {
+    "indicator_code": 21,
+    "name": "Per thousand distribution of hospitalised cases (EC) over broad ailment categories for different age groups",
+    "description": "Per thousand distribution of hospitalised cases (EC) over broad ailment categories for different age groups"
+  },
+  {
+    "indicator_code": 22,
+    "name": "Per thousand distribution of hospitalisation cases (EC) during the last 365 days by type of hospital and type of ward, separately for each gender",
+    "description": "Per thousand distribution of hospitalisation cases (EC) during the last 365 days by type of hospital and type of ward, separately for each gender"
+  },
+  {
+    "indicator_code": 23,
+    "name": "Per thousand distribution of hospitalisation cases (EC) during the last 365 days by type of hospital and type of ward, separately for each quintile class of UMPCE",
+    "description": "Per thousand distribution of hospitalisation cases (EC) during the last 365 days by type of hospital and type of ward, separately for each quintile class of UMPCE"
+  },
+  {
+    "indicator_code": 24,
+    "name": "Per thousand distribution of hospitalisation cases(EC) during the last 365 days by type of hospital and type of ward, separately",
+    "description": "Per thousand distribution of hospitalisation cases(EC) during the last 365 days by type of hospital and type of ward, separately"
+  },
+  {
+    "indicator_code": 25,
+    "name": "Per thousand distribution of hospitalisation cases (EC) by nature of treatment received during hospitalisation, separately for each quintile class of MPCE and gender",
+    "description": "Per thousand distribution of hospitalisation cases (EC) by nature of treatment received during hospitalisation, separately for each quintile class of MPCE and gender"
+  },
+  {
+    "indicator_code": 26,
+    "name": "Per thousand distribution of hospitalisation cases (EC) by nature of treatment received during hospitalisation, separately",
+    "description": "Per thousand distribution of hospitalisation cases (EC) by nature of treatment received during hospitalisation, separately"
+  },
+  {
+    "indicator_code": 27,
+    "name": "Average total medical expenditure for treatment per hospitalisation case (EC) during stay at hospital (as inpatient) over last 365 days by quintile class of MPCE and gender",
+    "description": "Average total medical expenditure for treatment per hospitalisation case (EC) during stay at hospital (as inpatient) over last 365 days by quintile class of MPCE and gender"
+  },
+  {
+    "indicator_code": 28,
+    "name": "Average total medical expenditure per hospitalisation case (EC) for treatment during stay at hospital (as inpatient) in last 365 days by level of care and gender for each State/UT and sector",
+    "description": "Average total medical expenditure per hospitalisation case (EC) for treatment during stay at hospital (as inpatient) in last 365 days by level of care and gender for each State/UT and sector"
+  },
+  {
+    "indicator_code": 29,
+    "name": "Average medical expenditure (Rs.) per hospitalisation case (EC) during last 365 days and its break-up for public hospital",
+    "description": "Average medical expenditure (Rs.) per hospitalisation case (EC) during last 365 days and its break-up for public hospital"
+  },
+  {
+    "indicator_code": 30,
+    "name": "Per thousand distribution of spells of ailment over broad ailment categories for different age groups",
+    "description": "Per thousand distribution of spells of ailment over broad ailment categories for different age groups"
+  },
+  {
+    "indicator_code": 31,
+    "name": "Per thousand distribution of spells of ailment treated on medical advice over levels of care in State/UT",
+    "description": "Per thousand distribution of spells of ailment treated on medical advice over levels of care in State/UT"
+  },
+  {
+    "indicator_code": 32,
+    "name": "Number of persons per 1,00,000 reporting onset of ailments during last 15 days and average duration of ailment by gender and age-group",
+    "description": "Number of persons per 1,00,000 reporting onset of ailments during last 15 days and average duration of ailment by gender and age-group"
+  },
+  {
+    "indicator_code": 33,
+    "name": "Average total medical expenditure (Rs.) for treatment per ailing person during a period of 15 days by State/UT and gender",
+    "description": "Average total medical expenditure (Rs.) for treatment per ailing person during a period of 15 days by State/UT and gender"
+  },
+  {
+    "indicator_code": 34,
+    "name": "Average total medical expenditure for (non-hospitalised) treatment per person with only one ailment during last 15 days by level of care, quintile class of MPCE and gender",
+    "description": "Average total medical expenditure for (non-hospitalised) treatment per person with only one ailment during last 15 days by level of care, quintile class of MPCE and gender"
+  },
+  {
+    "indicator_code": 35,
+    "name": "Average total medical expenditure for (non-hospitalised) treatments per person with only one ailment during last 15 days by level of care, State/ UT and gender",
+    "description": "Average total medical expenditure for (non-hospitalised) treatments per person with only one ailment during last 15 days by level of care, State/ UT and gender"
+  },
+  {
+    "indicator_code": 36,
+    "name": "Average total medical expenditure for (non-hospitalised) treatments per person with only one ailment during last 15 days quintile class of UMPCE by and gender",
+    "description": "Average total medical expenditure for (non-hospitalised) treatments per person with only one ailment during last 15 days quintile class of UMPCE by and gender"
+  },
+  {
+    "indicator_code": 37,
+    "name": "Break-up of average medical expenditure (Rs.) for non-hospitalised treatment per ailing person treated, for each State/UT and gender",
+    "description": "Break-up of average medical expenditure (Rs.) for non-hospitalised treatment per ailing person treated, for each State/UT and gender"
+  },
+  {
+    "indicator_code": 38,
+    "name": "Per thousand distribution of aged persons of each gender and State/UT by state of economic independence",
+    "description": "Per thousand distribution of aged persons of each gender and State/UT by state of economic independence"
+  },
+  {
+    "indicator_code": 39,
+    "name": "Per thousand distribution of aged persons of each age-group and gender by state of physical mobility: all-India",
+    "description": "Per thousand distribution of aged persons of each age-group and gender by state of physical mobility: all-India"
+  },
+  {
+    "indicator_code": 40,
+    "name": "Per thousand distribution of cases of hospitalisation for childbirth by age of the mother",
+    "description": "Per thousand distribution of cases of hospitalisation for childbirth by age of the mother"
+  },
+  {
+    "indicator_code": 41,
+    "name": "Per thousand distribution of cases of hospitalisation for childbirth by nature of treatment",
+    "description": "Per thousand distribution of cases of hospitalisation for childbirth by nature of treatment"
+  },
+  {
+    "indicator_code": 42,
+    "name": "Per thousand distribution of cases of hospitalisation for childbirth by level of care for each social group",
+    "description": "Per thousand distribution of cases of hospitalisation for childbirth by level of care for each social group"
+  },
+  {
+    "indicator_code": 43,
+    "name": "Per thousand distribution of cases of hospitalisation for childbirth by type of ward, separately for each type of hospital (public/private) and each quintile class of MPCE",
+    "description": "Per thousand distribution of cases of hospitalisation for childbirth by type of ward, separately for each type of hospital (public/private) and each quintile class of MPCE"
+  },
+  {
+    "indicator_code": 44,
+    "name": "Per thousand distribution of cases of hospitalisation for childbirth by type of ward, separately for each type of hospital (public/private) and each State/UT",
+    "description": "Per thousand distribution of cases of hospitalisation for childbirth by type of ward, separately for each type of hospital (public/private) and each State/UT"
+  },
+  {
+    "indicator_code": 45,
+    "name": "Average medical and non-medical expenditure (Rs.) per hospitalised childbirth during last 365 days – and break-up of medical expenditure – separately for public and private hospitals and for each quintile class of MPCE",
+    "description": "Average medical and non-medical expenditure (Rs.) per hospitalised childbirth during last 365 days – and break-up of medical expenditure – separately for public and private hospitals and for each quintile class of MPCE"
+  },
+  {
+    "indicator_code": 46,
+    "name": "Average medical and non-medical expenditure (Rs.) per hospitalised childbirth during last 365 days – and break- up of medical expenditure – separately for public hospitals",
+    "description": "Average medical and non-medical expenditure (Rs.) per hospitalised childbirth during last 365 days – and break- up of medical expenditure – separately for public hospitals"
+  }
+]

@@ -93,6 +93,7 @@ class MoSPI:
             "UDISE": "/api/udise/getUdiseRecords",
             "MNRE": "/api/mnre/getDataByEnergy",
             "NSS74": "/api/nss-74/getNss74Records",
+            "NSS71": "/api/nss-71/getNss71Records",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -1564,6 +1565,92 @@ class MoSPI:
             return response.json()
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
+
+    # =========================================================================
+    # NSS71 (NSS 71st Round - Social Consumption: Education and Health) Methods
+    # =========================================================================
+    @staticmethod
+    def _nss71_survey_for(indicator_code: int) -> Optional[int]:
+        """
+        Map NSS71 indicator_code to survey_code.
+
+        survey_code=1 -> Education indicators 1-12
+        survey_code=2 -> Health indicators 13-46
+        """
+        if 1 <= indicator_code <= 12:
+            return 1
+        if 13 <= indicator_code <= 46:
+            return 2
+        return None
+
+    def get_nss71_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS71 indicators from MoSPI API.
+
+        Returns all 46 indicators from NSS 71st Round — two survey modules combined:
+        - survey_code=1 (Education): 12 indicators on literacy, attendance,
+          enrolment, and education expenditure.
+        - survey_code=2 (Health): 34 indicators on hospitalisation, ailments,
+          medical expenditure, aged persons, and childbirth.
+        """
+        try:
+            resp1 = self.session.get(
+                f"{self.base_url}/api/nss-71/getIndicatorList",
+                params={"survey_code": 1},
+                timeout=30,
+            )
+            resp1.raise_for_status()
+            result = resp1.json()
+
+            resp2 = self.session.get(
+                f"{self.base_url}/api/nss-71/getIndicatorList",
+                params={"survey_code": 2},
+                timeout=30,
+            )
+            resp2.raise_for_status()
+            health = resp2.json().get("data", [])
+
+            result["data"] = result.get("data", []) + health
+            result["count"] = len(result["data"])
+            return result
+
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss71_filters(self, indicator_code: int, survey_code: Optional[int] = None) -> Dict[str, Any]:
+        """Fetch available NSS71 filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-46). 1-12 = Education, 13-46 = Health.
+            survey_code: Survey module (1=Education, 2=Health).
+                         Auto-derived from indicator_code if not supplied.
+        """
+        if survey_code is None:
+            survey_code = self._nss71_survey_for(indicator_code)
+            if survey_code is None:
+                return {
+                    "error": (
+                        f"Invalid indicator_code {indicator_code}. "
+                        "Valid ranges: 1-12 Education, 13-46 Health."
+                    ),
+                    "statusCode": False,
+                }
+
+        params = {"indicator_code": indicator_code, "survey_code": survey_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-71/getNss71FilterByIndicatorId",
+                params=params,
+                timeout=30,
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss71_data(self, params: Optional[Dict] = None) -> Dict[str, Any]:
+        """Fetch NSS71 records from MoSPI API."""
+        return self.get_data("NSS71", params)
 
     # =========================================================================
     # CPIALRL (CPI for Agricultural Labourers and Rural Labourers) Methods
