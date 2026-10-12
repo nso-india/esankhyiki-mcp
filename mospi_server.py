@@ -950,7 +950,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
                 pass
 
     # NSS74 drop Format/format, the swagger only documents lowercase xlsx format    
-    if dataset == "NSS74":
+    if dataset in ("NSS74", "NSS71"):
         transformed_filters.pop("Format", None)
         transformed_filters.pop("format", None)
 
