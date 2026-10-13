@@ -1,0 +1,57 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Households (in %) reporting expenditure, share of budget (in %) to total expenditure on transport and MPCE (in ₹) for different modes of transport",
+    "description": "Households (in %) reporting expenditure, share of budget (in %) to total expenditure on transport and MPCE (in ₹) for different modes of transport"
+  },
+  {
+    "indicator_code": 2,
+    "name": "MPCE (in ₹) on different modes of transport in different quintile UMPCE classes",
+    "description": "MPCE (in ₹) on different modes of transport in different quintile UMPCE classes"
+  },
+  {
+    "indicator_code": 3,
+    "name": "MPCE (in ₹), budget share (in %) and households (in %) reporting particular miscellaneous consumer services",
+    "description": "MPCE (in ₹), budget share (in %) and households (in %) reporting particular miscellaneous consumer services"
+  },
+  {
+    "indicator_code": 4,
+    "name": "MPCE (in ₹) on miscellaneous consumer services in last 30 days for each quintile class of UMPCE",
+    "description": "MPCE (in ₹) on miscellaneous consumer services in last 30 days for each quintile class of UMPCE"
+  },
+  {
+    "indicator_code": 5,
+    "name": "MPCE (in ₹) on services for each quintile class of UMPCE",
+    "description": "MPCE (in ₹) on services for each quintile class of UMPCE"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Budget-share (in %) of MPCE (in ₹) of different consumer services among total expenditure",
+    "description": "Budget-share (in %) of MPCE (in ₹) of different consumer services among total expenditure"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Households (in %) having NAE and acquiring major durable goods in the households having NAE and not having NAE",
+    "description": "Households (in %) having NAE and acquiring major durable goods in the households having NAE and not having NAE"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Households (in %) acquiring major durable goods and their percentage distribution in the households having NAE and not having NAE",
+    "description": "Households (in %) acquiring major durable goods and their percentage distribution in the households having NAE and not having NAE"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Average MPCE (in ₹) and budget-share(in %) on different broad groups of durable goods in last 365 days having NAE",
+    "description": "Average MPCE (in ₹) and budget-share(in %) on different broad groups of durable goods in last 365 days having NAE"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Expenditure (%) on broad durable goods acquired in last 365 days among the households having NAE",
+    "description": "Expenditure (%) on broad durable goods acquired in last 365 days among the households having NAE"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Average MPCE (in ₹) on different durable goods",
+    "description": "Average MPCE (in ₹) on different durable goods"
+  }
+]

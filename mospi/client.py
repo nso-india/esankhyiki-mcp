@@ -94,6 +94,7 @@ class MoSPI:
             "MNRE": "/api/mnre/getDataByEnergy",
             "NSS74": "/api/nss-74/getNss74Records",
             "NSS71": "/api/nss-71/getNss71Records",
+            "NSS72": "/api/nss-72/getNss72HesdgRecords",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -1651,6 +1652,59 @@ class MoSPI:
     def get_nss71_data(self, params: Optional[Dict] = None) -> Dict[str, Any]:
         """Fetch NSS71 records from MoSPI API."""
         return self.get_data("NSS71", params)
+
+    
+    # =========================================================================
+    # NSS72 (NSS 72nd Round - Household Expenditure on Services and Durable Goods) Methods
+    # =========================================================================
+
+    def get_nss72_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS72 indicators from MoSPI API.
+
+        Returns 11 indicators (1-11). All-India level only (state_ut_code=99).
+        There is no survey_code for this dataset.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-72/getIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss72_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available NSS72 filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-11)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-72/getNss72FilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss72_data(self, params: Optional[Dict] = None) -> Dict[str, Any]:
+        """Fetch NSS72 records from MoSPI API.
+
+        Args:
+            params: indicator_code (required, 1-11), plus optional filters:
+                state_ut_code, sector_code, mode_of_transport_code,
+                quintile_class_code, services_code, expenditure_component_code,
+                durable_goods_group_code, main_use_code,
+                average_mpce_of_households_code, type_of_households_code,
+                limit, page, format.
+        """
+        return self.get_data("NSS72", params)
 
     # =========================================================================
     # CPIALRL (CPI for Agricultural Labourers and Rural Labourers) Methods
