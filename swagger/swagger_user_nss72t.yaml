@@ -8,7 +8,7 @@ tags:
 - name: NSS72T
   description: National Sample Survey 72 - Domestic Tourism Expenditure in India (July 2014 - June 2015)
 paths:
-  /api/nss-72/getNss72TourismRecords:
+  /api/nss-72t/getNss72TourismRecords:
     get:
       tags:
       - NSS72T
