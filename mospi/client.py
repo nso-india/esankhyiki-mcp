@@ -1666,7 +1666,7 @@ class MoSPI:
         """
         try:
             response = self.session.get(
-                f"{self.base_url}/api/nss-72/getIndicatorList",
+                f"{self.base_url}/api/nss-72/getNss72HesdgFiltersByIndicatorCode",
                 timeout=30
             )
             response.raise_for_status()
@@ -1684,7 +1684,7 @@ class MoSPI:
 
         try:
             response = self.session.get(
-                f"{self.base_url}/api/nss-72/getNss72FilterByIndicatorId",
+                f"{self.base_url}/api/nss-72/getNss72HesdgFiltersByIndicatorCode",
                 params=params,
                 timeout=30
             )

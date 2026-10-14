@@ -8,7 +8,7 @@ tags:
 - name: NSS72_HESDG
   description: National Sample Survey 72 - Household Expenditure on Services and Durable Goods
 paths:
-  /api/nss-72-hesdg/getNss72HesdgRecords:
+  /api/nss-72/getNss72HesdgRecords:
     get:
       tags:
       - NSS72_HESDG
