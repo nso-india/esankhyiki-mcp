@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- NSS72T (NSS 72nd Round - Domestic Tourism Expenditure in India) with 37 indicators (July 2014 - June 2015): overnight trips by religion, social group, household type, leading purpose, quintile class, month, age group, education, activity status, nights spent, mode of travel, type of stay and destination; same-day trips; and average expenditure per trip. No survey_code; state_code=36 is All India. Filters are indicator-specific.
+
+### Changed
+- Total datasets: 30 → 31 (NSS72T)
+
+### Added
 - NSS72 (NSS 72nd Round - Household Expenditure on Services and Durable Goods) with 11 indicators: expenditure on transport and miscellaneous consumer services by quintile class of UMPCE (indicators 1-6), and acquisition of major durable goods by group and main use (indicators 7-11). All-India level only (state_ut_code=99); no survey_code.
 
 ### Changed
