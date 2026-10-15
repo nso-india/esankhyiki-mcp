@@ -1652,8 +1652,7 @@ class MoSPI:
     def get_nss71_data(self, params: Optional[Dict] = None) -> Dict[str, Any]:
         """Fetch NSS71 records from MoSPI API."""
         return self.get_data("NSS71", params)
-
-    
+  
     # =========================================================================
     # NSS72 (NSS 72nd Round - Household Expenditure on Services and Durable Goods) Methods
     # =========================================================================
@@ -1666,7 +1665,7 @@ class MoSPI:
         """
         try:
             response = self.session.get(
-                f"{self.base_url}/api/nss-72/getNss72HesdgFiltersByIndicatorCode",
+                f"{self.base_url}/api/nss-72/getNss72HesdgIndicatorList",
                 timeout=30
             )
             response.raise_for_status()

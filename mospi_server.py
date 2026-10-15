@@ -840,7 +840,10 @@ def get_metadata(
                 "survey_code is required by the data API. 1=Social Consumption: Education (indicators 1-12), "
                 "2=Social Consumption: Health (indicators 13-46). "
                 "Auto-derived from indicator_code if omitted. state_code=37 is All India."
-            )
+                )
+            result["next_step"] = _next
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, survey_code=survey_code)
+        
         elif dataset == "NSS72":
             if indicator_code is None:
                 return {"error": "indicator_code is required for NSS72. Valid range: 1-11."}
@@ -851,9 +854,8 @@ def get_metadata(
                 "state_ut_code=99 is All India (the only value available). Each indicator supports only "
                 "a specific subset of filters, so combining filters across indicators returns no data."
             )
-            
             result["next_step"] = _next
-            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, survey_code=survey_code)        
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)        
 
         else:
             return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
