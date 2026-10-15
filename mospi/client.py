@@ -95,6 +95,7 @@ class MoSPI:
             "NSS74": "/api/nss-74/getNss74Records",
             "NSS71": "/api/nss-71/getNss71Records",
             "NSS72": "/api/nss-72/getNss72HesdgRecords",
+            "NSS72T":"/api/nss-72t/getNss72TourismRecords",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
