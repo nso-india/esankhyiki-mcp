@@ -92,7 +92,9 @@ This server provides AI-ready access to official Indian government statistics th
 |      31 |  **NSS74**   | NSS 74th Round – Services Sector Enterprises | Service sector enterprises, registration status, establishments by activity, ICT use, workers per establishment, value per establishment, structural ratios |                                                                        |  
 |      32 |   **NSS71** | NSS 71st Round – Social Consumption: Education in India                     | Literacy rate, completed level of education, dropout/never-enrolled, attendance and enrolment status, GAR/NAR, general vs technical/vocational education, expenditure per student |
 |      33 |   **NSS71H** | NSS 71st Round – Social Consumption: Health in India                        | Hospitalisation cases by age-group/social group/religion/ailment, hospital type and ward distribution, medical expenditure, aged persons' economic independence and mobility, childbirth hospitalisation |
-|      34 |  **ISP**     | Index of Service Production                                                  | Services sector growth, monthly services output, sub-sector indices                                                                            |
+|      34 |  **NSS72**   | NSS 72nd Round – Household Expenditure on Services and Durable Goods        | Household expenditure on transport and miscellaneous consumer services, durable goods acquisition, MPCE, budget share, households having NAE, quintile class of UMPCE |
+|      35 |  **ISP**     | Index of Service Production                                                  | Services sector growth, monthly services output, sub-sector indices                                                                            |
+
 
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
 

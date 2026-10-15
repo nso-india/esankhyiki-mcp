@@ -1,0 +1,112 @@
+openapi: 3.0.1
+info:
+  title: "NSS 72: Household Expenditure on Services and Durable Goods"
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in
+tags:
+- name: NSS72_HESDG
+  description: National Sample Survey 72 - Household Expenditure on Services and Durable Goods
+paths:
+  /api/nss-72/getNss72HesdgRecords:
+    get:
+      tags:
+      - NSS72_HESDG
+      operationId: NSS72HesdgIndicatorValues
+      description: |
+        - **Required:** `indicator_code`
+        - **Filters (optional):** state_ut_code, sector_code, mode_of_transport_code, quintile_class_code, services_code, expenditure_component_code, durable_goods_group_code, main_use_code, average_mpce_of_households_code, type_of_households_code
+      parameters:
+        - in: query
+          name: indicator_code
+          required: true
+          schema: { type: integer, minimum: 1, maximum: 11 }
+          description: Enter The Indicator code (1 - 11)
+        - in: query
+          name: state_ut_code
+          schema: { type: integer, enum: [99] }
+          description: Enter The State UT code (99 = All India)
+        - in: query
+          name: sector_code
+          schema: { type: integer, enum: [1, 2, 3] }
+          description: Enter The Sector code (1 = Rural; 2 = Urban; 3 = Combined)
+        - in: query
+          name: mode_of_transport_code
+          schema: { type: integer, enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }
+          description: Enter The Mode Of Transport code (1-10)
+        - in: query
+          name: quintile_class_code
+          schema: { type: integer, enum: [1, 2, 3, 4, 5, 6] }
+          description: Enter The Quintile Class code (1-6)
+        - in: query
+          name: services_code
+          schema: { type: integer, enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19] }
+          description: Enter The Services code (1-19)
+        - in: query
+          name: expenditure_component_code
+          schema: { type: integer, enum: [1, 2, 3] }
+          description: Enter The Expenditure Component code (1 = MPCE (₹); 2 = Budget share (%); 3 = Percentage of households reporting)
+        - in: query
+          name: durable_goods_group_code
+          schema: { type: integer, enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
+          description: Enter The Durable Goods Group code (1-14)
+        - in: query
+          name: main_use_code
+          schema: { type: integer, enum: [1, 2, 3] }
+          description: Enter The Main Use code (1 = Enterprise; 2 = Domestic; 3 = Total)
+        - in: query
+          name: average_mpce_of_households_code
+          schema: { type: integer, enum: [1, 2, 3] }
+          description: Enter The Average MPCE Of Households code (1 = Having NAE; 2 = Not having NAE; 3 = Total)
+        - in: query
+          name: type_of_households_code
+          schema: { type: integer, enum: [1, 2, 3, 4, 5, 6, 7] }
+          description: Enter The Type Of Households code (1-7)
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1 }
+        - in: query
+          name: format
+          schema:
+            type: string
+          description: Set to `xlsx` to download as excel
+      responses:
+        "200":
+          description: A JSON array of records
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: "2.0"

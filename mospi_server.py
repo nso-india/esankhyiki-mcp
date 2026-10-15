@@ -98,7 +98,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74", "NSS71"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74", "NSS71", "NSS72"
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -135,12 +135,13 @@ DATASET_SWAGGER = {
     "NSS73": ("swagger_user_nss73.yaml", "/api/nss-73/getNss73Records"),
     "NSS74": ("swagger_user_nss74.yaml", "/api/nss-74/getNss74Records"),
     "NSS71": ("swagger_user_nss71.yaml", "/api/nss-71/getNss71Records"),
+    "NSS72": ("swagger_user_nss72.yaml", "/api/nss-72/getNss72HesdgRecords"),
 }
 
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74","NSS71"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74","NSS71","NSS72"
 ]
 
 
@@ -324,7 +325,7 @@ def get_indicators(
     Args:
         dataset: Dataset name ΓÇö one of: PLFS, CPI, IIP, ISP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
-                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74.
+                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72.
                  For CPI, IIP, ISP, WPI: returns available base years and frequencies.
         user_query: The user's original question. Captured for telemetry analytics; not echoed back in the response.
 
@@ -364,6 +365,7 @@ def get_indicators(
         "NSS73": mospi.get_nss73_indicators,
         "NSS74": mospi.get_nss74_indicators,
         "NSS71": mospi.get_nss71_indicators,
+        "NSS72": mospi.get_nss72_indicators,
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
         "IIP": mospi.get_iip_base_years,
@@ -422,7 +424,7 @@ def get_metadata(
     Args:
         dataset: Dataset name (same values as get_indicators).
         indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
-                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74.
+                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72.
                         Not applicable for: CPI, IIP, ISP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
         state_code: For NAS only — required when indicator_code is 23-34
@@ -838,9 +840,22 @@ def get_metadata(
                 "survey_code is required by the data API. 1=Social Consumption: Education (indicators 1-12), "
                 "2=Social Consumption: Health (indicators 13-46). "
                 "Auto-derived from indicator_code if omitted. state_code=37 is All India."
+                )
+            result["next_step"] = _next
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, survey_code=survey_code)
+        
+        elif dataset == "NSS72":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for NSS72. Valid range: 1-11."}
+            result = mospi.get_nss72_filters(indicator_code=indicator_code)
+            result["api_params"] = get_swagger_param_definitions("NSS72")
+            result["parameter_notes"] = (
+                "NSS72 (Household Expenditure on Services and Durable Goods) has no survey_code. "
+                "state_ut_code=99 is All India (the only value available). Each indicator supports only "
+                "a specific subset of filters, so combining filters across indicators returns no data."
             )
             result["next_step"] = _next
-            return _check_empty_metadata(result, dataset, indicator_code=indicator_code, survey_code=survey_code)        
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)        
 
         else:
             return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
@@ -866,7 +881,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY,
                  AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
-                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74).
+                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72).
                  CPI auto-routes to Group or Item endpoint based on
                  whether filters contain item_code.
                  IIP uses a single endpoint; pass frequency="Annually" or
@@ -928,6 +943,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         "NSS73": "NSS73",
         "NSS74": "NSS74",
         "NSS71": "NSS71",
+        "NSS72": "NSS72",
     }
 
     api_dataset = dataset_map.get(dataset)
@@ -950,7 +966,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
                 pass
 
     # NSS74 drop Format/format, the swagger only documents lowercase xlsx format    
-    if dataset in ("NSS74", "NSS71"):
+    if dataset in ("NSS74", "NSS71", "NSS72"):
         transformed_filters.pop("Format", None)
         transformed_filters.pop("format", None)
 
@@ -1085,7 +1101,7 @@ def list_datasets() -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 29,
+        "total_datasets": 30,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -1231,6 +1247,11 @@ def list_datasets() -> dict:
                 "name": "NSS71 (71st Round - Social Consumption: Education and Health in India)",
                 "description": "46 indicators from the NSS 71st Round (Jan-Jun 2014) across two survey modules. Education module (survey_code=1, indicators 1-12): literacy rate, completed level of education, dropout/never-enrolled, current attendance and enrolment status, Gross/Net Attendance Ratio, general vs technical/vocational education, and average expenditure per student by course type and item of expenditure. Health module (survey_code=2, indicators 13-46): hospitalisation cases per 100,000 persons by age-group/social group/religion/ailment category, distribution by hospital type/ward/treatment, medical expenditure for hospitalised and non-hospitalised treatment, aged persons by economic independence and mobility, and childbirth-related hospitalisation. state_code=37 is All India.",
                 "use_for": "Literacy, school attendance and enrolment, education expenditure, hospitalisation rates, ailment types, medical expenditure, aged persons' economic independence and mobility, childbirth hospitalisation. survey_code is required (1=Education, 2=Health) but is auto-derived from indicator_code if omitted."
+            },
+            "NSS72": {
+                "name": "NSS72 (72nd Round - Household Expenditure on Services and Durable Goods)",
+                "description": "11 indicators from the NSS 72nd Round on household expenditure on services and durable goods, at All-India level (state_ut_code=99) for rural, urban and combined sectors. Services: households reporting expenditure, budget share and MPCE on transport (by mode of transport) and on miscellaneous consumer services, by quintile class of UMPCE (indicators 1-6). Durable goods: households acquiring major durable goods (with and without NAE), MPCE and budget share by broad group of durable goods and main use (enterprise/domestic), and MPCE on different durable goods (indicators 7-11).",
+                "use_for": "Household expenditure on transport, modes of transport, miscellaneous consumer services, durable goods (transport equipment, kitchen equipment, IT and communication devices, furniture, jewellery), MPCE, budget share, households having NAE (Non-Agricultural Enterprise), quintile class of UMPCE. Note: each indicator supports only a specific subset of filters (for example mode_of_transport_code applies to indicators 1-2 only, durable_goods_group_code to indicators 9-11 only), so combining filters across indicators returns no data."
             },                        
         },
         "workflow": [
@@ -1250,7 +1271,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.3 with OpenTelemetry")
-    log("Datasets: 29 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71)")
+    log("Datasets: 30 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")

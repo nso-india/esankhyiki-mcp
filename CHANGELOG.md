@@ -5,11 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
+
+### Added
+- NSS72 (NSS 72nd Round - Household Expenditure on Services and Durable Goods) with 11 indicators: expenditure on transport and miscellaneous consumer services by quintile class of UMPCE (indicators 1-6), and acquisition of major durable goods by group and main use (indicators 7-11). All-India level only (state_ut_code=99); no survey_code.
+
+### Changed
+- Total datasets: 29 → 30 (NSS72)
+
 ### Added
 - NSS71 (NSS 71st Round - Social Consumption: Education and Health in India) with 46 indicators across two modules: Education (survey_code=1, indicators 1-12) and Health (survey_code=2, indicators 13-46). survey_code is auto-derived from indicator_code if not passed. state_code=37 is All India.
 
+### Changed
+- Total datasets: 28 → 29 (NSS71)
+
 ### Added
 - NSS74 (NSS 74th Round - Services Sector Enterprises in India) with 21 indicators (July 2016 - June 2017) from EC, BR and MCA frames: enterprise counts by registration status, establishments by broad activity code, months operated, ICT use, workers, value per establishment of selected characteristics, and structural/technical ratios. Filters are indicator-specific; state_code=37 is All India.
+
+### Changed
+- Total datasets: 27 → 28 (NSS74)
+
 
 ### Added
 - ENVSTATS: 2 new indicators on waste generation (codes 131-132), bringing the total from 124 to 126 active indicators.
