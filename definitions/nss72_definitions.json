@@ -2,56 +2,67 @@
   {
     "indicator_code": 1,
     "name": "Households (in %) reporting expenditure, share of budget (in %) to total expenditure on transport and MPCE (in ₹) for different modes of transport",
-    "description": "Households (in %) reporting expenditure, share of budget (in %) to total expenditure on transport and MPCE (in ₹) for different modes of transport"
+    "description": "Households (in %) reporting expenditure, share of budget (in %) to total expenditure on transport and MPCE (in ₹) for different modes of transport",
+    "specification": "Use this indicator when the query refers to rural and urban MPCE (₹), budget share (%) and share of households reporting spending, for each mode of transport (air, rail, bus/tram, taxi, auto rickshaw, etc.). Do not use this indicator for quintile-wise transport expenditure (use indicator 2) or non-transport services (use indicators 3, 4, 5 or 6)."
   },
   {
     "indicator_code": 2,
     "name": "MPCE (in ₹) on different modes of transport in different quintile UMPCE classes",
-    "description": "MPCE (in ₹) on different modes of transport in different quintile UMPCE classes"
+    "description": "MPCE (in ₹) on different modes of transport in different quintile UMPCE classes",
+    "specification": "Use this indicator when the query refers to rural and urban MPCE (₹) on each mode of transport across the five UMPCE quintile classes (0–20% to 80–100%). Do not use this indicator for overall transport MPCE, budget share or households reporting expenditure (use indicator 1)."
   },
   {
     "indicator_code": 3,
     "name": "MPCE (in ₹), budget share (in %) and households (in %) reporting particular miscellaneous consumer services",
-    "description": "MPCE (in ₹), budget share (in %) and households (in %) reporting particular miscellaneous consumer services"
+    "description": "MPCE (in ₹), budget share (in %) and households (in %) reporting particular miscellaneous consumer services",
+    "specification": "Use this indicator when the query refers to rural and urban MPCE (₹), budget share (%) and share of households reporting spending, for each miscellaneous consumer service (communication, barber and beauty, TV and radio, repair, religious services, etc.). Do not use this indicator for quintile-wise expenditure (use indicator 4 or 5), transport (use indicator 1 or 2) or budget share within total consumer services expenditure (use indicator 6)."
   },
   {
     "indicator_code": 4,
     "name": "MPCE (in ₹) on miscellaneous consumer services in last 30 days for each quintile class of UMPCE",
-    "description": "MPCE (in ₹) on miscellaneous consumer services in last 30 days for each quintile class of UMPCE"
+    "description": "MPCE (in ₹) on miscellaneous consumer services in last 30 days for each quintile class of UMPCE",
+    "specification": "Use this indicator when the query refers to rural and urban MPCE (₹) on each miscellaneous consumer service over the last 30 days, by UMPCE quintile class. Do not use this indicator for overall miscellaneous services expenditure, budget share or households reporting (use indicator 3) or repair, hotel lodging and hotel food (use indicator 5)."
   },
   {
     "indicator_code": 5,
     "name": "MPCE (in ₹) on services for each quintile class of UMPCE",
-    "description": "MPCE (in ₹) on services for each quintile class of UMPCE"
+    "description": "MPCE (in ₹) on services for each quintile class of UMPCE",
+    "specification": "Use this indicator when the query refers to rural and urban MPCE (₹) on repair and maintenance of selected items and hotel lodging, and on food in hotels, by UMPCE quintile class and overall. Do not use this indicator for miscellaneous consumer services by quintile (use indicator 4) or budget share of services (use indicator 6)."
   },
   {
     "indicator_code": 6,
     "name": "Budget-share (in %) of MPCE (in ₹) of different consumer services among total expenditure",
-    "description": "Budget-share (in %) of MPCE (in ₹) of different consumer services among total expenditure"
+    "description": "Budget-share (in %) of MPCE (in ₹) of different consumer services among total expenditure",
+    "specification": "Use this indicator when the query refers to rural and urban MPCE (₹) and budget share (%) of each consumer service (transport, hotel food, lodging and repair, and other services) within total expenditure on consumer services. Do not use this indicator for mode-wise transport details (use indicator 1) or quintile-wise expenditure (use indicators 2, 4 or 5)."
   },
   {
     "indicator_code": 7,
     "name": "Households (in %) having NAE and acquiring major durable goods in the households having NAE and not having NAE",
-    "description": "Households (in %) having NAE and acquiring major durable goods in the households having NAE and not having NAE"
+    "description": "Households (in %) having NAE and acquiring major durable goods in the households having NAE and not having NAE",
+    "specification": "Use this indicator when the query refers to rural and urban share of households with a non-agricultural enterprise (NAE), and the share acquiring major durable goods among households with and without an NAE. Do not use this indicator for the distribution of acquiring households by UMPCE class (use indicator 8) or expenditure on durable goods (use indicators 9, 10 or 11)."
   },
   {
     "indicator_code": 8,
     "name": "Households (in %) acquiring major durable goods and their percentage distribution in the households having NAE and not having NAE",
-    "description": "Households (in %) acquiring major durable goods and their percentage distribution in the households having NAE and not having NAE"
+    "description": "Households (in %) acquiring major durable goods and their percentage distribution in the households having NAE and not having NAE",
+    "specification": "Use this indicator when the query refers to share of households acquiring major durable goods by UMPCE class, and the split of acquiring households between those with and without an NAE, for rural and urban areas. Do not use this indicator for the share of households having NAE (use indicator 7) or expenditure on durable goods (use indicators 9, 10 or 11)."
   },
   {
     "indicator_code": 9,
     "name": "Average MPCE (in ₹) and budget-share(in %) on different broad groups of durable goods in last 365 days having NAE",
-    "description": "Average MPCE (in ₹) and budget-share(in %) on different broad groups of durable goods in last 365 days having NAE"
+    "description": "Average MPCE (in ₹) and budget-share(in %) on different broad groups of durable goods in last 365 days having NAE",
+    "specification": "Use this indicator when the query refers to rural and urban MPCE (₹) and budget share (%) on broad groups of durable goods bought over the last 365 days by NAE households, split by main use (enterprise vs domestic). Do not use this indicator for the enterprise versus domestic percentage split (use indicator 10) or households without NAE (use indicator 11)."
   },
   {
     "indicator_code": 10,
     "name": "Expenditure (%) on broad durable goods acquired in last 365 days among the households having NAE",
-    "description": "Expenditure (%) on broad durable goods acquired in last 365 days among the households having NAE"
+    "description": "Expenditure (%) on broad durable goods acquired in last 365 days among the households having NAE",
+    "specification": "Use this indicator when the query refers to percentage split of spending on each broad durable-goods group between enterprise and domestic use among NAE households, for rural and urban areas. Do not use this indicator for average MPCE or budget share in rupees (use indicator 9 or 11)."
   },
   {
     "indicator_code": 11,
     "name": "Average MPCE (in ₹) on different durable goods",
-    "description": "Average MPCE (in ₹) on different durable goods"
+    "description": "Average MPCE (in ₹) on different durable goods",
+    "specification": "Use this indicator when the query refers to average MPCE (₹) on each broad durable-goods group, for households with an NAE, without an NAE and all households, for rural, urban and combined areas. Do not use this indicator for enterprise versus domestic use (use indicators 9 or 10) or households acquiring durable goods (use indicators 7 or 8)."
   }
 ]
