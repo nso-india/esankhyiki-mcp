@@ -283,7 +283,7 @@ async def test_list_tools(mcp_target):
 
 
 async def test_list_datasets(mcp_target):
-    """list_datasets: API overview returns all 30 datasets and workflow instructions."""
+    """list_datasets: API overview returns all 31 datasets and workflow instructions."""
     data = await call(mcp_target, "list_datasets", {})
     assert isinstance(data, dict)
     assert "datasets" in data

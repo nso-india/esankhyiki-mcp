@@ -1117,7 +1117,7 @@ def list_datasets() -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 30,
+        "total_datasets": 31,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
