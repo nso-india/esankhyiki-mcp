@@ -98,7 +98,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74", "NSS71", "NSS72"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74", "NSS71", "NSS72", "NSS72T"
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -136,12 +136,13 @@ DATASET_SWAGGER = {
     "NSS74": ("swagger_user_nss74.yaml", "/api/nss-74/getNss74Records"),
     "NSS71": ("swagger_user_nss71.yaml", "/api/nss-71/getNss71Records"),
     "NSS72": ("swagger_user_nss72.yaml", "/api/nss-72/getNss72HesdgRecords"),
+    "NSS72T": ("swagger_user_nss72t.yaml", "/api/nss-72t/getNss72TourismRecords"),
 }
 
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74","NSS71","NSS72"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74","NSS71","NSS72","NSS72T"
 ]
 
 
@@ -325,7 +326,7 @@ def get_indicators(
     Args:
         dataset: Dataset name ΓÇö one of: PLFS, CPI, IIP, ISP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
-                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72.
+                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T.
                  For CPI, IIP, ISP, WPI: returns available base years and frequencies.
         user_query: The user's original question. Captured for telemetry analytics; not echoed back in the response.
 
@@ -366,6 +367,7 @@ def get_indicators(
         "NSS74": mospi.get_nss74_indicators,
         "NSS71": mospi.get_nss71_indicators,
         "NSS72": mospi.get_nss72_indicators,
+        "NSS72T": mospi.get_nss72t_indicators,
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
         "IIP": mospi.get_iip_base_years,
@@ -424,7 +426,7 @@ def get_metadata(
     Args:
         dataset: Dataset name (same values as get_indicators).
         indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
-                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72.
+                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T.
                         Not applicable for: CPI, IIP, ISP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
         state_code: For NAS only — required when indicator_code is 23-34
@@ -855,7 +857,20 @@ def get_metadata(
                 "a specific subset of filters, so combining filters across indicators returns no data."
             )
             result["next_step"] = _next
-            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)        
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
+        
+        elif dataset == "NSS72T":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for NSS72T. Valid range: 1-37."}
+            result = mospi.get_nss72t_filters(indicator_code=indicator_code)
+            result["api_params"] = get_swagger_param_definitions("NSS72T")
+            result["parameter_notes"] = (
+                "NSS72T (Domestic Tourism Expenditure, July 2014 - June 2015) has no survey_code. "
+                "state_code=36 is All India. Each indicator supports only a specific subset of filters, "
+                "so combining filters across indicators returns no data."
+            )
+            result["next_step"] = _next
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)          
 
         else:
             return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
@@ -881,7 +896,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY,
                  AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
-                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72).
+                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T).
                  CPI auto-routes to Group or Item endpoint based on
                  whether filters contain item_code.
                  IIP uses a single endpoint; pass frequency="Annually" or
@@ -944,6 +959,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         "NSS74": "NSS74",
         "NSS71": "NSS71",
         "NSS72": "NSS72",
+        "NSS72T": "NSS72T",
     }
 
     api_dataset = dataset_map.get(dataset)
@@ -1252,7 +1268,13 @@ def list_datasets() -> dict:
                 "name": "NSS72 (72nd Round - Household Expenditure on Services and Durable Goods)",
                 "description": "11 indicators from the NSS 72nd Round on household expenditure on services and durable goods, at All-India level (state_ut_code=99) for rural, urban and combined sectors. Services: households reporting expenditure, budget share and MPCE on transport (by mode of transport) and on miscellaneous consumer services, by quintile class of UMPCE (indicators 1-6). Durable goods: households acquiring major durable goods (with and without NAE), MPCE and budget share by broad group of durable goods and main use (enterprise/domestic), and MPCE on different durable goods (indicators 7-11).",
                 "use_for": "Household expenditure on transport, modes of transport, miscellaneous consumer services, durable goods (transport equipment, kitchen equipment, IT and communication devices, furniture, jewellery), MPCE, budget share, households having NAE (Non-Agricultural Enterprise), quintile class of UMPCE. Note: each indicator supports only a specific subset of filters (for example mode_of_transport_code applies to indicators 1-2 only, durable_goods_group_code to indicators 9-11 only), so combining filters across indicators returns no data."
-            },                        
+            },
+            "NSS72T": {
+                "name": "NSS72T (72nd Round - Domestic Tourism Expenditure in India)",
+                "description": "37 indicators from the NSS 72nd Round (July 2014 - June 2015) on domestic tourism: overnight trips and same-day trips. Covers households reporting overnight trips by religion, social group and household type; trips by leading purpose, quintile class of UMPCE, number of members, month of start, age group, education level, activity status, nights spent, mode of travel, type of stay, type of trip and main destination; and average expenditure per trip by category, sub-category and quintile class. Both last-365-day and last-30-day reference periods. state_code=36 is All India.",
+                "use_for": "Domestic tourism, overnight trips, same-day trips, purpose of trip (leisure, business, religious, health, education), mode of travel, type of stay, nights spent, tourism expenditure per trip, package vs non-package trips, destination. Note: each indicator supports only a specific subset of filters, so combining filters across indicators returns no data."
+            },
+                                    
         },
         "workflow": [
             "1. list_datasets() ΓÇö identify the relevant dataset",
@@ -1271,7 +1293,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.3 with OpenTelemetry")
-    log("Datasets: 30 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72)")
+    log("Datasets: 31 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")
