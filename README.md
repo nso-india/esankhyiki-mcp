@@ -93,6 +93,7 @@ This server provides AI-ready access to official Indian government statistics th
 |      32 |   **NSS71** | NSS 71st Round – Social Consumption: Education in India                     | Literacy rate, completed level of education, dropout/never-enrolled, attendance and enrolment status, GAR/NAR, general vs technical/vocational education, expenditure per student |
 |      33 |   **NSS71H** | NSS 71st Round – Social Consumption: Health in India                        | Hospitalisation cases by age-group/social group/religion/ailment, hospital type and ward distribution, medical expenditure, aged persons' economic independence and mobility, childbirth hospitalisation |
 |      34 |  **NSS72**   | NSS 72nd Round – Household Expenditure on Services and Durable Goods        | Household expenditure on transport and miscellaneous consumer services, durable goods acquisition, MPCE, budget share, households having NAE, quintile class of UMPCE |
+|      35 | **NSS72T**   | NSS 72nd Round – Domestic Tourism Expenditure in India                      | Overnight and same-day trips, purpose of trip, mode of travel, type of stay, nights spent, tourism expenditure per trip, package vs non-package trips |
 |      35 |  **ISP**     | Index of Service Production                                                  | Services sector growth, monthly services output, sub-sector indices                                                                            |
 
 

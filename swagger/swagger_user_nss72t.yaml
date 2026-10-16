@@ -1,0 +1,165 @@
+openapi: 3.0.1
+info:
+  title: "NSS 72: Domestic Tourism Expenditure in India"
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in
+tags:
+- name: NSS72T
+  description: National Sample Survey 72 - Domestic Tourism Expenditure in India (July 2014 - June 2015)
+paths:
+  /api/nss-72t/getNss72TourismRecords:
+    get:
+      tags:
+      - NSS72T
+      operationId: NSS72TourismIndicatorValues
+      description: |
+        - **Required:** `indicator_code`
+        - **Filters (optional):** sector_code, state_code, religion_code, social_group_code, household_type_code, gender_code, visitors_purpose_code, age_group_code, education_level_code, activity_statuses_code, major_mode_travel_code, major_type_of_stay_code, avg_no_of_nights_spent_code, main_destination_code, leading_purpose_code, month_code, quintile_class_of_umpce_code, number_of_members_code, category_of_expenditure_code, sub_category_code, sub_sub_category_code, trip_type_code, number_of_trips_code
+        - **Note:** Each indicator supports only a specific subset of filters; combining filters across indicators returns no data.
+      parameters:
+        - in: query
+          name: indicator_code
+          required: true
+          schema: { type: integer, minimum: 1, maximum: 37 }
+          description: Enter The Indicator code (1 - 37)
+        - in: query
+          name: sector_code
+          schema: { type: integer, minimum: 1, maximum: 3 }
+          description: Enter The Sector code (1-3). Applies to indicator_code 1-37
+        - in: query
+          name: state_code
+          schema: { type: integer, minimum: 1, maximum: 38 }
+          description: Enter The State code (1-38). Applies to indicator_code 1-37
+        - in: query
+          name: religion_code
+          schema: { type: integer, minimum: 1, maximum: 6 }
+          description: Enter The Religion code (1-6). Applies to indicator_code 1
+        - in: query
+          name: social_group_code
+          schema: { type: integer, minimum: 1, maximum: 5 }
+          description: Enter The Social Group code (1-5). Applies to indicator_code 2
+        - in: query
+          name: household_type_code
+          schema: { type: integer, minimum: 1, maximum: 9 }
+          description: Enter The Household Type code (1-9). Applies to indicator_code 3
+        - in: query
+          name: gender_code
+          schema: { type: integer, minimum: 1, maximum: 4 }
+          description: Enter The Gender code (1-4). Applies to indicator_code 8-9,12-19,28-29
+        - in: query
+          name: visitors_purpose_code
+          schema: { type: integer, minimum: 1, maximum: 9 }
+          description: Enter The Visitors Purpose code (1-9). Applies to indicator_code 12-25
+        - in: query
+          name: age_group_code
+          schema: { type: integer, minimum: 1, maximum: 5 }
+          description: Enter The Age Group code (1-5). Applies to indicator_code 13,17
+        - in: query
+          name: education_level_code
+          schema: { type: integer, minimum: 1, maximum: 8 }
+          description: Enter The Education Level code (1-8). Applies to indicator_code 14,18
+        - in: query
+          name: activity_statuses_code
+          schema: { type: integer, minimum: 1, maximum: 10 }
+          description: Enter The Activity Statuses code (1-10). Applies to indicator_code 15,19
+        - in: query
+          name: major_mode_travel_code
+          schema: { type: integer, minimum: 1, maximum: 11 }
+          description: Enter The Major Mode Travel code (1-11). Applies to indicator_code 22-23
+        - in: query
+          name: major_type_of_stay_code
+          schema: { type: integer, minimum: 1, maximum: 7 }
+          description: Enter The Major Type Of Stay code (1-7). Applies to indicator_code 24-25
+        - in: query
+          name: avg_no_of_nights_spent_code
+          schema: { type: integer, minimum: 1, maximum: 7 }
+          description: Enter The Avg No Of Nights Spent code (1-7). Applies to indicator_code 20-21
+        - in: query
+          name: main_destination_code
+          schema: { type: integer, minimum: 1, maximum: 5 }
+          description: Enter The Main Destination code (1-5). Applies to indicator_code 28-29
+        - in: query
+          name: leading_purpose_code
+          schema: { type: integer, minimum: 1, maximum: 10 }
+          description: Enter The Leading Purpose code (1-10). Applies to indicator_code 4-11,26-27,30-37
+        - in: query
+          name: month_code
+          schema: { type: integer, minimum: 1, maximum: 13 }
+          description: Enter The Month code (1-13). Applies to indicator_code 10-11
+        - in: query
+          name: quintile_class_of_umpce_code
+          schema: { type: integer, minimum: 1, maximum: 6 }
+          description: Enter The Quintile Class Of UMPCE code (1-6). Applies to indicator_code 6-7,32-33,35
+        - in: query
+          name: number_of_members_code
+          schema: { type: integer, minimum: 1, maximum: 5 }
+          description: Enter The Number Of Members code (1-5). Applies to indicator_code 8-9
+        - in: query
+          name: category_of_expenditure_code
+          schema: { type: integer, minimum: 1, maximum: 2 }
+          description: Enter The Category Of Expenditure code (1-2). Applies to indicator_code 31,34
+        - in: query
+          name: sub_category_code
+          schema: { type: integer, minimum: 1, maximum: 8 }
+          description: Enter The Sub Category code (1-8). Applies to indicator_code 31,34
+        - in: query
+          name: sub_sub_category_code
+          schema: { type: integer, minimum: 1, maximum: 20 }
+          description: Enter The Sub Sub Category code (1-20). Applies to indicator_code 31
+        - in: query
+          name: trip_type_code
+          schema: { type: integer, minimum: 1, maximum: 3 }
+          description: Enter The Trip Type code (1-3). Applies to indicator_code 26-27
+        - in: query
+          name: number_of_trips_code
+          schema: { type: integer, minimum: 1, maximum: 2 }
+          description: Enter The Number Of Trips code (1-2). Applies to indicator_code 30
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1 }
+        - in: query
+          name: format
+          schema:
+            type: string
+          description: Set to `xlsx` to download as excel
+      responses:
+        "200":
+          description: A JSON array of records
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+            text/csv:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request body
+      security:
+      - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: "2.0"

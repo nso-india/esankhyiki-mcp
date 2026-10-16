@@ -1,0 +1,187 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Per 1000 distribution of households reporting overnight trips during last 365 days by religion",
+    "description": "Per 1000 distribution of households reporting overnight trips during last 365 days by religion"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Per 1000 distribution of households reporting overnight trips during last 365 days by social group",
+    "description": "Per 1000 distribution of households reporting overnight trips during last 365 days by social group"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Per 1000 distribution of households reporting overnight trips during last 365 days by household type",
+    "description": "Per 1000 distribution of households reporting overnight trips during last 365 days by household type"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Sample number of overnight trips by leading purpose completed during last 365 days",
+    "description": "Sample number of overnight trips by leading purpose completed during last 365 days"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Sample number of overnight trips by leading purpose completed during last 30 days",
+    "description": "Sample number of overnight trips by leading purpose completed during last 30 days"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Per 1000 distribution of overnight trips by quintile classes of UMPCE during last 365 days",
+    "description": "Per 1000 distribution of overnight trips by quintile classes of UMPCE during last 365 days"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Per 1000 distribution of overnight trips by quintile classes of UMPCE during last 30 days",
+    "description": "Per 1000 distribution of overnight trips by quintile classes of UMPCE during last 30 days"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Per 1000 distribution of overnight trips by number of members in the trip and percentage of female member trip in a single member trip completed during last 365 days",
+    "description": "Per 1000 distribution of overnight trips by number of members in the trip and percentage of female member trip in a single member trip completed during last 365 days"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Per 1000 distribution of overnight trips by number of members in the trip and percentage of female member trip in a single member trip completed during last 30 days",
+    "description": "Per 1000 distribution of overnight trips by number of members in the trip and percentage of female member trip in a single member trip completed during last 30 days"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Per 1000 distribution of overnight trips by starting month during last 365 days",
+    "description": "Per 1000 distribution of overnight trips by starting month during last 365 days"
+  },
+  {
+    "indicator_code": 11,
+    "name": "Per 1000 distribution of overnight trips by starting month during last 30 days",
+    "description": "Per 1000 distribution of overnight trips by starting month during last 30 days"
+  },
+  {
+    "indicator_code": 12,
+    "name": "Per 1000 distribution of overnight visitor trips during last 365 days",
+    "description": "Per 1000 distribution of overnight visitor trips during last 365 days"
+  },
+  {
+    "indicator_code": 13,
+    "name": "Per 1000 distribution of overnight visitor-trips completed during last 365 days by purpose of trip for different age-group",
+    "description": "Per 1000 distribution of overnight visitor-trips completed during last 365 days by purpose of trip for different age-group"
+  },
+  {
+    "indicator_code": 14,
+    "name": "Per 1000 distribution of overnight visitor-trips completed during last 365 days by purpose of trip for different educational levels",
+    "description": "Per 1000 distribution of overnight visitor-trips completed during last 365 days by purpose of trip for different educational levels"
+  },
+  {
+    "indicator_code": 15,
+    "name": "Per 1000 distribution of overnight visitor-trips completed during last 365 days by purpose of the trip for different activity statuses",
+    "description": "Per 1000 distribution of overnight visitor-trips completed during last 365 days by purpose of the trip for different activity statuses"
+  },
+  {
+    "indicator_code": 16,
+    "name": "Per 1000 distribution of overnight visitor-trips completed during last 30 days by purpose of trip",
+    "description": "Per 1000 distribution of overnight visitor-trips completed during last 30 days by purpose of trip"
+  },
+  {
+    "indicator_code": 17,
+    "name": "Per 1000 distribution of overnight visitor-trips completed during last 30 days by purpose of trip for different age-group",
+    "description": "Per 1000 distribution of overnight visitor-trips completed during last 30 days by purpose of trip for different age-group"
+  },
+  {
+    "indicator_code": 18,
+    "name": "Per 1000 distribution of overnight visitor-trips completed during last 30 days by purpose of trip for different educational levels",
+    "description": "Per 1000 distribution of overnight visitor-trips completed during last 30 days by purpose of trip for different educational levels"
+  },
+  {
+    "indicator_code": 19,
+    "name": "Per 1000 distribution of overnight visitor-trips completed during last 30 days by purpose of the trip for different activity statuses",
+    "description": "Per 1000 distribution of overnight visitor-trips completed during last 30 days by purpose of the trip for different activity statuses"
+  },
+  {
+    "indicator_code": 20,
+    "name": "Per 1000 distribution overnight visitor-trips by average number of nights spent in the trip (including journey) completed during last 365 days",
+    "description": "Per 1000 distribution overnight visitor-trips by average number of nights spent in the trip (including journey) completed during last 365 days"
+  },
+  {
+    "indicator_code": 21,
+    "name": "Per 1000 distribution of overnight visitor-trips by average number of nights spent in the trip (including journey) completed during last 30 days",
+    "description": "Per 1000 distribution of overnight visitor-trips by average number of nights spent in the trip (including journey) completed during last 30 days"
+  },
+  {
+    "indicator_code": 22,
+    "name": "Per 1000 distribution of overnight visitor-trips by major mode of travel for each visitor’s purpose completed during last 365 days",
+    "description": "Per 1000 distribution of overnight visitor-trips by major mode of travel for each visitor’s purpose completed during last 365 days"
+  },
+  {
+    "indicator_code": 23,
+    "name": "Per 1000 distribution of overnight visitor-trips by major mode of travel for each visitor’s purpose completed during last 30 days",
+    "description": "Per 1000 distribution of overnight visitor-trips by major mode of travel for each visitor’s purpose completed during last 30 days"
+  },
+  {
+    "indicator_code": 24,
+    "name": "Per 1000 distribution of overnight visitor-trips by major type of stay for each visitor’s purpose completed during last 365 days",
+    "description": "Per 1000 distribution of overnight visitor-trips by major type of stay for each visitor’s purpose completed during last 365 days"
+  },
+  {
+    "indicator_code": 25,
+    "name": "Per 1000 distribution of overnight visitor-trips by major type of stay for each visitor’s purpose completed during last 30 days",
+    "description": "Per 1000 distribution of overnight visitor-trips by major type of stay for each visitor’s purpose completed during last 30 days"
+  },
+  {
+    "indicator_code": 26,
+    "name": "Per 1000 distribution of overnight visitor-trips by type of trip during last 365 days",
+    "description": "Per 1000 distribution of overnight visitor-trips by type of trip during last 365 days"
+  },
+  {
+    "indicator_code": 27,
+    "name": "Per 1000 distribution of overnight visitor-trips by type of during last 30 days",
+    "description": "Per 1000 distribution of overnight visitor-trips by type of during last 30 days"
+  },
+  {
+    "indicator_code": 28,
+    "name": "Per 1000 distribution overnight visitor-trips completed during last 365 days by main destination of origin",
+    "description": "Per 1000 distribution overnight visitor-trips completed during last 365 days by main destination of origin"
+  },
+  {
+    "indicator_code": 29,
+    "name": "Per 1000 distribution of overnight visitor-trips completed during last 30 days by main destination of origin with leading purposes business, social, religious & pilgrimage, education & training and others",
+    "description": "Per 1000 distribution of overnight visitor-trips completed during last 30 days by main destination of origin with leading purposes business, social, religious & pilgrimage, education & training and others"
+  },
+  {
+    "indicator_code": 30,
+    "name": "No. of same-day trips by leading purpose completed during last 30 days",
+    "description": "No. of same-day trips by leading purpose completed during last 30 days"
+  },
+  {
+    "indicator_code": 31,
+    "name": "Average expenditure (in ₹) per overnight trip by categories of expenditure",
+    "description": "Average expenditure (in ₹) per overnight trip by categories of expenditure"
+  },
+  {
+    "indicator_code": 32,
+    "name": "Average expenditure (in ₹) per overnight trip by quintile class of UMPCE during last 365 days",
+    "description": "Average expenditure (in ₹) per overnight trip by quintile class of UMPCE during last 365 days"
+  },
+  {
+    "indicator_code": 33,
+    "name": "Average expenditure (in ₹) per overnight trip by quintile class of UMPCE during last 30 days",
+    "description": "Average expenditure (in ₹) per overnight trip by quintile class of UMPCE during last 30 days"
+  },
+  {
+    "indicator_code": 34,
+    "name": "Average expenditure (in ₹) per same-day trip during last 30 days",
+    "description": "Average expenditure (in ₹) per same-day trip during last 30 days"
+  },
+  {
+    "indicator_code": 35,
+    "name": "Average expenditure (in ₹) per same-day trip for each quintile class of UMPCE during last 30 days",
+    "description": "Average expenditure (in ₹) per same-day trip for each quintile class of UMPCE during last 30 days"
+  },
+  {
+    "indicator_code": 36,
+    "name": "Estimated number of overnight trips by leading purpose completed during last 365 days",
+    "description": "Estimated number of overnight trips by leading purpose completed during last 365 days"
+  },
+  {
+    "indicator_code": 37,
+    "name": "Estimated number of overnight trips by leading purpose completed during last 30 days",
+    "description": "Estimated number of overnight trips by leading purpose completed during last 30 days"
+  }
+]

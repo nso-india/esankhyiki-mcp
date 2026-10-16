@@ -95,6 +95,7 @@ class MoSPI:
             "NSS74": "/api/nss-74/getNss74Records",
             "NSS71": "/api/nss-71/getNss71Records",
             "NSS72": "/api/nss-72/getNss72HesdgRecords",
+            "NSS72T":"/api/nss-72t/getNss72TourismRecords",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -1704,6 +1705,63 @@ class MoSPI:
                 limit, page, format.
         """
         return self.get_data("NSS72", params)
+
+    # =========================================================================
+    # NSS72T (NSS 72nd Round - Domestic Tourism Expenditure) Methods
+    # =========================================================================
+
+    def get_nss72t_indicators(self) -> Dict[str, Any]:
+        """Fetch list of NSS72T indicators from MoSPI API.
+
+        Returns 37 indicators (1-37) on domestic tourism (July 2014 - June 2015).
+        There is no survey_code for this dataset.
+        """
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-72t/getNss72TourismIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss72t_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available NSS72T filters for given indicator.
+
+        Args:
+            indicator_code: Indicator code (1-37)
+        """
+        params = {"indicator_code": indicator_code}
+
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/nss-72t/getNss72TourismFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_nss72t_data(self, params: Optional[Dict] = None) -> Dict[str, Any]:
+        """Fetch NSS72T records from MoSPI API.
+
+        Args:
+            params: indicator_code (required, 1-37), plus optional filters:
+                sector_code, state_code, religion_code, social_group_code,
+                household_type_code, gender_code, visitors_purpose_code,
+                age_group_code, education_level_code, activity_statuses_code,
+                major_mode_travel_code, major_type_of_stay_code,
+                avg_no_of_nights_spent_code, main_destination_code,
+                leading_purpose_code, month_code, quintile_class_of_umpce_code,
+                number_of_members_code, category_of_expenditure_code,
+                sub_category_code, sub_sub_category_code, trip_type_code,
+                number_of_trips_code, limit, page, format.
+        """
+        return self.get_data("NSS72T", params)
+
 
     # =========================================================================
     # CPIALRL (CPI for Agricultural Labourers and Rural Labourers) Methods
