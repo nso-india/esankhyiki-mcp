@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
+### Fixed
+- PLFS quarterly (`frequency_code=2`) is now documented as indicators 1-4 (was 1-3), matching the production data and the `get_indicators` response. Updated in `mospi_server.py` (`get_indicators` docstring and PLFS `parameter_notes`) and `swagger_user_plfs.yaml`.
+- PLFS year formats corrected: quarterly uses plain calendar years `YYYY` (2018-2026), with available quarters listed (2018: 2,3,5; 2019-2024: 2,3,4,5; 2025: 2,3,5; 2026: 4,5). Annual covers financial years 2017-18 to 2023-24 (`year_type_code=1`) and calendar years 2022-2025 (`year_type_code=2`).
+- PLFS filter docs aligned with the data: `month_code` now includes March (3); `state_code` notes 22 states plus 99 for quarterly and 99 only for monthly; `education_code` is `0=All, 1-9` (there is no code 10); `broad_industry_work_code` and `nic_group_code` also apply to quarterly with `indicator_code=4`; `year_type_code` is NULL for quarterly rows.
+
 ### Added
 - NSS72T (NSS 72nd Round - Domestic Tourism Expenditure in India) with 37 indicators (July 2014 - June 2015): overnight trips by religion, social group, household type, leading purpose, quintile class, month, age group, education, activity status, nights spent, mode of travel, type of stay and destination; same-day trips; and average expenditure per trip. No survey_code; state_code=36 is All India. Filters are indicator-specific.
 

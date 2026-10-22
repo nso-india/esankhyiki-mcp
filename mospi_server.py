@@ -317,7 +317,7 @@ def get_indicators(
 
     For PLFS and ASUSE, indicators are grouped by frequency_code:
       - PLFS frequency_code=1 (Annual): all 8 indicators including wages
-      - PLFS frequency_code=2 (Quarterly): indicators 1-3 only
+      - PLFS frequency_code=2 (Quarterly): indicators 1-4 only
       - PLFS frequency_code=3 (Monthly): indicators 1-3 only
       frequency_code selects the indicator set, not time granularity.
 
@@ -456,7 +456,7 @@ def get_metadata(
 
     Returns:
         dict with 'filter_values' (valid codes for each parameter),
-        'api_params' (parameter definitions), and dataset-specific
+        'api_params' (parameter definitions), and dataset-specific  
         parameter documentation.
     """
     dataset = dataset.upper()
@@ -553,14 +553,15 @@ def get_metadata(
                 "api_params": get_swagger_param_definitions("PLFS"),
                 "parameter_notes": "frequency_code selects the indicator set, not time granularity. "
                          "indicator_code accepts a single integer only; comma-separated values cause a 500 error. "
-                         "frequency_code=1 (Annual, 2017-18 to 2023-24): indicators 1=LFPR, 2=WPR, 3=UR, "
+                         "frequency_code=1 (Annual: financial years 2017-18 to 2023-24 with year_type_code=1, calendar years 2022 to 2025 with year_type_code=2): indicators 1=LFPR, 2=WPR, 3=UR, "
                          "4=Worker distribution, 5=Employment conditions, 6=Salaried wages, 7=Casual wages, "
-                         "8=Self-employment earnings. Year format: YYYY-YY (e.g. 2023-24). "
-                         "frequency_code=2 (Quarterly bulletin, 2017-18 to 2025-26): indicators 1-3 only. "
-                         "Year format: YYYY-YY. quarter_code: 2=JUL-SEP, 3=OCT-DEC, 4=JAN-MAR, 5=APR-JUN. "
-                         "frequency_code=3 (Monthly, 2025 onwards): indicators 1-3 only. "
+                         "8=Self-employment earnings. Year format: YYYY-YY (e.g. 2023-24) or YYYY for calendar years. "
+                         "frequency_code=2 (Quarterly bulletin, calendar years 2018 to 2026): indicators 1-4 only. "
+                         "Year format: plain YYYY (e.g. 2024). quarter_code: 2=JUL-SEP, 3=OCT-DEC, 4=JAN-MAR, 5=APR-JUN. "
+                         "Available quarters: 2018 [2,3,5], 2019-2024 [2,3,4,5], 2025 [2,3,5], 2026 [4,5]. "
+                         "frequency_code=3 (Monthly, Apr 2025 to Sep 2026, All India only): indicators 1-3 only. "
                          "Year format: YYYY (e.g. 2025). "
-                         "year_type_code: 1=Agriculture Year (financial year YYYY-YY), 2=Calendar Year (YYYY). "
+                         "year_type_code: 1=Agriculture Year (financial year YYYY-YY), 2=Calendar Year (YYYY); applies to annual data (NULL for quarterly rows). "
                          "state_code=99 for All India; omitting state_code returns all states.",
                 "next_step": _next,
             }
