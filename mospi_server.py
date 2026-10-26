@@ -2,7 +2,16 @@ import sys
 import os
 import json
 import yaml
-from typing import Dict, Any, Optional
+from datetime import datetime, timezone
+from typing import Annotated, Dict, Any, Optional
+from urllib.parse import quote
+from uuid import uuid4
+
+import requests
+from google.auth.exceptions import GoogleAuthError
+from google.auth.transport.requests import AuthorizedSession
+from google.oauth2 import service_account
+from pydantic import Field
 from fastmcp import FastMCP
 from mospi.client import mospi
 from observability.telemetry import TelemetryMiddleware
@@ -1285,6 +1294,67 @@ def list_datasets() -> dict:
         ],
         "next_step": "get_indicators(dataset) to list available indicators for the chosen dataset."
     }
+
+@mcp.tool(
+    name="submit_feedback",
+    title="Submit Feedback",
+    annotations={"readOnlyHint": False, "destructiveHint": False,
+                 "idempotentHint": False, "openWorldHint": True},
+)
+def submit_feedback(
+    feedback: Annotated[str, Field(min_length=1, max_length=5000)],
+    tool_name: Annotated[str, Field(max_length=100)] = "",
+    dataset: Annotated[str, Field(max_length=50)] = "",
+) -> dict:
+    """Report an MCP issue, confusing result, or improvement to the maintainers.
+
+    Call when you encounter a problem using this server. Describe what you tried,
+    the relevant filters, the error or unexpected result, and what you expected.
+    Include tool_name and dataset when relevant. Omit secrets, personal data,
+    and conversation history. Submit each issue once, not after every tool call.
+
+    Feedback is saved to the maintainer's Google Sheet, outside the data workflow.
+    Only status='saved' confirms storage. Do not automatically retry an
+    unconfirmed submission, because it may already have been saved.
+    """
+    feedback = feedback.strip()
+    if not feedback:
+        return {"error": "Feedback must contain a description of the issue."}
+
+    sheet_id = os.environ.get("FEEDBACK_SPREADSHEET_ID")
+    credentials_file = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+    if not sheet_id or not credentials_file:
+        return {"error": "Feedback storage is not configured. Ask the maintainer to set "
+                         "FEEDBACK_SPREADSHEET_ID and GOOGLE_APPLICATION_CREDENTIALS."}
+
+    try:
+        credentials = service_account.Credentials.from_service_account_file(
+            credentials_file, scopes=["https://www.googleapis.com/auth/spreadsheets"]
+        )
+    except (OSError, ValueError, GoogleAuthError):
+        return {"error": "Feedback credentials could not be loaded. Contact the maintainer."}
+
+    feedback_id = str(uuid4())
+    row = [feedback_id, datetime.now(timezone.utc).isoformat(), tool_name, dataset, feedback]
+    url = (f"https://sheets.googleapis.com/v4/spreadsheets/{quote(sheet_id, safe='')}"
+           "/values/Feedback!A:E:append")
+    try:
+        with AuthorizedSession(credentials, refresh_timeout=10) as session:
+            response = session.post(
+                url,
+                params={"valueInputOption": "RAW", "insertDataOption": "INSERT_ROWS"},
+                json={"values": [row]},
+                timeout=10,
+            )
+            response.raise_for_status()
+            if response.json().get("updates", {}).get("updatedRows") == 1:
+                return {"status": "saved", "feedback_id": feedback_id}
+    except (requests.RequestException, GoogleAuthError, ValueError):
+        pass
+    return {"status": "unconfirmed", "feedback_id": feedback_id,
+            "error": "Could not confirm feedback was saved. Do not retry automatically. "
+                     "Ask the maintainer to check this feedback_id in the sheet."}
+
 
 if __name__ == "__main__":
 

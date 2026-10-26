@@ -252,6 +252,7 @@ EXPECTED_TOOLS = {
     "get_indicators",
     "get_metadata",
     "get_data",
+    "submit_feedback",
 }
 
 EXPECTED_DATASETS = {
@@ -265,12 +266,12 @@ _INTERNAL_KEYS = {"user_query", "next_step", "related_datasets"}
 
 
 # ---------------------------------------------------------------------------
-# Tool registration ΓÇö verify the server exposes exactly 4 tools
+# Tool registration ΓÇö verify the server exposes exactly 5 tools
 # ---------------------------------------------------------------------------
 
 
 async def test_list_tools(mcp_target):
-    """Server exposes exactly 4 tools with the expected names."""
+    """Server exposes the data tools and feedback tool."""
     async with Client(mcp_target) as c:
         tools = await c.list_tools()
     names = {t.name for t in tools}
