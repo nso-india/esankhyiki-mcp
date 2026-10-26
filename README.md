@@ -98,7 +98,7 @@ This server provides AI-ready access to official Indian government statistics th
 
 ## MCP Tools
 
-The server exposes 4 tools that follow a sequential workflow:
+The server exposes 5 tools. Four data tools follow a sequential workflow:
 
 ```
 list_datasets  ΓåÆ  get_indicators  ΓåÆ  get_metadata  ΓåÆ  get_data
@@ -112,6 +112,11 @@ list_datasets  ΓåÆ  get_indicators  ΓåÆ  get_metadata  ΓåÆ  get_data
 | 4 | `get_data(dataset, filters)` | Fetch data using filter key-value pairs from metadata. |
 
 **Important:** Tools must be called in order. Skipping `get_metadata` will result in invalid filter codes.
+
+`submit_feedback(feedback, tool_name="", dataset="")` reports errors, confusing results,
+or improvements to the maintainers. Call it independently of the data workflow.
+Include the relevant filters, actual result, and expected result, without secrets,
+personal data, or conversation history. Feedback is limited to 5,000 characters.
 
 ---
 
@@ -304,11 +309,39 @@ pip install -r tests/requirements-test.txt
 pytest tests/ -v -p no:anyio
 ```
 
-Runs in-process against the MCP server (no running server needed). Covers all datasets across all 4 tools. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
+Runs in-process against the MCP server (no running server needed). Covers all datasets
+across the four data tools, plus feedback validation and storage failures using a mocked
+Sheets transport. See [CONTRIBUTING.md](CONTRIBUTING.md#testing) for details.
 
 ---
 
 ## Configuration
+
+### Feedback storage
+
+`submit_feedback` appends one row to a Google Sheet using the
+[Sheets append API](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets.values/append).
+To enable it:
+
+1. Enable the Google Sheets API in your Google Cloud project and create a service account.
+2. Create a private Google Sheet with a tab named `Feedback`. Add these headers in A1:E1:
+   `feedback_id`, `timestamp_utc`, `tool_name`, `dataset`, `feedback`.
+3. Share the sheet with the service account's email as **Editor**.
+4. Mount the service account JSON key outside the repository, then set these environment
+   variables in the server process. For Docker, pass them into the container and mount
+   the key read-only. The server does not automatically load `.env` files.
+
+| Variable | Value |
+|----------|-------|
+| `FEEDBACK_SPREADSHEET_ID` | The ID between `/d/` and `/edit` in the sheet URL |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Absolute path to the service account JSON key |
+
+Only `status: saved` confirms a stored report and returns its `feedback_id`.
+Network or API failures return `status: unconfirmed` with an ID for the maintainer
+to check before retrying. Text is stored as literal values, including strings starting
+with `=`. Without configuration, the tool returns an error and the data tools remain usable.
+
+### OpenTelemetry
 
 Environment variables for OpenTelemetry:
 
