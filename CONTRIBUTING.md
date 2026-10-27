@@ -43,7 +43,7 @@ In `mospi_server.py`:
 - Add indicator method to `get_indicators()`
 - Add metadata branch to `get_metadata()`
 - Add dataset mapping to `get_data()` -> `dataset_map`
-- Add dataset description to `know_about_mospi_api()`
+- Add dataset description to `list_datasets()`
 
 ### 5. Update docstrings
 
