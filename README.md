@@ -101,7 +101,7 @@ This server provides AI-ready access to official Indian government statistics th
 The server exposes 4 tools that follow a sequential workflow:
 
 ```
-list_datasets  ΓåÆ  get_indicators  ΓåÆ  get_metadata  ΓåÆ  get_data
+list_datasets   get_indicators   get_metadata   get_data
 ```
 
 | Step | Tool | Description |
