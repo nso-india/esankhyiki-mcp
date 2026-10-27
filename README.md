@@ -273,17 +273,17 @@ Services:
 
 ```
 mospi-mcp-api/
-Γö£ΓöÇΓöÇ mospi_server.py          # FastMCP server - tools, validation, routing
-Γö£ΓöÇΓöÇ mospi/
-Γöé   ΓööΓöÇΓöÇ client.py            # MoSPI API client - HTTP requests to api.mospi.gov.in
-Γö£ΓöÇΓöÇ swagger/                 # Swagger YAML specs per dataset (source of truth for params)
-Γöé   ΓööΓöÇΓöÇ swagger_user_*.yaml
-Γö£ΓöÇΓöÇ observability/
-Γöé   ΓööΓöÇΓöÇ telemetry.py         # OpenTelemetry middleware for tracing
-Γö£ΓöÇΓöÇ tests/                   # Pytest suite (covering all datasets)
-Γö£ΓöÇΓöÇ Dockerfile               # Production container with OTEL instrumentation
-Γö£ΓöÇΓöÇ docker-compose.yml       # Full stack with Jaeger
-ΓööΓöÇΓöÇ requirements.txt
+├── mospi_server.py          # FastMCP server - tools, validation, routing
+├── mospi/
+│   └── client.py            # MoSPI API client - HTTP requests to api.mospi.gov.in
+├── swagger/                 # Swagger YAML specs per dataset (source of truth for params)
+│   └── swagger_user_*.yaml
+├── observability/
+│   └── telemetry.py         # OpenTelemetry middleware for tracing
+├── tests/                   # Pytest suite (covering all datasets)
+├── Dockerfile               # Production container with OTEL instrumentation
+├── docker-compose.yml       # Full stack with Jaeger
+└── requirements.txt
 ```
 
 ### Design Principles
