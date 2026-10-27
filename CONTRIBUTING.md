@@ -42,8 +42,8 @@ In `mospi_server.py`:
 - Add to `DATASETS_REQUIRING_INDICATOR` if it uses indicator codes
 - Add indicator method to `get_indicators()`
 - Add metadata branch to `get_metadata()`
-- Add dataset mapping to `get_data()` → `dataset_map`
-- Add dataset description to `know_about_mospi_api()`
+- Add dataset mapping to `get_data()` -> `dataset_map`
+- Add dataset description to `list_datasets()`
 
 ### 5. Update docstrings
 
@@ -101,7 +101,7 @@ python mospi_server.py
 
 ## Testing
 
-The test suite uses FastMCP's in-process Client — no running server needed.
+The test suite uses FastMCP's in-process Client - no running server needed.
 
 ```bash
 # Install test dependencies

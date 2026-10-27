@@ -84,7 +84,7 @@ def log(msg: str):
 # Initialize FastMCP server
 mcp = FastMCP("MoSPI Data Server", version="2.3.0")
 
-# Disable listChanged notifications ΓÇö ChatGPT opens a persistent GET SSE stream
+# Disable listChanged notifications - ChatGPT opens a persistent GET SSE stream
 # when listChanged:true, waiting for notifications that never come in stateless mode,
 # causing 424 errors. Setting to false tells ChatGPT not to subscribe.
 mcp._mcp_server.notification_options.tools_changed = False
@@ -232,7 +232,7 @@ def validate_filters(dataset: str, filters: Dict[str, Any]) -> Dict[str, Any]:
             "hint": f"Invalid params: {invalid}. Valid params: {valid_params}."
         }
 
-    # Check for missing required params (exclude Format ΓÇö auto-handled by client)
+    # Check for missing required params (exclude Format - auto-handled by client)
     missing = [
         p["name"] for p in param_defs
         if p.get("required") and p["name"] != "Format" and p["name"] not in filters
@@ -311,7 +311,7 @@ def get_indicators(
     """
     Returns the full list of available indicators for a given dataset.
 
-    Datasets often have broader coverage than expected ΓÇö for example, ASI covers
+    Datasets often have broader coverage than expected - for example, ASI covers
     57 indicators (capital structure, wages, employment, GVA, fuel consumption),
     and GENDER covers 154 indicators across health, education, labor, and crime.
 
@@ -321,10 +321,10 @@ def get_indicators(
       - PLFS frequency_code=3 (Monthly): indicators 1-3 only
       frequency_code selects the indicator set, not time granularity.
 
-    Step 2 of: list_datasets ΓåÆ get_indicators ΓåÆ get_metadata ΓåÆ get_data
+    Step 2 of: list_datasets -> get_indicators -> get_metadata -> get_data
 
     Args:
-        dataset: Dataset name ΓÇö one of: PLFS, CPI, IIP, ISP, ASI, NAS, WPI,
+        dataset: Dataset name - one of: PLFS, CPI, IIP, ISP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
                  NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T.
                  For CPI, IIP, ISP, WPI: returns available base years and frequencies.
@@ -414,14 +414,14 @@ def get_metadata(
     Returns the valid filter values (states, years, quarters, etc.) for a
     given dataset and indicator.
 
-    Filter codes are arbitrary and dataset-specific ΓÇö for example, PLFS
+    Filter codes are arbitrary and dataset-specific - for example, PLFS
     state_code 99 means "All India", and NAS frequency_code 1 means "Annual".
     These values cannot be inferred or guessed from parameter names alone.
 
     The returned filter_values and api_params should be used as-is when
     calling get_data.
 
-    Step 3 of: list_datasets ΓåÆ get_indicators ΓåÆ get_metadata ΓåÆ get_data
+    Step 3 of: list_datasets -> get_indicators -> get_metadata -> get_data
 
     Args:
         dataset: Dataset name (same values as get_indicators).
@@ -429,10 +429,10 @@ def get_metadata(
                         NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T.
                         Not applicable for: CPI, IIP, ISP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
-        state_code: For NAS only — required when indicator_code is 23-34
+        state_code: For NAS only - required when indicator_code is 23-34
                     (state-level GSDP/NSDP/GSVA family). Values 01-37, where
                     37 = All-India aggregate. Comma separated for multiple
-                    states. Not applicable when frequency_code=2 (Quarterly) —
+                    states. Not applicable when frequency_code=2 (Quarterly) -
                     state-level indicators have Annual data only.
         frequency_code: Required for PLFS and ASUSE.
                         PLFS: 1=Annual, 2=Quarterly bulletin, 3=Monthly.
@@ -450,7 +450,7 @@ def get_metadata(
         survey_code: For NSS76 (1=Disability, 2=Housing & drinking water), NSS75E
                      (2=Education, indicators 43-55), NSS80 (1=Telecom (CMST), 2=Education (CMSE)),
                      and NSS77 AIDIS module (always 1).
-        module: For NSS77 only ΓÇö land_livestock (portal nss77) or aidis (portal nss77a).
+        module: For NSS77 only - land_livestock (portal nss77) or aidis (portal nss77a).
                 Required when indicator_code overlaps both modules (16-19, 24, 26, 29, 32, 34, 36).
                 Auto-derived for codes unique to one module.
 
@@ -461,7 +461,7 @@ def get_metadata(
     """
     dataset = dataset.upper()
 
-    # Validate numeric params ΓÇö FastMCP doesn't enforce type hints
+    # Validate numeric params - FastMCP doesn't enforce type hints
     indicator_code, err = _safe_int(indicator_code, "indicator_code")
     if err: return err
     frequency_code, err = _safe_int(frequency_code, "frequency_code")
@@ -669,7 +669,7 @@ def get_metadata(
                 "Pass module when indicator_code is ambiguous (16-19, 24, 26, 29, 32, 34, 36). "
                 "AIDIS filter/data params follow swagger_user_nss77_aidis.yaml "
                 "(e.g. tenure_agency_code, size_class_code, nature_of_interest_code, survey_year_code). "
-                "AIDIS data API: limit 20ΓÇô100 (default 20). state_code=37 is All-India."
+                "AIDIS data API: limit 20-100 (default 20). Change the limit value to retrieve the desired number of records. state_code=37 is All-India."
             )
             result["next_step"] = _next
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code, module=module)
@@ -683,7 +683,7 @@ def get_metadata(
             if indicator_name:
                 result["Indicator"] = indicator_name
             result["parameter_notes"] = (
-                "NSS78 get_data requires the full Indicator name from get_indicators() — "
+                "NSS78 get_data requires the full Indicator name from get_indicators() - "
                 "short labels in older docs cause upstream 500 errors. "
                 "Pass indicator_code in get_data and it is auto-mapped to Indicator, "
                 "or pass Indicator exactly as returned in this response. "
@@ -886,13 +886,13 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
     Fetches statistical data from a MoSPI dataset.
 
     This is the final step of the workflow. It requires filter values from
-    get_metadata ΓÇö filter codes are arbitrary (e.g., indicator_code=3 means
+    get_metadata - filter codes are arbitrary (e.g., indicator_code=3 means
     "Unemployment Rate" in PLFS but something different in other datasets).
 
     All filter parameters including limit and page go inside the filters dict,
     not as top-level arguments.
 
-    Step 4 of: list_datasets ΓåÆ get_indicators ΓåÆ get_metadata ΓåÆ get_data
+    Step 4 of: list_datasets -> get_indicators -> get_metadata -> get_data
 
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY,
@@ -906,7 +906,7 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
                  PLFS requires frequency_code (1=Annual, 2=Quarterly, 3=Monthly).
                  NAS requires base_year ("2022-23" or "2011-12").
                  MNRE: indicator_code (1-5) is mapped to type_of_renewable_energy_code.
-                 Pass limit (e.g., "50") to retrieve more than 10 records.
+                 Pass limit (e.g., "50") to retrieve 50 records. Change this parameter value to retrieve desired number of records.
 
     Returns:
         dict with statistical records, or an error/validation message
@@ -1083,11 +1083,11 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
         result["troubleshooting"] = (
             f"No data found for dataset '{dataset}' with the given filters. "
             "Most common causes: "
-            "1) Out-of-range codes ΓÇö verify indicator_code and other numeric codes "
+            "1) Out-of-range codes - verify indicator_code and other numeric codes "
             "match values from get_metadata(). "
-            "2) Incompatible filter combination ΓÇö some filters are mutually exclusive. "
+            "2) Incompatible filter combination - some filters are mutually exclusive. "
             "3) Comma-separated values where only single values are accepted. "
-            "4) Optional filters narrowing results too much ΓÇö try removing optional params."
+            "4) Optional filters narrowing results too much - try removing optional params."
         )
         result["suggestion"] = f"Call get_metadata(dataset='{dataset}') to verify valid filter values."
 
@@ -1100,18 +1100,18 @@ def get_data(dataset: str, filters: Dict[str, Any]) -> dict:
 def list_datasets() -> dict:
     """
     Returns an overview of all MoSPI statistical datasets with descriptions and coverage.
-    This is the starting point ΓÇö call this first to identify the right dataset.
+    This is the starting point - call this first to identify the right dataset.
 
     The API covers 500+ indicators across employment, prices, industry, national
     accounts, health, education, disability, housing, environment, trade, and more. Each dataset has
-    its own indicator codes, filter parameters, and valid values ΓÇö these are not
+    its own indicator codes, filter parameters, and valid values - these are not
     standardized and cannot be inferred or guessed from parameter names alone.
 
     Four-step workflow (each step depends on the previous):
-      1. list_datasets() ΓÇö identify the dataset
-      2. get_indicators(dataset) ΓÇö list available indicators
-      3. get_metadata(dataset, indicator_code) ΓÇö retrieve valid filter values
-      4. get_data(dataset, filters) ΓÇö fetch the data
+      1. list_datasets() - identify the dataset
+      2. get_indicators(dataset) - list available indicators
+      3. get_metadata(dataset, indicator_code) - retrieve valid filter values
+      4. get_data(dataset, filters) - fetch the data
 
     Returns:
         dict with 'datasets' (name, description, use_for for each dataset)
@@ -1122,7 +1122,7 @@ def list_datasets() -> dict:
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
-                "description": "8 indicators covering labor market dynamics: Labour Force Participation Rate (LFPR), Worker Population Ratio (WPR), Unemployment Rate (UR), worker distribution by sector/industry, employment conditions for regular wage employees, and earnings data across three employment typesΓÇöregular wages, casual labor, and self-employment.",
+                "description": "8 indicators covering labor market dynamics: Labour Force Participation Rate (LFPR), Worker Population Ratio (WPR), Unemployment Rate (UR), worker distribution by sector/industry, employment conditions for regular wage employees, and earnings data across three employment types-regular wages, casual labor, and self-employment.",
                 "use_for": "Jobs, unemployment, wages, workforce participation, employment conditions"
             },
             "CPI": {
@@ -1152,7 +1152,7 @@ def list_datasets() -> dict:
             },
             "WPI": {
                 "name": "Wholesale Price Index",
-                "description": "Hierarchical commodity structure with 1000+ items across 5 levels: Major Groups (Primary articles, Fuel & power, Manufactured products, Food index) ΓåÆ Groups (22) ΓåÆ Sub-groups (90+) ΓåÆ Sub-sub-groups ΓåÆ Items. Tracks wholesale/producer price inflation monthly. Four base years available: 2022-23 (latest, default; data from 2023 onwards), 2011-12, 2004-05, and 1993-94. For years before 2023 use an older base year; index values differ across base years, so state the base year in the answer.",
+                "description": "Hierarchical commodity structure with 1000+ items across 5 levels: Major Groups (Primary articles, Fuel & power, Manufactured products, Food index) -> Groups (22) -> Sub-groups (90+) -> Sub-sub-groups -> Items. Tracks wholesale/producer price inflation monthly. Four base years available: 2022-23 (latest, default; data from 2023 onwards), 2011-12, 2004-05, and 1993-94. For years before 2023 use an older base year; index values differ across base years, so state the base year in the answer.",
                 "use_for": "Wholesale inflation, producer prices, commodity price trends"
             },
             "ENERGY": {
@@ -1182,12 +1182,12 @@ def list_datasets() -> dict:
             },
             "ENVSTATS": {
                 "name": "Environment Statistics",
-                "description": "126 indicators covering: climate (temperature, rainfall, heat/cold waves, cyclones), water resources (wetlands, watersheds, rivers, groundwater, reservoirs, water quality), land (soil types, degradation, land use/cover), forests (area, cover, fire, carbon stock, tree cover), biodiversity (faunal diversity including global species counts by phylumΓÇömammals, birds, reptiles, fish, etc., plant status), minerals, energy (coal/lignite reserves, power generation), agriculture (crops, fertilizers, pesticides, organic farming, livestock), pollution (air quality, noise, industrial clusters), waste (municipal, hazardous, biomedical, sewage, plastic waste), natural disasters (earthquakes, extreme events, deaths, government expenditure), water/sanitation access, transport, disease outbreaks, and environmental expenditure (government + corporate CSR).",
+                "description": "126 indicators covering: climate (temperature, rainfall, heat/cold waves, cyclones), water resources (wetlands, watersheds, rivers, groundwater, reservoirs, water quality), land (soil types, degradation, land use/cover), forests (area, cover, fire, carbon stock, tree cover), biodiversity (faunal diversity including global species counts by phylum-mammals, birds, reptiles, fish, etc., plant status), minerals, energy (coal/lignite reserves, power generation), agriculture (crops, fertilizers, pesticides, organic farming, livestock), pollution (air quality, noise, industrial clusters), waste (municipal, hazardous, biomedical, sewage, plastic waste), natural disasters (earthquakes, extreme events, deaths, government expenditure), water/sanitation access, transport, disease outbreaks, and environmental expenditure (government + corporate CSR).",
                 "use_for": "Climate, biodiversity, species counts, water resources, forests, land use, pollution, waste, natural disasters, environmental health, plastic waste, bio-medical waste"
             },
             "RBI": {
                 "name": "RBI Statistics",
-                "description": "39 indicators on external sector: foreign trade (direction by country, commodity exports/imports in USD/INR), balance of payments (overall BoP, invisibles, key componentsΓÇöquarterly and annual), external debt, forex reserves, NRI deposits, and exchange rates (155 currencies, SDR, monthly averages, highs/lows, forward premia). Comprehensive for trade and currency analysis.",
+                "description": "39 indicators on external sector: foreign trade (direction by country, commodity exports/imports in USD/INR), balance of payments (overall BoP, invisibles, key components-quarterly and annual), external debt, forex reserves, NRI deposits, and exchange rates (155 currencies, SDR, monthly averages, highs/lows, forward premia). Comprehensive for trade and currency analysis.",
                 "use_for": "Foreign trade, exports, imports, balance of payments, forex reserves, exchange rates, external debt, NRI deposits"
             },
             "NSS77": {
@@ -1207,7 +1207,7 @@ def list_datasets() -> dict:
             },
             "CPIALRL": {
                 "name": "CPI for Agricultural/Rural Labourers",
-                "description": "2 indicators: General Index and Group Index for two worker categoriesΓÇöAgricultural Labourers (AL) and Rural Labourers (RL). Separate inflation series measuring cost of living for India's most vulnerable rural workforce segments.",
+                "description": "2 indicators: General Index and Group Index for two worker categories-Agricultural Labourers (AL) and Rural Labourers (RL). Separate inflation series measuring cost of living for India's most vulnerable rural workforce segments.",
                 "use_for": "Rural inflation, agricultural labourer cost of living, rural wage indexing"
             },
             "HCES": {
@@ -1252,8 +1252,8 @@ def list_datasets() -> dict:
             },
             "NSS73": {
                 "name": "NSS73 (73rd Round - Unincorporated Non-Agricultural Enterprises in India)",
-                "description": "6 indicators from the NSS 73rd Round (2015-16) survey covering Unincorporated Non-Agricultural Enterprises in India, with statistics broken down by state/UT, sector (rural/urban), broad activity category (Manufacturing, Trade, Other services, Non-captive electricity), enterprise type (Own Account Enterprises vs Establishment), and — depending on the indicator — further dimensions such as detailed activity category, ownership type, gender, employment type, worker category, or normal working hours per day.",
-                "use_for": "Querying enterprise counts, ownership patterns, workforce composition (gender, employment type, worker category), hired-worker emoluments, and Gross Value Added (GVA) per worker or per enterprise across India's informal non-agricultural sector. Note: each indicator supports only a specific subset of filters (e.g., activity_category_code applies to indicator 1 only; enterprises_by_ownership_code applies to indicator 2 only; gva_per_worker_code applies to indicators 5-6 only) — combining filters across indicators returns no data, since the underlying survey tables were never cross-tabulated together."
+                "description": "6 indicators from the NSS 73rd Round (2015-16) survey covering Unincorporated Non-Agricultural Enterprises in India, with statistics broken down by state/UT, sector (rural/urban), broad activity category (Manufacturing, Trade, Other services, Non-captive electricity), enterprise type (Own Account Enterprises vs Establishment), and - depending on the indicator - further dimensions such as detailed activity category, ownership type, gender, employment type, worker category, or normal working hours per day.",
+                "use_for": "Querying enterprise counts, ownership patterns, workforce composition (gender, employment type, worker category), hired-worker emoluments, and Gross Value Added (GVA) per worker or per enterprise across India's informal non-agricultural sector. Note: each indicator supports only a specific subset of filters (e.g., activity_category_code applies to indicator 1 only; enterprises_by_ownership_code applies to indicator 2 only; gva_per_worker_code applies to indicators 5-6 only) - combining filters across indicators returns no data, since the underlying survey tables were never cross-tabulated together."
             },
             "NSS74": {
                 "name": "NSS74 (74th Round - Services Sector Enterprises in India)",
@@ -1278,10 +1278,10 @@ def list_datasets() -> dict:
                                     
         },
         "workflow": [
-            "1. list_datasets() ΓÇö identify the relevant dataset",
-            "2. get_indicators(dataset) ΓÇö list available indicators",
-            "3. get_metadata(dataset, indicator_code) ΓÇö retrieve valid filter values",
-            "4. get_data(dataset, filters) ΓÇö fetch the data using filter values from step 3"
+            "1. list_datasets() - identify the relevant dataset",
+            "2. get_indicators(dataset) - list available indicators",
+            "3. get_metadata(dataset, indicator_code) - retrieve valid filter values",
+            "4. get_data(dataset, filters) - fetch the data using filter values from step 3"
         ],
         "next_step": "get_indicators(dataset) to list available indicators for the chosen dataset."
     }

@@ -96,6 +96,7 @@ class MoSPI:
             "NSS71": "/api/nss-71/getNss71Records",
             "NSS72": "/api/nss-72/getNss72HesdgRecords",
             "NSS72T":"/api/nss-72t/getNss72TourismRecords",
+            
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -145,7 +146,7 @@ class MoSPI:
             return {
                 "indicators_by_frequency": result,
                 "_note": "frequency_code=1 (Annual) has 8 indicators including all wages. "
-                         "It already contains quarterly breakdowns ΓÇö use quarter_code to filter. "
+                         "It already contains quarterly breakdowns - use quarter_code to filter. "
                          "frequency_code=2 (Quarterly) has 4 indicators for quarterly bulletin tables. "
                          "frequency_code=3 (Monthly) has 3 indicators (2025+ data only). "
                          "Pick the frequency_code whose indicator set matches the query.",
@@ -362,10 +363,10 @@ class MoSPI:
                 "classification_years": ["2008", "2004", "1998", "1987"],
                 "_note": "classification_year is REQUIRED for ASI. It is the NIC classification version, NOT the data year. "
                          "Pick based on which data year you need: "
-                         "'1987' ΓåÆ 1992-93 to 1997-98 | "
-                         "'1998' ΓåÆ 1998-99 to 2003-04 | "
-                         "'2004' ΓåÆ 2004-05 to 2007-08 | "
-                         "'2008' ΓåÆ 2008-09 to 2023-24. "
+                         "'1987' -> 1992-93 to 1997-98 | "
+                         "'1998' -> 1998-99 to 2003-04 | "
+                         "'2004' -> 2004-05 to 2007-08 | "
+                         "'2008' -> 2008-09 to 2023-24. "
                          "Pass classification_year in get_metadata() and get_data().",
                 "statusCode": True,
             }
@@ -945,7 +946,7 @@ class MoSPI:
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 
-    # NSS77 module routing ΓÇö Land & Livestock (nss77) + AIDIS (nss77a)
+    # NSS77 module routing - Land & Livestock (nss77) + AIDIS (nss77a)
     NSS77_LL_ONLY = frozenset({
         21, 22, 23, 25, 27, 28, 31, 33, 35, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,
     })
@@ -980,7 +981,7 @@ class MoSPI:
     def get_nss77_indicators(self) -> Dict[str, Any]:
         """Fetch list of NSS77 indicators from MoSPI API.
 
-        Returns 55 indicators from NSS 77th Round ΓÇö two modules combined:
+        Returns 55 indicators from NSS 77th Round - two modules combined:
         - module=land_livestock (portal product nss77): 33 indicators on agricultural
           households, land ownership, livestock, farm income, and crop insurance.
         - module=aidis (portal product nss77a): 22 indicators on household assets,
@@ -1017,7 +1018,7 @@ class MoSPI:
             result["data"] = ll_data + aidis_data
             result["count"] = len(result["data"])
             result["_note"] = (
-                "Two modules share indicator_code values ΓÇö always pass module in "
+                "Two modules share indicator_code values - always pass module in "
                 "get_metadata/get_data when codes overlap (16-19, 24, 26, 29, 32, 34, 36). "
                 "module=land_livestock: Land & Livestock (codes 16-51, 23 unique). "
                 "module=aidis: All India Debt & Investment Survey (22 indicators, survey_code=1). "
@@ -1177,7 +1178,7 @@ class MoSPI:
     def get_nss79_indicators(self) -> Dict[str, Any]:
         """Fetch list of NSS79 indicators from MoSPI API.
 
-        Returns all 35 indicators from NSS 79th Round ΓÇö two survey modules combined:
+        Returns all 35 indicators from NSS 79th Round - two survey modules combined:
         - survey_code=1 (CAMS): 28 indicators on education, health expenditure,
           financial inclusion, digital literacy, and household living conditions.
         - survey_code=2 (AYUSH): 7 indicators on AYUSH awareness, usage,
@@ -1346,7 +1347,7 @@ class MoSPI:
     def get_nss76_indicators(self) -> Dict[str, Any]:
         """Fetch list of NSS76 indicators from MoSPI API.
 
-        Returns 25 indicators from NSS 76th Round ΓÇö two survey modules combined:
+        Returns 25 indicators from NSS 76th Round - two survey modules combined:
         - survey_code=1 (Disability): 13 indicators on disability prevalence,
           literacy, education, employment, and aid for persons with disability.
         - survey_code=2 (Housing & water): 12 indicators on drinking water,
@@ -1503,7 +1504,7 @@ class MoSPI:
     def get_nss80_indicators(self) -> Dict[str, Any]:
         """Fetch list of NSS80 indicators from MoSPI API.
 
-        Returns all 38 indicators from NSS 80th Round ΓÇö two survey modules combined:
+        Returns all 38 indicators from NSS 80th Round - two survey modules combined:
         - survey_code=1 (Telecom (CMST)): 20 indicators on telecommunications, internet usage,
           mobile phone ownership, cybercrime reporting, household connectivity,
           online purchases, and digital connectivity.
