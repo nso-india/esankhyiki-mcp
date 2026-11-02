@@ -5,6 +5,7 @@ Handles all API calls to the MoSPI data portal
 
 import json
 import ssl
+from unittest import result
 import requests
 import yaml, os
 import math, random
@@ -433,13 +434,24 @@ class MoSPI:
             )
             response.raise_for_status()
             result = response.json()
+            # Upstream sometimes returns HTTP 200 with an error body and no data
+            if (
+                not isinstance(result, dict)
+                or result.get("error")
+                or result.get("statusCode") is False
+                or not result.get("data")
+            ):
+                upstream_err = (
+                    result.get("error") if isinstance(result, dict) else str(result)
+                )
+                return self._nas_indicators_fallback(str(upstream_err))
 
             # Add base_year info for consistency with CPI workflow
-            if "data" in result and isinstance(result["data"], dict):
+            if "data" in result and isinstance(result["data"], dict): 
                 result["data"]["base_year"] = [
                     {"base_year": "2022-23"},
                     {"base_year": "2011-12"},
-                ]
+                ]   
             result["_note"] = (
                 "NAS requires base_year in get_metadata and get_data. "
                 "Available base years: '2022-23' (latest, Current series only) and '2011-12' (Current and Back series). "
