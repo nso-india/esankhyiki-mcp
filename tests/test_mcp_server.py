@@ -408,6 +408,49 @@ async def test_get_data_unknown_filter_param(mcp_target):
     assert "error" in data or "invalid_params" in data
 
 
+async def test_get_data_plfs_new_industry_filters(mcp_target):
+    """get_data: PLFS industry_code / nic_division_code are accepted (new DB columns)."""
+    for extra in ({"industry_code": "4", "broad_status_employment_code": "6"},
+                  {"nic_division_code": "758"}):
+        data = await call(
+            mcp_target,
+            "get_data",
+            {"dataset": "PLFS", "filters": {
+                "indicator_code": "4", "frequency_code": "1",
+                "year": "PLFS 2024", "state_code": "99", "limit": "5", **extra}},
+        )
+        assert "invalid_params" not in data, f"{extra}: rejected by swagger validation"
+        assert "error" not in data
+
+
+async def test_get_data_plfs_plain_calendar_year(mcp_target):
+    """get_data: PLFS annual accepts plain YYYY and returns data labelled 'PLFS YYYY'."""
+    data = await call(
+        mcp_target,
+        "get_data",
+        {"dataset": "PLFS", "filters": {
+            "indicator_code": "1", "frequency_code": "1", "year": "2024",
+            "state_code": "99", "gender_code": "3", "sector_code": "3", "limit": "2"}},
+    )
+    assert "error" not in data
+    assert data.get("msg") != "No Data Found"
+    assert data.get("year_normalized") == {"2024": "PLFS 2024"}
+    assert all(r["year"] == "PLFS 2024" for r in data["data"])
+
+
+async def test_get_data_plfs_no_year_uses_latest(mcp_target):
+    """get_data: PLFS without year auto-selects the latest year; year='all' returns every year."""
+    base = {"indicator_code": "1", "frequency_code": "3", "state_code": "99",
+            "gender_code": "3", "sector_code": "3", "age_code": "1", "limit": "50"}
+    latest = await call(mcp_target, "get_data", {"dataset": "PLFS", "filters": base})
+    assert "error" not in latest
+    assert latest.get("year_auto_selected"), "year_auto_selected missing when year is omitted"
+    assert {str(r["year"]) for r in latest["data"]} == {str(latest["year_auto_selected"])}
+
+    every = await call(mcp_target, "get_data", {"dataset": "PLFS", "filters": {**base, "year": "all"}})
+    assert "error" not in every
+    assert "year_auto_selected" not in every
+    assert len({str(r["year"]) for r in every["data"]}) > 1
 # ---------------------------------------------------------------------------
 # Input type validation tests (Issue 3)
 # ---------------------------------------------------------------------------
