@@ -147,9 +147,11 @@ class MoSPI:
             return {
                 "indicators_by_frequency": result,
                 "_note": "frequency_code=1 (Annual) has 8 indicators including all wages. "
-                         "It already contains quarterly breakdowns - use quarter_code to filter. "
+                         "It also has quarterly breakdowns (quarter_code 2-5) for indicator_codes 6-8 in Agriculture Years (YYYY-YY)."
                          "frequency_code=2 (Quarterly) has 4 indicators for quarterly bulletin tables. "
                          "frequency_code=3 (Monthly) has 3 indicators (2025+ data only). "
+                         "Annual calendar years are stored as 'PLFS YYYY' (e.g. 'PLFS 2024'); plain '2024' is also accepted by get_data. "
+                         "Annual indicator_code=4 also has industry_code and nic_division_code breakdowns (calendar years, All India only). "
                          "Pick the frequency_code whose indicator set matches the query.",
                 "statusCode": True,
             }

@@ -1,6 +1,7 @@
 import sys
 import os
 import json
+import re
 import yaml
 from typing import Dict, Any, Optional
 from fastmcp import FastMCP
@@ -295,6 +296,115 @@ def transform_filters(filters: Dict[str, Any]) -> Dict[str, str]:
         result[k] = str(v)
     return result
 
+# PLFS stores annual calendar years as "PLFS YYYY" but quarterly/monthly years as plain "YYYY".
+# Accepts "2024", "PLFS 2024", "plfs2024", "PLFS-2024" etc.; Agriculture Years "YYYY-YY" never match.
+_PLFS_CALENDAR_YEAR_RE = re.compile(r"^(?:PLFS[\s_-]*)?(\d{4})$", re.IGNORECASE)
+
+
+def _normalize_plfs_year(filters: Dict[str, str]) -> Dict[str, str]:
+    """
+    Rewrite PLFS year values in place to the format the API stores for the given frequency_code.
+
+    frequency_code=1 (Annual):    "2024" / "plfs 2024" -> "PLFS 2024"; "2023-24" unchanged.
+    frequency_code=2 or 3:        "PLFS 2024" -> "2024"; "2024" unchanged.
+    Comma-separated values are normalized one by one.
+
+    Returns a dict {original_value: normalized_value} for the values that changed (empty if none).
+    """
+    raw = filters.get("year")
+    if not raw:
+        return {}
+
+    frequency_code = str(filters.get("frequency_code", "")).strip()
+    normalized = []
+    changed = {}
+    for token in (t.strip() for t in str(raw).split(",")):
+        if not token:
+            continue
+        new_token = token
+        match = _PLFS_CALENDAR_YEAR_RE.match(token)
+        if match:
+            yyyy = match.group(1)
+            new_token = f"PLFS {yyyy}" if frequency_code == "1" else yyyy
+        if new_token != token:
+            changed[token] = new_token
+        normalized.append(new_token)
+
+    filters["year"] = ",".join(normalized)
+    return changed
+
+
+def _plfs_year_kind(value: str) -> str:
+    """'calendar' for 'PLFS YYYY', 'agriculture' for 'YYYY-YY' (Agriculture Year), 'plain' for 'YYYY' (quarterly/monthly)."""
+    v = value.strip()
+    if re.match(r"^PLFS\s*\d{4}$", v, re.IGNORECASE):
+        return "calendar"
+    if re.match(r"^\d{4}-\d{2}$", v):
+        return "agriculture"
+    return "plain"
+
+
+def _plfs_year_end(value: str):
+    """
+    Sort key = the year the label ends in, so years of different types compare correctly:
+    'PLFS 2025' -> (2025, 1), '2023-24' -> (2024, 0) (label ends in 24), '2026' -> (2026, 1).
+    A calendar year sorts after the Agriculture Year label that ends in the same year.
+    Returns None for values that are not a PLFS year.
+    """
+    v = value.strip()
+    m = re.match(r"^(?:PLFS\s*)?(\d{4})$", v, re.IGNORECASE)
+    if m:
+        return (int(m.group(1)), 1)
+    m = re.match(r"^(\d{4})-\d{2}$", v)
+    if m:
+        return (int(m.group(1)) + 1, 0)
+    return None
+
+
+def _plfs_latest_year_candidates(filters: Dict[str, str], max_candidates: int = 3) -> list:
+    """
+    Years to try, newest first, when the caller did not pass a year.
+
+    Reads the available years for this indicator/frequency from the PLFS filter API, so the
+    "latest" year follows the data automatically when new years are loaded. Order:
+      1. the latest year overall,
+      2. the latest year of the other year type (annual only: calendar 'PLFS YYYY' vs Agriculture
+         Year 'YYYY-YY'), because some breakdowns exist only in one type (e.g. quarter_code, age_code
+         for wage indicators are Agriculture-Year only),
+      3. the next-latest year (e.g. monthly month_code=12 is only in the previous year).
+    Respects year_type_code (1=Agriculture Year, 2=Calendar Year) when given. Returns [] if years can't be read.
+    """
+    try:
+        indicator_code = int(filters.get("indicator_code", ""))
+        frequency_code = int(filters.get("frequency_code", ""))
+    except ValueError:
+        return []
+
+    meta = mospi.get_plfs_filters(indicator_code=indicator_code, frequency_code=frequency_code)
+    data = meta.get("data") if isinstance(meta, dict) else None
+    if not isinstance(data, dict):
+        return []
+    years = [y.get("year") for y in data.get("year", []) if isinstance(y, dict) and y.get("year")]
+
+    year_type_code = str(filters.get("year_type_code", "")).strip()
+    if frequency_code == 1 and year_type_code == "1":
+        years = [y for y in years if _plfs_year_kind(y) == "agriculture"]
+    elif frequency_code == 1 and year_type_code == "2":
+        years = [y for y in years if _plfs_year_kind(y) == "calendar"]
+
+    ranked = sorted({y for y in years if _plfs_year_end(y)}, key=_plfs_year_end, reverse=True)
+    if not ranked:
+        return []
+
+    order = [ranked[0]]
+    other_type = next((y for y in ranked if _plfs_year_kind(y) != _plfs_year_kind(ranked[0])), None)
+    if other_type:
+        order.append(other_type)
+    next_latest = next((y for y in ranked[1:] if y not in order), None)
+    if next_latest:
+        order.append(next_latest)
+    return order[:max_candidates]
+
 
 @mcp.tool(name="get_indicators", title="Browse Dataset Indicators", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": True})
 def get_indicators(
@@ -558,16 +668,26 @@ def get_metadata(
                 "api_params": get_swagger_param_definitions("PLFS"),
                 "parameter_notes": "frequency_code selects the indicator set, not time granularity. "
                          "indicator_code accepts a single integer only; comma-separated values cause a 500 error. "
-                         "frequency_code=1 (Annual: financial years 2017-18 to 2023-24 with year_type_code=1, calendar years 2022 to 2025 with year_type_code=2): indicators 1=LFPR, 2=WPR, 3=UR, "
+                         "frequency_code=1 (Annual: Agriculture Years 2017-18 to 2023-24 with year_type_code=1, calendar years 'PLFS 2022' to 'PLFS 2025' with year_type_code=2; indicator_code=5 has Agriculture Years only): indicators 1=LFPR, 2=WPR, 3=UR, "
                          "4=Worker distribution, 5=Employment conditions, 6=Salaried wages, 7=Casual wages, "
-                         "8=Self-employment earnings. Year format: YYYY-YY (e.g. 2023-24) or YYYY for calendar years. "
+                         "8=Self-employment earnings. Year format: YYYY-YY (e.g. 2023-24) for Agriculture Years (year_type_code=1); for calendar years pass YYYY or 'PLFS YYYY' - both work, the server converts to 'PLFS YYYY'. "
                          "frequency_code=2 (Quarterly bulletin, calendar years 2018 to 2026): indicators 1-4 only. "
-                         "Year format: plain YYYY (e.g. 2024). quarter_code: 2=JUL-SEP, 3=OCT-DEC, 4=JAN-MAR, 5=APR-JUN. "
+                         "Quarterly 2018-2024 is Urban only (sector_code=2); Rural (1) and Rural+Urban (3) start in 2025. "
+                         "Year format: plain YYYY (e.g. 2024). quarter_code: 2=JUL-SEP, 3=OCT-DEC, 4=JAN-MAR, 5=APR-JUN "
+                         "(annual: quarter_code 2-5 only for indicator_codes 6-8 in Agriculture Years; 1=all otherwise). "
                          "Available quarters: 2018 [2,3,5], 2019-2024 [2,3,4,5], 2025 [2,3,5], 2026 [4,5]. "
-                         "frequency_code=3 (Monthly, Apr 2025 to Sep 2026, All India only): indicators 1-3 only. "
+                         "frequency_code=3 (Monthly, Apr 2025 to Sep 2026 except March 2026 - month_code=3 has no data, All India only): indicators 1-3 only. "
                          "Year format: YYYY (e.g. 2025). "
-                         "year_type_code: 1=Agriculture Year (financial year YYYY-YY), 2=Calendar Year (YYYY); applies to annual data (NULL for quarterly rows). "
-                         "state_code=99 for All India; omitting state_code returns all states.",
+                         "year_type_code: 1=Agriculture Year (YYYY-YY), 2=Calendar Year ('PLFS YYYY'); applies to annual data (NULL for quarterly rows). "
+                         "state_code=99 for All India; omitting state_code returns all states. "
+                         "indicator_code=4 annual calendar years also support industry_code (1-13, used with broad_status_employment_code) "
+                         "and nic_division_code (1-758); both All India (state_code=99) only. "
+                         "nco_division_code: Agriculture Years codes 1-11, calendar years codes 12-188; codes other than 1 are All India only. "
+                         "In calendar years each breakdown is a separate table, so pass only one breakdown filter at a time "
+                         "(indicator_code=4: industry_code may be combined with broad_status_employment_code; "
+                         "indicator_codes 1-3: age_code alone, education_code alone, or age_code with religion_code or social_category_code). "
+                         "If year is omitted, get_data uses the latest available year that has data for the given filters "
+                         "(reported as year_auto_selected); pass year='all' for every year (trend/time-series questions).",
                 "next_step": _next,
             }
             return _check_empty_metadata(result, dataset, indicator_code=indicator_code, frequency_code=frequency_code)
@@ -909,6 +1029,8 @@ def get_data(dataset: str, filters: Dict[str, Any], user_query: Optional[str] = 
                  frequency="Monthly" in filters.
         filters: Key-value pairs from get_metadata filter_values.
                  PLFS requires frequency_code (1=Annual, 2=Quarterly, 3=Monthly).
+                 PLFS year: omit it for the latest year, pass year="all" for every year
+                 (trends), or a specific year ("2024" and "PLFS 2024" both work).
                  NAS requires base_year ("2022-23" or "2011-12").
         user_query: The user's original question, verbatim. Captured for the
                     engagement report only; not returned.
@@ -1063,6 +1185,22 @@ def get_data(dataset: str, filters: Dict[str, Any], user_query: Optional[str] = 
             }
         transformed_filters.pop("indicator_code", None)
 
+    # PLFS: accept plain "YYYY" or "PLFS YYYY" for any frequency and send the format the API stores
+    plfs_year_changes = {}
+    plfs_year_candidates = []
+    if dataset == "PLFS":
+        if transformed_filters.get("year", "").strip().lower() == "all":
+            # Explicit opt-out: return every available year
+            transformed_filters.pop("year")
+        elif not transformed_filters.get("year", "").strip():
+            # No year given: use the latest available year for this indicator/frequency
+            transformed_filters.pop("year", None)
+            plfs_year_candidates = _plfs_latest_year_candidates(transformed_filters)
+            if plfs_year_candidates:
+                transformed_filters["year"] = plfs_year_candidates[0]
+        else:
+            plfs_year_changes = _normalize_plfs_year(transformed_filters)
+
     # Validate params against swagger spec
     validation = validate_filters(dataset, transformed_filters)
     if not validation["valid"]:
@@ -1072,6 +1210,13 @@ def get_data(dataset: str, filters: Dict[str, Any], user_query: Optional[str] = 
         result = mospi.get_nss77_data(transformed_filters)
     else:
         result = mospi.get_data(api_dataset, transformed_filters)
+
+    # PLFS: the auto-selected latest year has no rows for this filter combination -> try the next candidate
+        for fallback_year in plfs_year_candidates[1:]:
+            if not (isinstance(result, dict) and result.get("msg") == "No Data Found"):
+                break
+            transformed_filters["year"] = fallback_year
+            result = mospi.get_data(api_dataset, transformed_filters)
 
     # Upstream error (500s, timeouts, etc.)
     if isinstance(result, dict) and "error" in result and "msg" not in result:
@@ -1097,10 +1242,29 @@ def get_data(dataset: str, filters: Dict[str, Any], user_query: Optional[str] = 
             "4) Optional filters narrowing results too much - try removing optional params."
         )
         result["suggestion"] = f"Call get_metadata(dataset='{dataset}') to verify valid filter values."
+        if plfs_year_changes and transformed_filters.get("frequency_code") == "1":
+            result["troubleshooting"] += (
+                " PLFS annual calendar-year data exists only for the 'PLFS YYYY' years listed by get_metadata. "
+                "For other years use the Agriculture Year (year_type_code=1, format YYYY-YY), "
+                "e.g. 2019 appears in the labels '2018-19' and '2019-20'."
+            )
+
+    # Tell the caller which PLFS year values were rewritten, so the answer can cite the year as the data shows it
+    if plfs_year_changes and isinstance(result, dict):
+        result["year_normalized"] = plfs_year_changes
+
+    # Tell the caller which year was picked automatically, so the answer states it
+    if plfs_year_candidates and isinstance(result, dict):
+        if result.get("msg") == "No Data Found":
+            result["years_tried"] = plfs_year_candidates
+        else:
+            result["year_auto_selected"] = transformed_filters.get("year")
+            result["year_note"] = (
+                "No year was given, so the latest available year with data for these filters was used. "
+                "Pass year='all' to get every year, or a specific year."
+            )
 
     return result
-
-
 
 # Comprehensive API documentation tool
 @mcp.tool(name="list_datasets", title="Discover Available Datasets", annotations={"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False})
@@ -1132,7 +1296,7 @@ def list_datasets(user_query: Optional[str] = None) -> dict:
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
-                "description": "8 indicators covering labor market dynamics: Labour Force Participation Rate (LFPR), Worker Population Ratio (WPR), Unemployment Rate (UR), worker distribution by sector/industry, employment conditions for regular wage employees, and earnings data across three employment types-regular wages, casual labor, and self-employment.",
+                "description": "8 indicators covering labor market dynamics: Labour Force Participation Rate (LFPR), Worker Population Ratio (WPR), Unemployment Rate (UR), worker distribution by sector/industry (including industry, NIC division and NCO division breakdowns), employment conditions for regular wage employees, and earnings data across three employment types-regular wages, casual labor, and self-employment.",
                 "use_for": "Jobs, unemployment, wages, workforce participation, employment conditions"
             },
             "CPI": {
