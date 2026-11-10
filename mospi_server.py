@@ -1326,7 +1326,7 @@ def list_datasets(user_query: Optional[str] = None) -> dict:
             },
             "WPI": {
                 "name": "Wholesale Price Index",
-                "description": "Hierarchical commodity structure with 1000+ items across 5 levels: Major Groups (Primary articles, Fuel & power, Manufactured products, Food index) -> Groups (22) -> Sub-groups (90+) -> Sub-sub-groups -> Items. Tracks wholesale/producer price inflation monthly. Four base years available: 2022-23 (latest, default; data from 2023 onwards), 2011-12, 2004-05, and 1993-94. For years before 2023 use an older base year; index values differ across base years, so state the base year in the answer.",
+                "description": "Hierarchical commodity structure with 1000+ items across 5 levels: Major Groups (Primary articles, Fuel & power, Manufactured products, Food index) -> Groups (22) -> Sub-groups (90+) -> Sub-sub-groups -> Items. Tracks wholesale/producer price inflation monthly. Four base years available: 2022-23 (latest, default; data from 2023 onwards), 2011-12, 2004-05, and 1993-94. For years before 2023 use an older base year; index values differ across base years, so state the base year in the answer. Note: the WPI general index uses different major_group_code values across base years - 1000000000 under base_year='2011-12' and 1 under '2004-05' and '1993-94'. Using the wrong code returns a valid-looking response for a different aggregation level rather than an error; confirm the code via get_metadata for the base year in use before calling get_data.",
                 "use_for": "Wholesale inflation, producer prices, commodity price trends"
             },
             "ENERGY": {
