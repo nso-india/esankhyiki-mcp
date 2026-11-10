@@ -1287,6 +1287,14 @@ def list_datasets(user_query: Optional[str] = None) -> dict:
       3. get_metadata(dataset, indicator_code) - retrieve valid filter values
       4. get_data(dataset, filters) - fetch the data
 
+    Note: state_code values are dataset-specific and NOT interchangeable
+    across datasets. The same state has different numeric codes in different
+    datasets (e.g. Tamil Nadu is 24 in NFHS/NSS78/NSS80, 25 in UDISE/NSS75E,
+    32 in GENDER, 33 in EC). Always re-fetch state codes with get_metadata
+    for each dataset before calling get_data; reusing a code from another
+    dataset returns a plausible-looking answer for the wrong state, not an
+    error.
+
     Returns:
         dict with 'datasets' (name, description, use_for for each dataset)
         and 'workflow' (the four-step sequence).
@@ -1451,6 +1459,14 @@ def list_datasets(user_query: Optional[str] = None) -> dict:
             },
                                     
         },
+        "_note": (
+            "state_code values are dataset-specific and NOT interchangeable across "
+            "datasets. The same state has different numeric codes in different datasets "
+            "(e.g. Tamil Nadu is 24 in NFHS/NSS78/NSS80, 25 in UDISE/NSS75E, 32 in GENDER, "
+            "33 in EC). Always re-fetch state codes via get_metadata for each dataset; "
+            "reusing a code from another dataset returns a plausible-looking answer for "
+            "the wrong state rather than an error."
+        ),
         "workflow": [
             "1. list_datasets() - identify the relevant dataset",
             "2. get_indicators(dataset) - list available indicators",
