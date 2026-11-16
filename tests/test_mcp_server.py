@@ -1,4 +1,4 @@
-"""MCP Server health-check tests - all 4 tools across all 31 datasets.
+"""MCP Server health-check tests - all 4 tools across all 32 datasets.
 
 Uses FastMCP Client (in-process by default, HTTP via MCP_SERVER_URL env var).
 Run:  pytest tests/ -v
@@ -245,6 +245,12 @@ DATASETS = [
             {"indicator_code": "1", "limit": "20"},
             id="NSS72T",
     ),
+        pytest.param(
+        "BMW",
+        {"indicator_code": 1},
+        {"indicator_code": "1", "limit": "20"},
+        id="BMW",
+    ),
 ]
 
 EXPECTED_TOOLS = {
@@ -257,7 +263,7 @@ EXPECTED_TOOLS = {
 EXPECTED_DATASETS = {
     "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73", "NSS74","NSS71", "NSS72", "NSS72T"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73", "NSS74","NSS71", "NSS72", "NSS72T", "BMW"
 }
 
 # Internal keys injected by the server (not dataset-specific content)

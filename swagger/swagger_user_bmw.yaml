@@ -1,0 +1,77 @@
+openapi: 3.0.1
+info:
+  title: Inventory on Biomedical Waste Management
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: Inventory on Biomedical Waste Management
+  description: Indicator-wise Bio Medical Waste (BMW) statistics, state-wise, 2016-2024.
+paths:
+  /api/bmw/getRecords:
+    get:
+      tags:
+      - Inventory on Biomedical Waste Management
+      operationId: BMWIndicatorValues
+      parameters:
+      - name: indicator_code
+        required: true
+        in: query
+        description: >
+          Indicator code. 1=Bio Medical Waste Generated (Kg/Day), 2=Bio Medical Waste Treated & Disposed (Kg/Day). Single value or comma-separated.
+        schema:
+          type: integer
+          pattern: ^\d+(,\d+)*$
+      - name: year
+        in: query
+        description: >
+          Calendar year YYYY, 2016 to 2024 (e.g. 2023). Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d{4}(,\d{4})*$
+      - name: state_code
+        in: query
+        description: >
+          State/UT code 1-36 (1=Andhra Pradesh ... 36=Puducherry). There is no All India code. Call get_metadata for the list. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: limit
+        in: query
+        description: >
+          Records per page (default 10). Use 100+ to get all 36 states for several years.
+        schema:
+          type: integer
+          pattern: ^\d+$
+      - name: page
+        in: query
+        description: >
+          Enter the page no (default 1). (from 1 to n.)
+        schema:
+          type: integer
+          pattern: ^\d+$
+      - name: Format
+        required: true
+        in: query
+        description: Select the Output format
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+      responses:
+        '200':
+          description: A JSON array of records
+        '400':
+          description: Bad Request
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'

@@ -97,7 +97,7 @@ class MoSPI:
             "NSS71": "/api/nss-71/getNss71Records",
             "NSS72": "/api/nss-72/getNss72HesdgRecords",
             "NSS72T":"/api/nss-72t/getNss72TourismRecords",
-            
+            "BMW": "/api/bmw/getRecords",    
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -1777,6 +1777,39 @@ class MoSPI:
         """
         return self.get_data("NSS72T", params)
 
+    # =========================================================================
+    # BMW (Bio Medical Waste) Methods
+    # =========================================================================
+
+    def get_bmw_indicators(self) -> Dict[str, Any]:
+        """Fetch list of BMW indicators (1-2) from MoSPI API."""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/bmw/getIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_bmw_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch available BMW filters for given indicator (1-2)."""
+        params = {"indicator_code": indicator_code}
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/bmw/getFilterByIndicatorId",
+                params=params,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_bmw_data(self, params: Optional[Dict] = None) -> Dict[str, Any]:
+        """Fetch BMW records. params: indicator_code (1-2), year, state_code, limit, page, format."""
+        return self.get_data("BMW", params)
 
     # =========================================================================
     # CPIALRL (CPI for Agricultural Labourers and Rural Labourers) Methods

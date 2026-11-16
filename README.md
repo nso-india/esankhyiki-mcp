@@ -47,7 +47,7 @@ MCP (Model Context Protocol) server for accessing India's Ministry of Statistics
 This server provides AI-ready access to official Indian government statistics through the Model Context Protocol (MCP). It acts as a bridge between AI assistants (Claude, ChatGPT, Cursor, etc.) and MoSPI's open data APIs, enabling natural language queries for economic, demographic, and social indicators.
 
 **Key Features:**
-- Following statistical datasets covering employment, unemployment, inflation, industrial and services production, GDP and national accounts, energy and renewable energy, higher and school education, gender, health and nutrition, disability, housing and sanitation, household consumption and expenditure, time use, agriculture and livestock, land holdings, debt and investment, AYUSH, environment and climate, banking and financial statistics, economic census, unincorporated enterprises, telecom and digital connectivity.
+- Following statistical datasets covering employment, unemployment, inflation, industrial and services production, GDP and national accounts, energy and renewable energy, higher and school education, gender, health and nutrition, disability, housing and sanitation, household consumption and expenditure, time use, agriculture and livestock, land holdings, debt and investment, AYUSH, environment and climate, bio medical waste, banking and financial statistics, economic census, unincorporated enterprises, telecom and digital connectivity.
 - Sequential 4-tool workflow designed for LLM consumption
 - Swagger-driven parameter validation
 - Full OpenTelemetry integration for observability
@@ -90,6 +90,7 @@ This server provides AI-ready access to official Indian government statistics th
 | 29 | **NSS72** | NSS 72nd Round – Household Expenditure on Services and Durable Goods | Household expenditure on transport and miscellaneous consumer services, durable goods acquisition, MPCE, budget share, households having NAE, quintile class of UMPCE |
 | 30 | **NSS72T** | NSS 72nd Round – Domestic Tourism Expenditure in India | Overnight and same-day trips, purpose of trip, mode of travel, type of stay, nights spent, tourism expenditure per trip, package vs non-package trips |
 | 31 | **ISP** | Index of Service Production | Services sector growth, monthly services output, sub-sector indices |
+| 32 | **BMW** | Bio Medical Waste | Bio medical waste generated, treated and disposed, state-wise healthcare waste statistics (Kg/Day), 2016-2024 |
 
 
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->
