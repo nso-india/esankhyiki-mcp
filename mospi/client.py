@@ -96,8 +96,9 @@ class MoSPI:
             "NSS74": "/api/nss-74/getNss74Records",
             "NSS71": "/api/nss-71/getNss71Records",
             "NSS72": "/api/nss-72/getNss72HesdgRecords",
-            "NSS72T":"/api/nss-72t/getNss72TourismRecords",
-            "BMW": "/api/bmw/getRecords",    
+            "NSS72T": "/api/nss-72t/getNss72TourismRecords",
+            "BMW": "/api/bmw/getRecords",
+            "SPPI": "/api/sppi/get-records",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -1810,6 +1811,43 @@ class MoSPI:
     def get_bmw_data(self, params: Optional[Dict] = None) -> Dict[str, Any]:
         """Fetch BMW records. params: indicator_code (1-2), year, state_code, limit, page, format."""
         return self.get_data("BMW", params)
+
+    # =========================================================================
+    # SPPI (Services Producer Price Index) Methods
+    # =========================================================================
+
+    def get_sppi_indicators(self) -> Dict[str, Any]:
+        """Return SPPI services (sppi_code 1-10). SPPI has no indicator_code."""
+        names = [
+            "Securities Transaction Service Price Index",
+            "Banking Service Price Index",
+            "Banking Service Contribution Index",
+            "Management of Pension Funds Service Price Index",
+            "Insurance Service Price Index",
+            "Telecom Service Price Index",
+            "Railway Service Price Index",
+            "Railway Freight Service Price Index",
+            "Railway Passenger Service Price Index",
+            "Air (Passenger) Service Price Index",
+        ]
+        return {
+            "data": [{"code": i, "name": n} for i, n in enumerate(names, 1)],
+            "_note": "Quarterly index. 'code' is the sppi_code (1-10); pass it as sppi_code in get_data.",
+            "statusCode": True,
+        }
+
+    def get_sppi_filters(self, sppi_code: Optional[int] = None) -> Dict[str, Any]:
+        """Fetch SPPI filter values (service-specific) from MoSPI API."""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/sppi/get-filters",
+                params={"sppi_code": sppi_code} if sppi_code is not None else None,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
 
     # =========================================================================
     # CPIALRL (CPI for Agricultural Labourers and Rural Labourers) Methods

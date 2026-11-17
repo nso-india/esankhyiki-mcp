@@ -1,0 +1,52 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Securities Transaction Service Price Index",
+    "description": "Securities Transaction Service Price Index, quarterly, 2023-24 to 2026-27"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Banking Service Price Index",
+    "description": "Banking Service Price Index, quarterly, 2023-24 to 2026-27"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Banking Service Contribution Index",
+    "description": "Banking Service Contribution Index, quarterly, 2023-24 to 2026-27"
+  },
+  {
+    "indicator_code": 4,
+    "name": "Management of Pension Funds Service Price Index",
+    "description": "Management of Pension Funds Service Price Index, quarterly, 2023-24 to 2026-27"
+  },
+  {
+    "indicator_code": 5,
+    "name": "Insurance Service Price Index",
+    "description": "Insurance Service Price Index, quarterly, 2023-24 to 2026-27"
+  },
+  {
+    "indicator_code": 6,
+    "name": "Telecom Service Price Index",
+    "description": "Telecom Service Price Index, quarterly, 2023-24 to 2026-27"
+  },
+  {
+    "indicator_code": 7,
+    "name": "Railway Service Price Index",
+    "description": "Railway Service Price Index, quarterly, 2023-24 to 2026-27"
+  },
+  {
+    "indicator_code": 8,
+    "name": "Railway Freight Service Price Index",
+    "description": "Railway Freight Service Price Index, quarterly, 2023-24 to 2026-27"
+  },
+  {
+    "indicator_code": 9,
+    "name": "Railway Passenger Service Price Index",
+    "description": "Railway Passenger Service Price Index, quarterly, 2023-24 to 2026-27"
+  },
+  {
+    "indicator_code": 10,
+    "name": "Air (Passenger) Service Price Index",
+    "description": "Air (Passenger) Service Price Index, quarterly, 2025-26 to 2026-27"
+  }
+]

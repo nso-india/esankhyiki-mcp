@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- SPPI (Services Producer Price Index) with 10 services (`sppi_code` 1-10): securities transaction, banking service price and contribution, pension fund management, insurance, telecom, railway (total, freight, passenger) and air passenger. Quarterly, FY 2023-24 to 2026-27 (2026-27 has only Q1, provisional). Filters: sppi_code, financial_year (YYYY-YY), quarter_code (1-4). Air passenger has data only from 2025-26.
+
+### Changed
+- Total datasets: 32 -> 33 (SPPI)
+
+### Added
 - BMW (Bio Medical Waste) with 2 indicators (Bio Medical Waste Generated; Bio Medical Waste Treated & Disposed, both in Kg/Day), state-wise (36 states/UTs, no All India code), annual 2016-2024. Filters: indicator_code, year (YYYY), state_code. Swagger and definitions added.
 
 ### Changed
