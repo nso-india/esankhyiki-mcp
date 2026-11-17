@@ -99,7 +99,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74", "NSS71", "NSS72", "NSS72T"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74", "NSS71", "NSS72", "NSS72T", "BMW", "SPPI"
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -138,19 +138,21 @@ DATASET_SWAGGER = {
     "NSS71": ("swagger_user_nss71.yaml", "/api/nss-71/getNss71Records"),
     "NSS72": ("swagger_user_nss72.yaml", "/api/nss-72/getNss72HesdgRecords"),
     "NSS72T": ("swagger_user_nss72t.yaml", "/api/nss-72t/getNss72TourismRecords"),
+    "BMW": ("swagger_user_bmw.yaml", "/api/bmw/getRecords"),
+    "SPPI": ("swagger_user_sppi.yaml", "/api/sppi/get-records"),
 }
 
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74","NSS71","NSS72","NSS72T"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74","NSS71","NSS72","NSS72T", "BMW"
 ]
 
 
 def _resolve_swagger_parameters(spec: dict, endpoint_path: str) -> list:
     """Load GET parameters for an endpoint, resolving component $ref entries."""
     raw_params = (
-        spec.get("paths", {})
+        spec.get("paths", {})   
         .get(endpoint_path, {})
         .get("get", {})
         .get("parameters", [])
@@ -436,7 +438,7 @@ def get_indicators(
     Args:
         dataset: Dataset name - one of: PLFS, CPI, IIP, ISP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
-                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T.
+                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI.
                  For CPI, IIP, ISP, WPI: returns available base years and frequencies.
         user_query: The user's original question, verbatim. Pass this on every tool call
                     (list_datasets, get_indicators, get_metadata, get_data) so the
@@ -480,12 +482,14 @@ def get_indicators(
         "NSS71": mospi.get_nss71_indicators,
         "NSS72": mospi.get_nss72_indicators,
         "NSS72T": mospi.get_nss72t_indicators,
+        "BMW": mospi.get_bmw_indicators,
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
         "IIP": mospi.get_iip_base_years,
         "ISP": mospi.get_isp_indicators,
         "WPI": mospi.get_wpi_base_years,
         "ASI": mospi.get_asi_indicators,
+        "SPPI": mospi.get_sppi_indicators,
     }
 
     if dataset not in indicator_methods:
@@ -541,7 +545,7 @@ def get_metadata(
         user_query: The user's original question, verbatim. Pass the same text on
                     every step. Captured for the engagement report only; not returned.
         indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
-                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T.
+                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI (service code 1-10, as sppi_code).
                         Not applicable for: CPI, IIP, ISP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
         state_code: For NAS only - required when indicator_code is 23-34
@@ -996,10 +1000,36 @@ def get_metadata(
                 "so combining filters across indicators returns no data."
             )
             result["next_step"] = _next
-            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)          
-
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
+                 
+        elif dataset == "BMW":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for BMW. Valid range: 1-2."}
+            result = mospi.get_bmw_filters(indicator_code=indicator_code)
+            result["api_params"] = get_swagger_param_definitions("BMW")
+            result["parameter_notes"] = (
+                "BMW (Bio Medical Waste, 2016-2024, Kg/Day) has no survey_code. "
+                "year is plain YYYY. state_code 1-36; there is no All India code."
+            )
+            result["next_step"] = _next
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
+        
+        elif dataset == "SPPI":
+            if indicator_code is None:
+                return {"error": "indicator_code (the SPPI service code, 1-10) is required for SPPI get_metadata."}
+            result = mospi.get_sppi_filters(sppi_code=indicator_code)
+            result["api_params"] = get_swagger_param_definitions("SPPI")
+            result["next_step"] = _next
+            result["parameter_notes"] = (
+                "SPPI (Services Producer Price Index) has no separate indicator list. "
+                "Pass the service code (sppi_code 1-10) as indicator_code to get its filters. "
+                "In get_data use sppi_code. financial_year is YYYY-YY; quarter_code 1-4 = Q1-Q4. "
+                "2026-27 has only Q1 (provisional); sppi_code=10 (Air Passenger) has data only from 2025-26."
+            )
+            return _check_empty_metadata(result, dataset, sppi_code=indicator_code)
+        
         else:
-            return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}
+            return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}   
 
     except Exception as e:
         return {"error": str(e)}
@@ -1022,7 +1052,7 @@ def get_data(dataset: str, filters: Dict[str, Any], user_query: Optional[str] = 
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY,
                  AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
-                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T).
+                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI).
                  CPI auto-routes to Group or Item endpoint based on
                  whether filters contain item_code.
                  IIP uses a single endpoint; pass frequency="Annually" or
@@ -1035,6 +1065,7 @@ def get_data(dataset: str, filters: Dict[str, Any], user_query: Optional[str] = 
         user_query: The user's original question, verbatim. Captured for the
                     engagement report only; not returned.
                  MNRE: indicator_code (1-5) is mapped to type_of_renewable_energy_code.
+                 SPPI: use sppi_code (1-10) to pick the service; financial_year (YYYY-YY) and quarter_code (1-4) are optional.
                  Pass limit (e.g., "50") to retrieve 50 records. Change this parameter value to retrieve desired number of records.
 
     Returns:
@@ -1090,6 +1121,8 @@ def get_data(dataset: str, filters: Dict[str, Any], user_query: Optional[str] = 
         "NSS71": "NSS71",
         "NSS72": "NSS72",
         "NSS72T": "NSS72T",
+        "BMW": "BMW",
+        "SPPI": "SPPI",
     }
 
     api_dataset = dataset_map.get(dataset)
@@ -1128,6 +1161,10 @@ def get_data(dataset: str, filters: Dict[str, Any], user_query: Optional[str] = 
     # MNRE uses type_of_renewable_energy_code but accept indicator_code for consistency
     if dataset == "MNRE" and "indicator_code" in transformed_filters:
         transformed_filters["type_of_renewable_energy_code"] = transformed_filters.pop("indicator_code")
+
+    # SPPI uses sppi_code but accept indicator_code for consistency
+    if dataset == "SPPI" and "indicator_code" in transformed_filters:
+        transformed_filters["sppi_code"] = transformed_filters.pop("indicator_code")
 
     # NSS76/NSS80 require survey_code; auto-derive from indicator_code if not supplied
     if dataset == "NSS76" and "survey_code" not in transformed_filters:
@@ -1292,7 +1329,7 @@ def list_datasets(user_query: Optional[str] = None) -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 31,
+        "total_datasets": 33,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -1449,6 +1486,16 @@ def list_datasets(user_query: Optional[str] = None) -> dict:
                 "description": "37 indicators from the NSS 72nd Round (July 2014 - June 2015) on domestic tourism: overnight trips and same-day trips. Covers households reporting overnight trips by religion, social group and household type; trips by leading purpose, quintile class of UMPCE, number of members, month of start, age group, education level, activity status, nights spent, mode of travel, type of stay, type of trip and main destination; and average expenditure per trip by category, sub-category and quintile class. Both last-365-day and last-30-day reference periods. state_code=36 is All India.",
                 "use_for": "Domestic tourism, overnight trips, same-day trips, purpose of trip (leisure, business, religious, health, education), mode of travel, type of stay, nights spent, tourism expenditure per trip, package vs non-package trips, destination. Note: each indicator supports only a specific subset of filters, so combining filters across indicators returns no data."
             },
+            "BMW": {
+                "name": "BMW (Bio Medical Waste)",
+                "description": "2 indicators on bio medical waste, state-wise (36 states/UTs), annual 2016-2024, in Kg/Day: waste generated, and waste treated and disposed. Filters: indicator_code, year (YYYY), state_code.",
+                "use_for": "Bio medical waste generation, treatment and disposal, state-wise hospital and healthcare waste statistics",
+            },
+            "SPPI": {
+                "name": "SPPI (Services Producer Price Index)",
+                "description": "10 services of quarterly Services Producer Price Index, FY 2023-24 to 2026-27 (latest quarter provisional): securities transaction, banking (price and contribution), pension fund management, insurance, telecom, railway (total, freight, passenger) and air passenger. Filters: sppi_code (1-10), financial_year (YYYY-YY), quarter_code (1-4).",
+                "use_for": "Services price inflation, producer prices of banking, insurance, telecom, railway and air passenger services, quarterly services price index trends",
+            },
                                     
         },
         "workflow": [
@@ -1468,7 +1515,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.3 with OpenTelemetry")
-    log("Datasets: 31 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T)")
+    log("Datasets: 33 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")

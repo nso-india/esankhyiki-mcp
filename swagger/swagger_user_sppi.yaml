@@ -1,0 +1,76 @@
+openapi: 3.0.1
+info:
+  title: Services Producer Price Index (SPPI)
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: Services Producer Price Index
+  description: Quarterly Services Producer Price Index (SPPI) by service type.
+paths:
+  /api/sppi/get-records:
+    get:
+      tags:
+      - Services Producer Price Index
+      operationId: SPPIIndicatorValues
+      parameters:
+      - name: sppi_code
+        in: query
+        description: >
+          Services Producer Price Index (the service type) code 1-10. 1=Securities Transaction Service Price Index, 2=Banking Service Price Index, 3=Banking Service Contribution Index, 4=Management of Pension Funds Service Price Index, 5=Insurance Service Price Index, 6=Telecom Service Price Index, 7=Railway Service Price Index, 8=Railway Freight Service Price Index, 9=Railway Passenger Service Price Index, 10=Air (Passenger) Service Price Index. Air (Passenger) has data only for 2025-26 onwards. Omit to get all services. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: financial_year
+        in: query
+        description: >
+          Financial year YYYY-YY. Available 2023-24, 2024-25, 2025-26, 2026-27. 2026-27 has only Q1 (provisional). Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d{4}-\d{2}(,\d{4}-\d{2})*$
+      - name: quarter_code
+        in: query
+        description: >
+          Quarter of the financial year: 1=Q1 (Apr-Jun), 2=Q2 (Jul-Sep), 3=Q3 (Oct-Dec), 4=Q4 (Jan-Mar). Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^[1-4](,[1-4])*$
+      - name: limit
+        in: query
+        description: >
+          Records per page (default 10). 10 services x 4 years x 4 quarters is about 130 records, so use 100+ for everything.
+        schema:
+          type: integer
+          pattern: ^\d+$
+      - name: page
+        in: query
+        description: >
+          Enter the page no (default 1). (from 1 to n.)
+        schema:
+          type: integer
+          pattern: ^\d+$
+      - name: Format
+        required: true
+        in: query
+        description: Select the Output format
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+      responses:
+        '200':
+          description: A JSON array of records
+        '400':
+          description: Bad Request
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'

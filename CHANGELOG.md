@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- SPPI (Services Producer Price Index) with 10 services (`sppi_code` 1-10): securities transaction, banking service price and contribution, pension fund management, insurance, telecom, railway (total, freight, passenger) and air passenger. Quarterly, FY 2023-24 to 2026-27 (2026-27 has only Q1, provisional). Filters: sppi_code, financial_year (YYYY-YY), quarter_code (1-4). Air passenger has data only from 2025-26.
+
+### Changed
+- Total datasets: 32 -> 33 (SPPI)
+
+### Added
+- BMW (Bio Medical Waste) with 2 indicators (Bio Medical Waste Generated; Bio Medical Waste Treated & Disposed, both in Kg/Day), state-wise (36 states/UTs, no All India code), annual 2016-2024. Filters: indicator_code, year (YYYY), state_code. Swagger and definitions added.
+
+### Changed
+- Total datasets: 31 -> 32 (BMW)
+
+### Added
 - PLFS: new filters `industry_code` (1-13, used with `broad_status_employment_code`) and `nic_division_code` (1-758) for annual `indicator_code=4`, calendar years, All India only. Added to `swagger_user_plfs.yaml`; previously `get_data` rejected them as invalid params although `get_metadata` returned them.
 - PLFS: `get_data` now normalizes `year` per `frequency_code`. Annual accepts both `2024` and `PLFS 2024` (sent to the API as `PLFS 2024`); quarterly/monthly accept both and send plain `2024`. Rewritten values are reported in a new `year_normalized` response field.
 - PLFS: when `year` is omitted, `get_data` uses the latest available year for the indicator/frequency (read from the PLFS filter API, so it follows newly loaded data). If that year has no rows for the given filters, it tries the latest year of the other annual year type and then the next-latest year. The year used is returned as `year_auto_selected`. Pass `year="all"` to get every year.
