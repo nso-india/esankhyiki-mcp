@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: Irrigation Statistics
+  title: 6th Minor Irrigation Census (IRRIGATION)
   version: 1.0.0
 servers:
 - url: https://api.mospi.gov.in/

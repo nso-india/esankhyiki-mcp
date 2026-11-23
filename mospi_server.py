@@ -1515,7 +1515,7 @@ def list_datasets(user_query: Optional[str] = None) -> dict:
                 "use_for": "Services price inflation, producer prices of banking, insurance, telecom, railway and air passenger services, quarterly services price index trends",
             },
             "IRRIGATION": {
-                "name": "Irrigation Statistics",
+                "name": "IRRIGATION (6th Minor Irrigation Census)",
                 "description": "3 indicators on minor irrigation: number of schemes (by water source type), schemes of Culturable Command Area (CCA), Irrigation Potential Created (IPC) and Irrigation Potential Utilized (IPU), and area irrigated by minor irrigation schemes (by season). State-wise data for 2017-18 only. Filters: indicator_code (1-3), state_code (1-34, 34 = All India), year (YYYY-YY), type_code, sub_type_code, sub_indicator_code, season_code.",
                 "use_for": "Minor irrigation schemes, irrigation potential created/utilized, area irrigated by season, ground water vs surface water irrigation, state-wise irrigation statistics"
             }                                    
