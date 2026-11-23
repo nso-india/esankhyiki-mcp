@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- IRRIGATION (6th Minor Irrigation Census) with 3 indicators: Number of Schemes; Schemes of Culturable Command Area (CCA), Irrigation Potential Created (IPC) and Irrigation Potential Utilized (IPU); Area irrigated by Minor Irrigation Schemes. State-wise (state_code 1-34, 34 = All India), FY 2017-18. Filters: indicator_code, state_code, year (YYYY-YY), type_code, sub_type_code, sub_indicator_code, season_code. Swagger and definitions added.
+
+### Changed
+- Total datasets: 33 -> 34 (IRRIGATION)
+
+### Added
 - SPPI (Services Producer Price Index) with 10 services (`sppi_code` 1-10): securities transaction, banking service price and contribution, pension fund management, insurance, telecom, railway (total, freight, passenger) and air passenger. Quarterly, FY 2023-24 to 2026-27 (2026-27 has only Q1, provisional). Filters: sppi_code, financial_year (YYYY-YY), quarter_code (1-4). Air passenger has data only from 2025-26.
 
 ### Changed

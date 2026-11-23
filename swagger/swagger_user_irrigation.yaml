@@ -1,0 +1,105 @@
+openapi: 3.0.1
+info:
+  title: Irrigation Statistics
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: Irrigation
+  description: State-wise irrigation statistics (minor irrigation schemes, CCA/IPC/IPU, area irrigated), 2017-18.
+paths:
+  /api/irrigation/getIrrigationData:
+    get:
+      tags:
+      - Irrigation
+      operationId: IrrigationIndicatorValues
+      parameters:
+      - name: indicator_code
+        required: true
+        in: query
+        description: >
+          Indicator code 1-3. 1=Number of Schemes, 2=Schemes of Culturable Command Area (CCA), Irrigation Potential Created (IPC) and Irrigation Potential Utilized (IPU), 3=Area irrigated by Minor Irrigation Schemes. Single value or comma-separated.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: state_code
+        in: query
+        description: >
+          State/UT code 1-34 (34=All India). All indicators. Call get_metadata for the list. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: year
+        in: query
+        description: >
+          Financial year YYYY-YY. Only 2017-18 is available. All indicators.
+        schema:
+          type: string
+          pattern: ^\d{4}-\d{2}(,\d{4}-\d{2})*$
+      - name: type_code
+        in: query
+        description: >
+          Type of water source: 1=Ground Water, 2=Surface Water, 3=Grand Total. Indicator 1 uses 1-3, indicator 3 uses 1-2, indicator 2 does not use it.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_type_code
+        in: query
+        description: >
+          Sub type: 1=Dugwell, 2=Shallow Tubewell, 3=Medium Tubewell, 4=Deep Tubewell (Ground Water), 5=Flow Scheme, 6=Lift Scheme (Surface Water), 7=Total. Indicator 1 only.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: sub_indicator_code
+        in: query
+        description: >
+          1=Ground Water-CCA, 2=Ground Water-IPC, 3=Ground Water-IPU, 4=Surface water-CCA, 5=Surface water-IPC, 6=Surface water-IPU. Indicator 2 only.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: season_code
+        in: query
+        description: >
+          Season: 1=Kharif, 2=Rabi, 3=Perennial, 4=Others, 5=Total. Indicator 3 only.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: limit
+        in: query
+        description: >
+          Records per page (default 10).
+        schema:
+          type: string
+          pattern: ^\d+$
+      - name: page
+        in: query
+        description: >
+          Enter the page no (default 1). (from 1 to n.)
+        schema:
+          type: string
+          pattern: ^\d+$
+      - name: Format
+        required: true
+        in: query
+        description: Select the Output format
+        schema:
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+      responses:
+        '200':
+          description: A JSON array of records
+        '400':
+          description: Bad Request
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'

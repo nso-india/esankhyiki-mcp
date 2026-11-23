@@ -99,6 +99,7 @@ class MoSPI:
             "NSS72T": "/api/nss-72t/getNss72TourismRecords",
             "BMW": "/api/bmw/getRecords",
             "SPPI": "/api/sppi/get-records",
+            "IRRIGATION": "/api/irrigation/getIrrigationData"
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -1849,6 +1850,34 @@ class MoSPI:
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}
 
+    # =========================================================================
+    # IRRIGATION (6th Minor Irrigation Census) Methods
+    # =========================================================================
+    def get_irrigation_indicators(self) -> Dict[str, Any]:
+        """Fetch list of IRRIGATION indicators from MoSPI API."""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/irrigation/getIrrigationIndicatorList",
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+    def get_irrigation_filters(self, indicator_code: int) -> Dict[str, Any]:
+        """Fetch IRRIGATION filter values for an indicator from MoSPI API."""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/irrigation/getIrrigationFilters",
+                params={"indicator_code": indicator_code},
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}  
+          
     # =========================================================================
     # CPIALRL (CPI for Agricultural Labourers and Rural Labourers) Methods
     # =========================================================================
