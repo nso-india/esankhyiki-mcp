@@ -99,7 +99,7 @@ mcp.add_middleware(TelemetryMiddleware())
 VALID_DATASETS = [
     "PLFS", "CPI", "IIP", "ISP", "ASI", "NAS", "WPI", "ENERGY",
     "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS", "RBI",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74", "NSS71", "NSS72", "NSS72T", "BMW", "SPPI"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74", "NSS71", "NSS72", "NSS72T", "BMW", "SPPI", "IRRIGATION"
 ]
 
 # Maps dataset key -> (swagger_yaml_file, endpoint_path)
@@ -140,12 +140,13 @@ DATASET_SWAGGER = {
     "NSS72T": ("swagger_user_nss72t.yaml", "/api/nss-72t/getNss72TourismRecords"),
     "BMW": ("swagger_user_bmw.yaml", "/api/bmw/getRecords"),
     "SPPI": ("swagger_user_sppi.yaml", "/api/sppi/get-records"),
+    "IRRIGATION": ("swagger_user_irrigation.yaml", "/api/irrigation/getIrrigationData")
 }
 
 # Datasets that require indicator_code in get_data
 DATASETS_REQUIRING_INDICATOR = [
     "PLFS", "NAS", "ENERGY", "AISHE", "ASUSE", "GENDER", "NFHS", "ENVSTATS",
-    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74","NSS71","NSS72","NSS72T", "BMW"
+    "NSS77", "NSS78", "NSS76", "NSS75E", "NSS79", "CPIALRL", "HCES", "TUS", "EC", "UDISE", "MNRE", "NSS80","NSS73","NSS74","NSS71","NSS72","NSS72T", "BMW", "IRRIGATION"
 ]
 
 
@@ -438,7 +439,7 @@ def get_indicators(
     Args:
         dataset: Dataset name - one of: PLFS, CPI, IIP, ISP, ASI, NAS, WPI,
                  ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI,
-                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI.
+                 NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI, IRRIGATION.
                  For CPI, IIP, ISP, WPI: returns available base years and frequencies.
         user_query: The user's original question, verbatim. Pass this on every tool call
                     (list_datasets, get_indicators, get_metadata, get_data) so the
@@ -483,6 +484,7 @@ def get_indicators(
         "NSS72": mospi.get_nss72_indicators,
         "NSS72T": mospi.get_nss72t_indicators,
         "BMW": mospi.get_bmw_indicators,
+        "IRRIGATION": mospi.get_irrigation_indicators,
         # Special datasets - return guidance instead of indicators
         "CPI": mospi.get_cpi_base_years,
         "IIP": mospi.get_iip_base_years,
@@ -490,6 +492,7 @@ def get_indicators(
         "WPI": mospi.get_wpi_base_years,
         "ASI": mospi.get_asi_indicators,
         "SPPI": mospi.get_sppi_indicators,
+        
     }
 
     if dataset not in indicator_methods:
@@ -545,7 +548,7 @@ def get_metadata(
         user_query: The user's original question, verbatim. Pass the same text on
                     every step. Captured for the engagement report only; not returned.
         indicator_code: Required for: PLFS, NAS, ENERGY, AISHE, ASUSE, GENDER,
-                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI (service code 1-10, as sppi_code).
+                        NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI (service code 1-10, as sppi_code), IRRIGATION.
                         Not applicable for: CPI, IIP, ISP, ASI, WPI.
                         For RBI, this maps to sub_indicator_code internally.
         state_code: For NAS only - required when indicator_code is 23-34
@@ -1028,6 +1031,20 @@ def get_metadata(
             )
             return _check_empty_metadata(result, dataset, sppi_code=indicator_code)
         
+        elif dataset == "IRRIGATION":
+            if indicator_code is None:
+                return {"error": "indicator_code is required for IRRIGATION."}
+            result = mospi.get_irrigation_filters(indicator_code=indicator_code)
+            result["api_params"] = get_swagger_param_definitions("IRRIGATION")
+            result["next_step"] = _next
+            result["parameter_notes"] = (
+                "IRRIGATION has no survey_code. year is YYYY-YY (only 2017-18). "
+                "state_code 1-34 (34 = All India). "
+                "type_code/sub_type_code apply to indicator 1, sub_indicator_code to indicator 2, "
+                "type_code/season_code to indicator 3."
+            )
+            return _check_empty_metadata(result, dataset, indicator_code=indicator_code)
+
         else:
             return {"error": f"Unknown dataset: {dataset}", "valid_datasets": VALID_DATASETS}   
 
@@ -1052,7 +1069,7 @@ def get_data(dataset: str, filters: Dict[str, Any], user_query: Optional[str] = 
     Args:
         dataset: Dataset name (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY,
                  AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77,
-                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI).
+                 NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI, IRRIGATION).
                  CPI auto-routes to Group or Item endpoint based on
                  whether filters contain item_code.
                  IIP uses a single endpoint; pass frequency="Annually" or
@@ -1123,6 +1140,7 @@ def get_data(dataset: str, filters: Dict[str, Any], user_query: Optional[str] = 
         "NSS72T": "NSS72T",
         "BMW": "BMW",
         "SPPI": "SPPI",
+        "IRRIGATION": "IRRIGATION",
     }
 
     api_dataset = dataset_map.get(dataset)
@@ -1329,7 +1347,7 @@ def list_datasets(user_query: Optional[str] = None) -> dict:
         and 'workflow' (the four-step sequence).
     """
     return {
-        "total_datasets": 33,
+        "total_datasets": 34,
         "datasets": {
             "PLFS": {
                 "name": "Periodic Labour Force Survey",
@@ -1496,7 +1514,11 @@ def list_datasets(user_query: Optional[str] = None) -> dict:
                 "description": "10 services of quarterly Services Producer Price Index, FY 2023-24 to 2026-27 (latest quarter provisional): securities transaction, banking (price and contribution), pension fund management, insurance, telecom, railway (total, freight, passenger) and air passenger. Filters: sppi_code (1-10), financial_year (YYYY-YY), quarter_code (1-4).",
                 "use_for": "Services price inflation, producer prices of banking, insurance, telecom, railway and air passenger services, quarterly services price index trends",
             },
-                                    
+            "IRRIGATION": {
+                "name": "IRRIGATION (6th Minor Irrigation Census)",
+                "description": "3 indicators on minor irrigation: number of schemes (by water source type), schemes of Culturable Command Area (CCA), Irrigation Potential Created (IPC) and Irrigation Potential Utilized (IPU), and area irrigated by minor irrigation schemes (by season). State-wise data for 2017-18 only. Filters: indicator_code (1-3), state_code (1-34, 34 = All India), year (YYYY-YY), type_code, sub_type_code, sub_indicator_code, season_code.",
+                "use_for": "Minor irrigation schemes, irrigation potential created/utilized, area irrigated by season, ground water vs surface water irrigation, state-wise irrigation statistics"
+            }                                    
         },
         "workflow": [
             "1. list_datasets() - identify the relevant dataset",
@@ -1515,7 +1537,7 @@ if __name__ == "__main__":
     log("="*75)
     log("Serving Indian Government Statistical Data")
     log("Framework: FastMCP 3.3 with OpenTelemetry")
-    log("Datasets: 33 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI)")
+    log("Datasets: 34 (PLFS, CPI, IIP, ISP, ASI, NAS, WPI, ENERGY, AISHE, ASUSE, GENDER, NFHS, ENVSTATS, RBI, NSS77, NSS78, NSS76, NSS75E, NSS79, CPIALRL, HCES, TUS, EC, UDISE, MNRE, NSS80, NSS73, NSS74, NSS71, NSS72, NSS72T, BMW, SPPI, IRRIGATION)")
     log("Server: http://localhost:8000/mcp")
     log("Telemetry: IP tracking + Input/Output capture enabled")
     log("="*75 + "\n")

@@ -1,0 +1,17 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "Number of Schemes",
+    "description": "Number of Schemes"
+  },
+  {
+    "indicator_code": 2,
+    "name": "Schemes of Culturable Command Area (CCA), Irrigation Potential Created (IPC) and Irrigation Potential Utilized (IPU)",
+    "description": "Schemes of Culturable Command Area (CCA), Irrigation Potential Created (IPC) and Irrigation Potential Utilized (IPU)"
+  },
+  {
+    "indicator_code": 3,
+    "name": "Area irrigated by Minor Irrigation Schemes (In Use & Temporarily not in Use)",
+    "description": "Area irrigated by Minor Irrigation Schemes (In Use & Temporarily not in Use)"
+  }
+]
