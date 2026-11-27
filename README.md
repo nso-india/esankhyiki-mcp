@@ -93,6 +93,7 @@ This server provides AI-ready access to official Indian government statistics th
 | 32 | **BMW** | Bio Medical Waste | Bio medical waste generated, treated and disposed, state-wise healthcare waste statistics (Kg/Day), 2016-2024 |
 | 33 | **SPPI** | Services Producer Price Index | Quarterly price index of services (banking, insurance, telecom, securities transactions, pension fund management, railway freight and passenger, air passenger), services price inflation trends |
 | 34 | **IRRIGATION** | 6th Minor Irrigation Census | Minor irrigation schemes (ground water / surface water), CCA / IPC / IPU, area irrigated by season, state-wise irrigation statistics, 2017-18 |
+| 35 | **IPPI** | Trial Input Producer Price Index | Monthly input price index of manufacturing industry groups (food, beverages, textiles, chemicals, metals, machinery, motor vehicles etc.), manufacturing input price inflation, 2026 |
 
 
 <!-- | NMKN | National Namkeen Consumption Index | Bhujia per capita, sev consumption patterns, mixture preference by state | -->

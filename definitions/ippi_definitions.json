@@ -1,0 +1,117 @@
+[
+  {
+    "indicator_code": 1,
+    "name": "(A). Manufacture of Food Products",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Food Products' (NIC 2008 division 10)."
+  },
+  {
+    "indicator_code": 2,
+    "name": "(B). Manufacture of Beverages",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Beverages' (NIC 2008 division 11)."
+  },
+  {
+    "indicator_code": 3,
+    "name": "(C). Manufacture of Tobacco Products",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Tobacco Products' (NIC 2008 division 12)."
+  },
+  {
+    "indicator_code": 4,
+    "name": "(D). Manufacture of Textiles",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Textiles' (NIC 2008 division 13)."
+  },
+  {
+    "indicator_code": 5,
+    "name": "(E). Manufacture of Wearing Apparel",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Wearing Apparel' (NIC 2008 division 14)."
+  },
+  {
+    "indicator_code": 6,
+    "name": "(F). Manufacture of Leather and Related Products",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Leather and Related Products' (NIC 2008 division 15)."
+  },
+  {
+    "indicator_code": 7,
+    "name": "(G). Manufacture of Wood and Products of Wood and Cork, Except Furniture; Manufacture of Articles of Straw and Plaiting Materials",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Wood and Products of Wood and Cork, Except Furniture; Manufacture of Articles of Straw and Plaiting Materials' (NIC 2008 division 16)."
+  },
+  {
+    "indicator_code": 8,
+    "name": "(H). Manufacture of Paper and Paper Products",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Paper and Paper Products' (NIC 2008 division 17)."
+  },
+  {
+    "indicator_code": 9,
+    "name": "(I). Printing and Reproduction of Recorded Media",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Printing and Reproduction of Recorded Media' (NIC 2008 division 18)."
+  },
+  {
+    "indicator_code": 10,
+    "name": "(J). Manufacture of Coke and Refined Petroleum Products",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Coke and Refined Petroleum Products' (NIC 2008 division 19)."
+  },
+  {
+    "indicator_code": 11,
+    "name": "(K). Manufacture of Chemicals and Chemical Products",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Chemicals and Chemical Products' (NIC 2008 division 20)."
+  },
+  {
+    "indicator_code": 12,
+    "name": "(L). Manufacture of Basic Pharmaceutical Products and Pharmaceutical Preparations",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Basic Pharmaceutical Products and Pharmaceutical Preparations' (NIC 2008 division 21)."
+  },
+  {
+    "indicator_code": 13,
+    "name": "(M). Manufacture of Rubber and Plastic Products",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Rubber and Plastic Products' (NIC 2008 division 22)."
+  },
+  {
+    "indicator_code": 14,
+    "name": "(N). Manufacture of Other Non-Metallic Mineral Products",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Other Non-Metallic Mineral Products' (NIC 2008 division 23)."
+  },
+  {
+    "indicator_code": 15,
+    "name": "(O). Manufacture of Basic Metals",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Basic Metals' (NIC 2008 division 24)."
+  },
+  {
+    "indicator_code": 16,
+    "name": "(P). Manufacture of Fabricated Metal Products, except Machinery and Equipment",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Fabricated Metal Products, except Machinery and Equipment' (NIC 2008 division 25)."
+  },
+  {
+    "indicator_code": 17,
+    "name": "(Q). Manufacture of Computer, Electronic and Optical Products",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Computer, Electronic and Optical Products' (NIC 2008 division 26)."
+  },
+  {
+    "indicator_code": 18,
+    "name": "(R). Manufacture of Electrical Equipment",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Electrical Equipment' (NIC 2008 division 27)."
+  },
+  {
+    "indicator_code": 19,
+    "name": "(S). Manufacture of Machinery and Equipment n.e.c.",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Machinery and Equipment n.e.c.' (NIC 2008 division 28)."
+  },
+  {
+    "indicator_code": 20,
+    "name": "(T). Manufacture of Motor Vehicles, Trailers and Semi-Trailers, and Manufacture of Other Transport Equipment",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Motor Vehicles, Trailers and Semi-Trailers, and Manufacture of Other Transport Equipment' (NIC 2008 division 29 and 30)."
+  },
+  {
+    "indicator_code": 21,
+    "name": "(U). Manufacture of Furniture",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Manufacture of Furniture' (NIC 2008 division 31)."
+  },
+  {
+    "indicator_code": 22,
+    "name": "(V). Other Manufacturing",
+    "description": "Monthly input producer price index (IPPI) for the industry group 'Other Manufacturing' (NIC 2008 division 32)."
+  },
+  {
+    "indicator_code": 23,
+    "name": "Manufacturing Sector",
+    "description": "Overall monthly input producer price index for the Manufacturing Sector, covering all manufacturing industry groups (A) to (V)."
+  }
+]

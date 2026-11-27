@@ -99,7 +99,8 @@ class MoSPI:
             "NSS72T": "/api/nss-72t/getNss72TourismRecords",
             "BMW": "/api/bmw/getRecords",
             "SPPI": "/api/sppi/get-records",
-            "IRRIGATION": "/api/irrigation/getIrrigationData"
+            "IRRIGATION": "/api/irrigation/getIrrigationData",
+            "IPPI": "/api/ippi/getIPPIRecords",
         }
 
     def get_data(self, dataset_name: str, params: Optional[Dict] = None) -> Dict[str, Any]:
@@ -1877,7 +1878,46 @@ class MoSPI:
             return response.json()
         except requests.RequestException as e:
             return {"error": str(e), "statusCode": False}  
-          
+
+    # =========================================================================
+    # IPPI (Input Producer Price Index) Methods
+    # =========================================================================
+    def get_ippi_indicators(self) -> Dict[str, Any]:
+        """Fetch IPPI industry groups (1-23). IPPI has no indicator_code;
+        industry_group_code plays that role."""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/ippi/getIPPIIndicators",
+                timeout=30
+            )
+            response.raise_for_status()
+            result = response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
+
+        items = result.get("data") if isinstance(result, dict) else None
+        if isinstance(items, list):
+            for item in items:
+                if isinstance(item, dict) and "industry_group_code" in item:
+                    item["code"] = item["industry_group_code"]
+            result["_note"] = (
+                "Monthly index. 'code' is the industry_group_code (1-23); "
+                "pass it as industry_group_code in get_data."
+            )
+        return result
+
+    def get_ippi_filters(self, industry_group_code: Optional[int] = None) -> Dict[str, Any]:
+        """Fetch IPPI filter values (years, months, industry groups) from MoSPI API."""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/ippi/getIPPIFilter",
+                params={"industry_group_code": industry_group_code} if industry_group_code is not None else None,
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return {"error": str(e), "statusCode": False}
     # =========================================================================
     # CPIALRL (CPI for Agricultural Labourers and Rural Labourers) Methods
     # =========================================================================

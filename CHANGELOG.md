@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- IPPI (Input Producer Price Index) with 23 manufacturing industry groups (`industry_group_code` 1-23; 23 = Manufacturing Sector). Monthly, calendar year 2026 (March-October). Filters: industry_group_code, year (YYYY), month_code (1-12). Swagger and definitions added.
+
+### Changed
+- Total datasets: 34 -> 35 (IPPI)
+
+### Added
 - IRRIGATION (6th Minor Irrigation Census) with 3 indicators: Number of Schemes; Schemes of Culturable Command Area (CCA), Irrigation Potential Created (IPC) and Irrigation Potential Utilized (IPU); Area irrigated by Minor Irrigation Schemes. State-wise (state_code 1-34, 34 = All India), FY 2017-18. Filters: indicator_code, state_code, year (YYYY-YY), type_code, sub_type_code, sub_indicator_code, season_code. Swagger and definitions added.
 
 ### Changed

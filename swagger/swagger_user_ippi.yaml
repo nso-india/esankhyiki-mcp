@@ -1,0 +1,79 @@
+openapi: 3.0.1
+info:
+  title: Input Producer Price Index(IPPI)
+  version: 1.0.0
+servers:
+- url: https://api.mospi.gov.in/
+tags:
+- name: IPPI
+  description: Monthly input producer price index of manufacturing industry groups.
+paths:
+  /api/ippi/getIPPIRecords:
+    get:
+      tags:
+      - IPPI
+      operationId: IppiIndexValues
+      parameters:
+      - name: year
+        in: query
+        description: >
+          Calendar year YYYY. Only 2026 is currently available.
+        schema:
+          type: string
+          pattern: ^\d{4}(,\d{4})*$
+      - name: month_code
+        in: query
+        description: >
+          Month 1-12 (1=January ... 12=December). Data is available for 3-10 (March to October 2026). Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: industry_group_code
+        in: query
+        description: >
+          Industry group code 1-23. 1=(A) Food Products, 2=(B) Beverages, 3=(C) Tobacco Products, 4=(D) Textiles, 5=(E) Wearing Apparel, 6=(F) Leather and Related Products, 7=(G) Wood and Products of Wood and Cork (except furniture), 8=(H) Paper and Paper Products, 9=(I) Printing and Reproduction of Recorded Media, 10=(J) Coke and Refined Petroleum Products, 11=(K) Chemicals and Chemical Products, 12=(L) Pharmaceuticals, 13=(M) Rubber and Plastic Products, 14=(N) Other Non-Metallic Mineral Products, 15=(O) Basic Metals, 16=(P) Fabricated Metal Products (except machinery), 17=(Q) Computer, Electronic and Optical Products, 18=(R) Electrical Equipment, 19=(S) Machinery and Equipment n.e.c., 20=(T) Motor Vehicles, Trailers and Other Transport Equipment, 21=(U) Furniture, 22=(V) Other Manufacturing, 23=Manufacturing Sector (overall). Call get_metadata for the list. Comma-separated for multiple values.
+        schema:
+          type: string
+          pattern: ^\d+(,\d+)*$
+      - name: limit
+        in: query
+        description: >
+          Records per page (default 10).
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 10
+      - name: page
+        in: query
+        description: >
+          Enter the page no (default 1). (from 1 to n.)
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: Format
+        required: true
+        in: query
+        description: Select the Output format
+        schema: 
+          type: string
+          default: JSON
+          enum:
+          - JSON
+          - CSV
+      responses:
+        '200':
+          description: A JSON array of records
+        '400':
+          description: Bad Request
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      description: Bearer token to access these api endpoints
+      name: Authorization
+      in: header
+x-original-swagger-version: '2.0'
